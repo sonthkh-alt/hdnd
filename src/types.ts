@@ -56,6 +56,19 @@ export interface Deputy {
   reelected: string;
 }
 
+export interface NADeputy {
+  id: string;
+  fullName: string;
+  dateOfBirth: string;
+  gender: string;
+  hometown: string;
+  profession: string;
+  jobTitle: string;
+  workplace: string;
+  electionUnit: string;
+  source: string;
+}
+
 export type Priority = 'Hỏa tốc' | 'Thượng khẩn' | 'Khẩn' | 'Thường';
 
 export interface Department {

@@ -2,7 +2,7 @@ import { LayoutDashboard, Users, CheckSquare, Calendar, Bot, Building2, LogOut, 
 import { cn } from '../lib/utils';
 import { useApp } from '../store';
 
-export type TabId = 'dashboard' | 'departments' | 'employees' | 'deputies' | 'tasks' | 'schedules' | 'assistant' | 'approvals';
+export type TabId = 'dashboard' | 'departments' | 'employees' | 'deputies' | 'na-deputies' | 'tasks' | 'schedules' | 'assistant' | 'approvals';
 
 interface SidebarProps {
   activeTab: TabId;
@@ -16,6 +16,7 @@ export function Sidebar({ activeTab, onChangeTab }: SidebarProps) {
     { id: 'dashboard', label: 'Tổng quan', icon: LayoutDashboard },
     { id: 'departments', label: 'Phòng ban', icon: Building2 },
     { id: 'employees', label: 'Hồ sơ Cán bộ', icon: Users },
+    { id: 'na-deputies', label: 'Đại biểu Quốc hội', icon: Contact },
     { id: 'deputies', label: 'Đại biểu HĐND', icon: Contact },
     { id: 'tasks', label: 'Công việc', icon: CheckSquare },
     { id: 'schedules', label: 'Lịch công tác', icon: Calendar },

@@ -6,8 +6,8 @@ import { signInWithGoogle } from '../lib/firebase';
 
 export function Login() {
   const { login, pendingRegistrations, setRegistrationUser, setAuthState, employees } = useApp();
-  const [username, setUsername] = useState('admin');
-  const [password, setPassword] = useState('123456');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();

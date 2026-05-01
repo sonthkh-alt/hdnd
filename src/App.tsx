@@ -5,6 +5,7 @@ import { Dashboard } from './components/Dashboard';
 import { DepartmentManager } from './components/DepartmentManager';
 import { EmployeeManager } from './components/EmployeeManager';
 import { DeputiesManager } from './components/DeputiesManager';
+import { NADeputiesManager } from './components/NADeputiesManager';
 import { TaskManager } from './components/TaskManager';
 import { ScheduleManager } from './components/ScheduleManager';
 import { AIAssistant } from './components/AIAssistant';
@@ -36,6 +37,7 @@ function AppContent() {
         {activeTab === 'dashboard' && <Dashboard />}
         {activeTab === 'departments' && <DepartmentManager />}
         {activeTab === 'employees' && <EmployeeManager />}
+        {activeTab === 'na-deputies' && <NADeputiesManager />}
         {activeTab === 'deputies' && <DeputiesManager />}
         {activeTab === 'tasks' && <TaskManager />}
         {activeTab === 'schedules' && <ScheduleManager />}
