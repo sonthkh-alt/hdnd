@@ -172,33 +172,6 @@ export function Login() {
               Đăng nhập bằng Google
             </button>
           </div>
-
-          <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-slate-300" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-slate-500">
-                  Tài khoản thử nghiệm
-                </span>
-              </div>
-            </div>
-            <div className="mt-6 grid grid-cols-2 gap-3 text-xs text-slate-600">
-              <div className="bg-slate-50 p-2 rounded border border-slate-200">
-                <span className="font-bold text-slate-800">Admin:</span> admin/123456
-              </div>
-              <div className="bg-slate-50 p-2 rounded border border-slate-200">
-                <span className="font-bold text-slate-800">Lãnh đạo:</span> lanhdao/123456
-              </div>
-              <div className="bg-slate-50 p-2 rounded border border-slate-200">
-                <span className="font-bold text-slate-800">Cán bộ (Quản lý):</span> truongphong/123456
-              </div>
-              <div className="bg-slate-50 p-2 rounded border border-slate-200">
-                <span className="font-bold text-slate-800">Chuyên viên:</span> chuyenvien/123456
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>

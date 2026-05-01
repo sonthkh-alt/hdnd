@@ -5,6 +5,11 @@ export const mockDepartments: Department[] = [
   { id: 'd2', name: 'Phòng Công tác Quốc hội', description: 'Tham mưu, phục vụ hoạt động của Đoàn ĐBQH' },
   { id: 'd3', name: 'Phòng Công tác HĐND', description: 'Tham mưu, phục vụ hoạt động của HĐND' },
   { id: 'd4', name: 'Phòng Hành chính - Tổ chức - Quản trị', description: 'Công tác nghiệp vụ hành chính, tổ chức nhân sự' },
+  { id: 'd5', name: 'Ban Kinh tế - Ngân sách', description: 'Tham mưu, giám sát các lĩnh vực kinh tế, tài chính, ngân sách' },
+  { id: 'd6', name: 'Ban Văn hóa - Xã hội', description: 'Tham mưu, giám sát lĩnh vực giáo dục, y tế, văn hóa, xã hội' },
+  { id: 'd7', name: 'Ban Dân tộc', description: 'Tham mưu, giám sát lĩnh vực công tác dân tộc' },
+  { id: 'd8', name: 'Ban Pháp chế', description: 'Tham mưu, giám sát công tác thi hành pháp luật, tư pháp, an ninh, quốc phòng' },
+  { id: 'd9', name: 'Phòng Tổng hợp - Thông tin - Dân nguyện', description: 'Công tác tổng hợp, thông tin và tiếp nhận, xử lý khiếu nại tố cáo, dân nguyện' },
 ];
 
 export const mockEmployees: Employee[] = [

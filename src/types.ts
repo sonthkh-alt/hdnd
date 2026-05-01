@@ -23,6 +23,28 @@ export interface RegistrationData {
   createdAt: number;
 }
 
+export interface Deputy {
+  id: string;
+  fullName: string;
+  dateOfBirth: string;
+  gender: string;
+  nationality: string;
+  ethnicity: string;
+  religion: string;
+  hometown: string;
+  currentResidence: string;
+  education: string;
+  profession: string;
+  degree: string;
+  politicalTheory: string;
+  foreignLanguage: string;
+  jobTitle: string;
+  workplace: string;
+  partyDate: string;
+  councilRole: string;
+  reelected: string;
+}
+
 export type Priority = 'Hỏa tốc' | 'Thượng khẩn' | 'Khẩn' | 'Thường';
 
 export interface Department {
