@@ -1,7 +1,7 @@
 import { useApp } from '../store';
 import { Bot, MapPin, Users, Clock, Calendar as CalendarIcon, Plus } from 'lucide-react';
 import { formatDateVN } from '../lib/utils';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Modal } from './Modal';
 import { EventSchedule } from '../types';
 

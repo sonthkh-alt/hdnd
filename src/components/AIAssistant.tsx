@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
-import { Bot, Send, ShieldAlert, FileSearch } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Bot, Send, ShieldAlert, FileSearch, ExternalLink } from 'lucide-react';
 import { GoogleGenAI } from '@google/genai';
 
 interface Message {
@@ -72,7 +72,8 @@ export function AIAssistant() {
     setIsLoading(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY });
+      const apiKey = (import.meta as any).env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
+      const ai = new GoogleGenAI({ apiKey });
       let contextStr = '';
       if (fileContext) {
          contextStr = `\n\nNỘI DUNG TÀI LIỆU (${fileContext.name}):\n${fileContext.content}\n\nHãy trả lời câu hỏi dựa trên nội dung tài liệu này.`;
@@ -196,6 +197,15 @@ ${input}${contextStr}`;
             <p className="text-slate-500 mt-1">Phân tích văn bản, lập báo cáo, dự thảo lịch công tác tự động.</p>
           </div>
         </div>
+        <a 
+          href="https://notebooklm.google.com/notebook/3a84275e-5abd-45d0-b437-ddb7efc74ce8" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-medium transition-colors border border-slate-200"
+        >
+          <ExternalLink size={16} />
+          Mở Không gian làm việc NotebookLM
+        </a>
       </div>
 
       <div className="flex-1 bg-white border border-slate-200 rounded-xl shadow-sm flex flex-col overflow-hidden">

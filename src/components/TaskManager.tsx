@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useApp } from '../store';
 import { Search, Plus, Clock, FileText } from 'lucide-react';
 import { formatDateVN, getPriorityColor } from '../lib/utils';

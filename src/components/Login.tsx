@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useApp } from '../store';
 import { Building2, UserCircle, KeyRound, ArrowRight } from 'lucide-react';
 import { AuthUser } from '../types';

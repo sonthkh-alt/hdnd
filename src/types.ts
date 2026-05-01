@@ -13,12 +13,23 @@ export interface RegistrationData {
   uid: string;
   email: string;
   name: string;
-  dateOfBirth: string;
+  dateOfBirth?: string;
   departmentId: string;
-  role: string;
-  rank: string;
-  education: string;
-  isPartyMember: boolean;
+  role?: string;
+  rank?: string;
+  gender?: string;
+  nationality?: string;
+  ethnicity?: string;
+  religion?: string;
+  hometown?: string;
+  currentResidence?: string;
+  education?: string;
+  profession?: string;
+  degree?: string;
+  politicalTheory?: string;
+  foreignLanguage?: string;
+  isPartyMember?: boolean;
+  partyDate?: string;
   status: UserStatus;
   createdAt: number;
 }
@@ -59,8 +70,19 @@ export interface Employee {
   departmentId: string;
   role: string; // Chức vụ
   rank: string; // Ngạch bậc
-  education: string; // Trình độ chuyên môn
+  education: string; // GD Phổ thông
+  profession?: string; // Chuyên môn, nghiệp vụ
+  degree?: string; // Học hàm, học vị
+  politicalTheory?: string; // Lý luận chính trị
+  foreignLanguage?: string; // Ngoại ngữ
   isPartyMember: boolean; // Đảng viên
+  partyDate?: string; // Ngày vào Đảng
+  gender?: string;
+  nationality?: string;
+  ethnicity?: string;
+  religion?: string;
+  hometown?: string;
+  currentResidence?: string;
   avatar?: string;
   dateOfBirth?: string;
 }

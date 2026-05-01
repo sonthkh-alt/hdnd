@@ -129,7 +129,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
       rank: reg.rank || '',
       education: reg.education || '',
       isPartyMember: reg.isPartyMember || false,
-      dateOfBirth: reg.dateOfBirth || ''
+      dateOfBirth: reg.dateOfBirth || '',
+      gender: reg.gender,
+      nationality: reg.nationality,
+      ethnicity: reg.ethnicity,
+      religion: reg.religion,
+      hometown: reg.hometown,
+      currentResidence: reg.currentResidence,
+      profession: reg.profession,
+      degree: reg.degree,
+      politicalTheory: reg.politicalTheory,
+      foreignLanguage: reg.foreignLanguage,
+      partyDate: reg.partyDate
     };
     setEmployees(prev => {
       if (prev.some(e => e.id === uid)) return prev;
