@@ -1,6 +1,8 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { Department, Employee, Task, EventSchedule, AuthUser, RegistrationData } from './types';
 import { mockDepartments, mockEmployees, mockTasks, mockSchedules } from './data/mock';
+import { collection, doc, setDoc, onSnapshot } from 'firebase/firestore';
+import { db } from './lib/firebase';
 
 type AuthState = 'LOGGED_OUT' | 'REGISTERING' | 'PENDING_APPROVAL' | 'LOGGED_IN';
 
@@ -53,7 +55,35 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [schedules, setSchedules] = useState<EventSchedule[]>(mockSchedules);
   const [pendingRegistrations, setPendingRegistrations] = useState<RegistrationData[]>(() => loadInitialData('ais_registrations', []));
 
-  // Persist important data
+  // Sync data with Firebase
+  useEffect(() => {
+    const unsubRegs = onSnapshot(collection(db, 'registrations'), (snapshot) => {
+      const regs: RegistrationData[] = [];
+      snapshot.forEach(doc => regs.push({ uid: doc.id, ...doc.data() } as RegistrationData));
+      setPendingRegistrations(regs);
+      localStorage.setItem('ais_registrations', JSON.stringify(regs));
+    }, (error) => {
+      console.error('Lỗi lấy registrations từ Firebase:', error);
+    });
+
+    const unsubEmps = onSnapshot(collection(db, 'employees'), (snapshot) => {
+      const emps: Employee[] = [];
+      snapshot.forEach(doc => emps.push({ id: doc.id, ...doc.data() } as Employee));
+      if (emps.length > 0) {
+        setEmployees(emps);
+        localStorage.setItem('ais_employees', JSON.stringify(emps));
+      }
+    }, (error) => {
+      console.error('Lỗi lấy employees từ Firebase:', error);
+    });
+
+    return () => {
+      unsubRegs();
+      unsubEmps();
+    };
+  }, []);
+
+  // Sync back to local storage when things update locally before Firebase fires
   useEffect(() => {
     localStorage.setItem('ais_employees', JSON.stringify(employees));
   }, [employees]);
@@ -72,35 +102,60 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setAuthState('LOGGED_OUT');
   };
 
-  const addRegistration = (data: RegistrationData) => {
+  const addRegistration = async (data: RegistrationData) => {
+    // Update locally first for fast UI response
     setPendingRegistrations(prev => [...prev.filter(r => r.uid !== data.uid), data]);
     setAuthState('PENDING_APPROVAL');
-  };
-
-  const approveRegistration = (uid: string) => {
-    setPendingRegistrations(prev => prev.map(r => r.uid === uid ? { ...r, status: 'APPROVED' } : r));
-    const approvedData = pendingRegistrations.find(r => r.uid === uid);
-    if (approvedData) {
-       // Auto-add to employees
-       const newEmp: Employee = {
-         id: approvedData.uid,
-         name: approvedData.name,
-         departmentId: approvedData.departmentId,
-         role: approvedData.role,
-         rank: approvedData.rank,
-         education: approvedData.education,
-         isPartyMember: approvedData.isPartyMember,
-         dateOfBirth: approvedData.dateOfBirth
-       };
-       setEmployees(prev => {
-         if (prev.some(e => e.id === approvedData.uid)) return prev;
-         return [...prev, newEmp];
-       });
+    
+    // Save to Firebase
+    try {
+      await setDoc(doc(db, 'registrations', data.uid), data);
+    } catch (e) {
+      console.error('Lỗi lưu đăng ký vào Firebase:', e);
     }
   };
 
-  const rejectRegistration = (uid: string) => {
+  const approveRegistration = async (uid: string) => {
+    const reg = pendingRegistrations.find(r => r.uid === uid);
+    if (!reg) return;
+    
+    // Update locally
+    setPendingRegistrations(prev => prev.map(r => r.uid === uid ? { ...r, status: 'APPROVED' } : r));
+    const newEmp: Employee = {
+      id: reg.uid,
+      name: reg.name,
+      departmentId: reg.departmentId || '',
+      role: reg.role || '',
+      rank: reg.rank || '',
+      education: reg.education || '',
+      isPartyMember: reg.isPartyMember || false,
+      dateOfBirth: reg.dateOfBirth || ''
+    };
+    setEmployees(prev => {
+      if (prev.some(e => e.id === uid)) return prev;
+      return [...prev, newEmp];
+    });
+
+    // Save to Firebase
+    try {
+      await setDoc(doc(db, 'registrations', uid), { ...reg, status: 'APPROVED' });
+      await setDoc(doc(db, 'employees', uid), newEmp);
+    } catch (e) {
+      console.error('Lỗi duyệt Firebase:', e);
+    }
+  };
+
+  const rejectRegistration = async (uid: string) => {
+    const reg = pendingRegistrations.find(r => r.uid === uid);
+    if (!reg) return;
+
     setPendingRegistrations(prev => prev.map(r => r.uid === uid ? { ...r, status: 'REJECTED' } : r));
+    
+    try {
+      await setDoc(doc(db, 'registrations', uid), { ...reg, status: 'REJECTED' });
+    } catch (e) {
+      console.error('Lỗi từ chối Firebase:', e);
+    }
   };
 
   const addDepartment = (dept: Department) => setDepartments([...departments, dept]);
