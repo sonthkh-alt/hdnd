@@ -9,7 +9,46 @@ export function EmployeeManager() {
   const [searchTerm, setSearchTerm] = useState('');
 
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
+  const [isEditingDetails, setIsEditingDetails] = useState(false);
+  const [editData, setEditData] = useState<Partial<Employee>>({});
+  const { requestProfileEdit, pendingEdits, approveProfileEdit, rejectProfileEdit } = useApp();
   const [isAdding, setIsAdding] = useState(false);
+
+  const startEditing = () => {
+    if (selectedEmployee) {
+      setEditData(selectedEmployee);
+      setIsEditingDetails(true);
+    }
+  };
+
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const { resizeImage } = await import('../lib/imageUtils');
+      const base64 = await resizeImage(file, 200, 200);
+      setEditData(prev => ({ ...prev, avatar: base64 }));
+    } catch (e) {
+      console.error('Error resizing avatar', e);
+    }
+  };
+
+  const submitEdit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (selectedEmployee && currentUser) {
+      requestProfileEdit({
+         id: Math.random().toString(36).substr(2, 9),
+         employeeId: selectedEmployee.id,
+         employeeName: selectedEmployee.name,
+         requestedBy: currentUser.username,
+         timestamp: new Date().toISOString(),
+         updates: editData
+      });
+      setIsEditingDetails(false);
+      setSelectedEmployee(null);
+      alert('Yêu cầu thay đổi thông tin đã được gửi. Vui lòng chờ Admin phê duyệt.');
+    }
+  };
   const [formData, setFormData] = useState<Partial<Employee>>({
     departmentId: departments[0]?.id || '',
     role: 'Chuyên viên',
@@ -108,7 +147,11 @@ export function EmployeeManager() {
                   <tr key={emp.id} className="hover:bg-slate-50 transition-colors">
                     <td className="p-4">
                       <div className="flex items-center gap-3">
-                        <UserCircle size={36} className="text-slate-400" />
+                        {emp.avatar ? (
+                           <img src={emp.avatar} alt={emp.name} className="w-9 h-9 rounded-full object-cover" />
+                        ) : (
+                           <UserCircle size={36} className="text-slate-400" />
+                        )}
                         <div>
                           <div className="font-semibold text-slate-900">{emp.name}</div>
                           <div className="text-xs text-slate-500">{emp.dateOfBirth}</div>
@@ -348,12 +391,16 @@ export function EmployeeManager() {
       </Modal>
 
       {/* Modal View Details */}
-      <Modal isOpen={!!selectedEmployee} onClose={() => setSelectedEmployee(null)} title="Hồ sơ chi tiết cán bộ">
-        {selectedEmployee && (
+      <Modal isOpen={!!selectedEmployee} onClose={() => { setSelectedEmployee(null); setIsEditingDetails(false); }} title={isEditingDetails ? "Chỉnh sửa hồ sơ" : "Hồ sơ chi tiết cán bộ"}>
+        {selectedEmployee && !isEditingDetails && (
           <div className="space-y-6 max-h-[70vh] overflow-y-auto px-1 pb-4">
             <div className="flex items-center gap-6 pb-6 border-b border-slate-200">
-              <div className="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center text-slate-400">
-                <UserCircle size={64} />
+              <div className="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 overflow-hidden relative">
+                {selectedEmployee.avatar ? (
+                  <img src={selectedEmployee.avatar} alt="Avatar" className="w-full h-full object-cover" />
+                ) : (
+                  <UserCircle size={64} />
+                )}
               </div>
               <div>
                 <h3 className="text-2xl font-bold text-slate-900">{selectedEmployee.name}</h3>
@@ -437,11 +484,113 @@ export function EmployeeManager() {
             </div>
             
             <div className="pt-4 flex justify-end gap-3 border-t border-slate-200 mt-4">
+              {currentUser?.uid === selectedEmployee.id || currentUser?.role === 'admin' ? (
+                <button type="button" onClick={startEditing} className="px-4 py-2 bg-blue-600 text-white font-medium hover:bg-blue-700 rounded-lg transition-colors">
+                  Chỉnh sửa
+                </button>
+              ) : null}
               <button type="button" onClick={() => setSelectedEmployee(null)} className="px-4 py-2 bg-slate-100 text-slate-700 font-medium hover:bg-slate-200 rounded-lg transition-colors">
                 Đóng
               </button>
             </div>
           </div>
+        )}
+
+        {selectedEmployee && isEditingDetails && (
+          <form onSubmit={submitEdit} className="space-y-6 max-h-[70vh] overflow-y-auto px-1 pb-4">
+            <div className="flex items-center gap-6 pb-6 border-b border-slate-200">
+              <label className="text-slate-400 cursor-pointer overflow-hidden relative group">
+                <div className="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center border-2 border-dashed border-slate-300 group-hover:border-blue-500 transition-colors">
+                  {editData.avatar ? (
+                    <img src={editData.avatar} alt="Avatar" className="w-full h-full object-cover rounded-full" />
+                  ) : (
+                    <span className="text-xs text-center text-slate-500 group-hover:text-blue-500">Tải ảnh lên</span>
+                  )}
+                </div>
+                <input type="file" className="hidden" accept="image/*" onChange={handleAvatarChange} />
+              </label>
+              <div className="flex-1">
+                <input 
+                  className="w-full text-2xl font-bold text-slate-900 border-b border-slate-300 focus:border-blue-500 focus:outline-none pb-1"
+                  value={editData.name || ''} onChange={e => setEditData({...editData, name: e.target.value})}
+                  placeholder="Họ và Tên"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-y-4 gap-x-8">
+              <div>
+                <label className="block text-sm text-slate-500 font-medium mb-1">Giới tính</label>
+                <select 
+                  className="w-full border border-slate-300 rounded px-3 py-2"
+                  value={editData.gender || ''} onChange={e => setEditData({...editData, gender: e.target.value})}
+                >
+                  <option value="">-- Chọn --</option>
+                  <option value="Nam">Nam</option>
+                  <option value="Nữ">Nữ</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm text-slate-500 font-medium mb-1">Ngày sinh</label>
+                <input type="date" className="w-full border border-slate-300 rounded px-3 py-2" value={editData.dateOfBirth || ''} onChange={e => setEditData({...editData, dateOfBirth: e.target.value})} />
+              </div>
+              <div>
+                <label className="block text-sm text-slate-500 font-medium mb-1">Dân tộc</label>
+                <input className="w-full border border-slate-300 rounded px-3 py-2" value={editData.ethnicity || ''} onChange={e => setEditData({...editData, ethnicity: e.target.value})} />
+              </div>
+              <div>
+                <label className="block text-sm text-slate-500 font-medium mb-1">Tôn giáo</label>
+                <input className="w-full border border-slate-300 rounded px-3 py-2" value={editData.religion || ''} onChange={e => setEditData({...editData, religion: e.target.value})} />
+              </div>
+              <div>
+                <label className="block text-sm text-slate-500 font-medium mb-1">Quốc tịch</label>
+                <input className="w-full border border-slate-300 rounded px-3 py-2" value={editData.nationality || ''} onChange={e => setEditData({...editData, nationality: e.target.value})} />
+              </div>
+            </div>
+
+            <div className="space-y-4 border-t border-slate-200 pt-4">
+              <div>
+                <label className="block text-sm text-slate-500 font-medium mb-1">Quê quán</label>
+                <input className="w-full border border-slate-300 rounded px-3 py-2" value={editData.hometown || ''} onChange={e => setEditData({...editData, hometown: e.target.value})} />
+              </div>
+              <div>
+                <label className="block text-sm text-slate-500 font-medium mb-1">Nơi ở hiện nay</label>
+                <input className="w-full border border-slate-300 rounded px-3 py-2" value={editData.currentResidence || ''} onChange={e => setEditData({...editData, currentResidence: e.target.value})} />
+              </div>
+            </div>
+
+            <div className="space-y-4 border-t border-slate-200 pt-4">
+              <h4 className="font-semibold text-slate-800 text-lg">Thông tin Chức vụ - Trình độ</h4>
+              <div className="grid grid-cols-2 gap-y-4 gap-x-8">
+                <div>
+                  <label className="block text-sm text-slate-500 font-medium mb-1">Ngạch công chức</label>
+                  <input className="w-full border border-slate-300 rounded px-3 py-2" value={editData.rank || ''} onChange={e => setEditData({...editData, rank: e.target.value})} />
+                </div>
+                <div>
+                  <label className="block text-sm text-slate-500 font-medium mb-1">Giáo dục phổ thông</label>
+                  <input className="w-full border border-slate-300 rounded px-3 py-2" value={editData.education || ''} onChange={e => setEditData({...editData, education: e.target.value})} />
+                </div>
+                <div>
+                  <label className="block text-sm text-slate-500 font-medium mb-1">Chuyên môn, nghiệp vụ</label>
+                  <input className="w-full border border-slate-300 rounded px-3 py-2" value={editData.profession || ''} onChange={e => setEditData({...editData, profession: e.target.value})} />
+                </div>
+                <div>
+                  <label className="block text-sm text-slate-500 font-medium mb-1">Học hàm, học vị</label>
+                  <input className="w-full border border-slate-300 rounded px-3 py-2" value={editData.degree || ''} onChange={e => setEditData({...editData, degree: e.target.value})} />
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-4 flex justify-end gap-3 border-t border-slate-200 mt-4">
+              <button type="submit" className="px-4 py-2 bg-blue-600 text-white font-medium hover:bg-blue-700 rounded-lg transition-colors">
+                Lưu thay đổi
+              </button>
+              <button type="button" onClick={() => setIsEditingDetails(false)} className="px-4 py-2 bg-slate-100 text-slate-700 font-medium hover:bg-slate-200 rounded-lg transition-colors">
+                Hủy
+              </button>
+            </div>
+          </form>
         )}
       </Modal>
     </div>

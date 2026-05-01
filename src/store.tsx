@@ -30,6 +30,11 @@ interface AppState {
   removeTask: (id: string) => void;
   addSchedule: (schedule: EventSchedule) => void;
   removeSchedule: (id: string) => void;
+  pendingEdits: any[];
+  requestProfileEdit: (edit: any) => void;
+  approveProfileEdit: (id: string) => void;
+  rejectProfileEdit: (id: string) => void;
+  updateEmployee: (id: string, updates: Partial<Employee>) => void;
 }
 
 const AppContext = createContext<AppState | undefined>(undefined);
@@ -54,6 +59,33 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [tasks, setTasks] = useState<Task[]>(mockTasks);
   const [schedules, setSchedules] = useState<EventSchedule[]>(mockSchedules);
   const [pendingRegistrations, setPendingRegistrations] = useState<RegistrationData[]>(() => loadInitialData('ais_registrations', []));
+
+  const [pendingEdits, setPendingEdits] = useState<any[]>(() => loadInitialData('ais_pending_edits', []));
+
+  useEffect(() => {
+    localStorage.setItem('ais_pending_edits', JSON.stringify(pendingEdits));
+  }, [pendingEdits]);
+
+  const requestProfileEdit = (edit: any) => {
+    setPendingEdits(prev => [...prev.filter(e => e.employeeId !== edit.employeeId), edit]);
+  };
+  
+  const updateEmployee = (id: string, updates: Partial<Employee>) => {
+    setEmployees(prev => prev.map(e => e.id === id ? { ...e, ...updates } : e));
+  };
+
+  const approveProfileEdit = (employeeId: string) => {
+    const edit = pendingEdits.find(e => e.employeeId === employeeId);
+    if (!edit) return;
+    
+    updateEmployee(employeeId, edit.updates);
+    setPendingEdits(prev => prev.filter(e => e.employeeId !== employeeId));
+  };
+  
+  const rejectProfileEdit = (employeeId: string) => {
+    setPendingEdits(prev => prev.filter(e => e.employeeId !== employeeId));
+  };
+
 
   // Sync data with Firebase
   useEffect(() => {
@@ -186,6 +218,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       currentUser, authState, setAuthState, registrationUser, setRegistrationUser, login, logout,
       departments, employees, tasks, schedules, pendingRegistrations,
       addRegistration, approveRegistration, rejectRegistration,
+      pendingEdits, requestProfileEdit, approveProfileEdit, rejectProfileEdit, updateEmployee,
       addDepartment, removeDepartment, addEmployee, removeEmployee, addTask, removeTask, addSchedule, removeSchedule
     }}>
       {children}
