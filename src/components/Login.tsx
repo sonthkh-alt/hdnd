@@ -15,14 +15,16 @@ export function Login() {
     // Simple mock authentication logic
     let user: AuthUser | null = null;
     
-    if (username === 'admin' && password === '123456') {
+    if (username === 'admin' && password === '123465') {
       user = { username: 'admin', role: 'ADMIN', name: 'Quản trị hệ thống' };
-    } else if (username === 'lanhdao' && password === '123456') {
+    } else if (username === 'lanhdao' && password === '123465') {
       user = { username: 'lanhdao', role: 'MANAGER', employeeId: 'e1', name: 'Nguyễn Văn A' };
-    } else if (username === 'truongphong' && password === '123456') {
+    } else if (username === 'truongphong' && password === '123465') {
       user = { username: 'truongphong', role: 'MANAGER', employeeId: 'e2', name: 'Trần Thị B' };
-    } else if (username === 'chuyenvien' && password === '123456') {
+    } else if (username === 'chuyenvien' && password === '123465') {
       user = { username: 'chuyenvien', role: 'USER', employeeId: 'e4', name: 'Phạm Thị D' };
+    } else if (username === 'huonglt' && password === '123456') {
+      user = { username: 'huonglt', role: 'USER', employeeId: 'e5', name: 'Hương L.T.' };
     }
 
     if (user) {
