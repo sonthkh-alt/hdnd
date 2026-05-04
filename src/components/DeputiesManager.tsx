@@ -62,6 +62,9 @@ export function DeputiesManager() {
                     </td>
                     <td className="p-4 text-slate-700">{deputy.dateOfBirth}</td>
                     <td className="p-4">
+                      {deputy.hdndPosition ? (
+                        <div className="text-sm font-bold text-amber-700 mb-1 line-clamp-2" title={deputy.hdndPosition}>{deputy.hdndPosition}</div>
+                      ) : null}
                       <div className="text-sm font-medium text-slate-800 line-clamp-1" title={deputy.jobTitle}>{deputy.jobTitle}</div>
                       <div className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
                         <Building size={12} /> <span className="line-clamp-1" title={deputy.workplace}>{deputy.workplace}</span>
@@ -123,6 +126,12 @@ export function DeputiesManager() {
                       <div className="text-xs text-slate-500 mb-0.5">Nghề nghiệp, chức vụ</div>
                       <div className="text-sm font-medium text-slate-800">{selectedDeputy.jobTitle || 'Không có'}</div>
                     </div>
+                    {selectedDeputy.hdndPosition && (
+                      <div>
+                        <div className="text-xs text-slate-500 mb-0.5">Chức vụ trong HĐND tỉnh khóa XIX</div>
+                        <div className="text-sm font-medium text-amber-700 bg-amber-50 px-2 py-1 rounded inline-block border border-amber-100">{selectedDeputy.hdndPosition}</div>
+                      </div>
+                    )}
                     <div>
                       <div className="text-xs text-slate-500 mb-0.5">Nơi công tác</div>
                       <div className="text-sm font-medium text-slate-800">{selectedDeputy.workplace || 'Không có'}</div>

@@ -54,6 +54,7 @@ export interface Deputy {
   partyDate: string;
   councilRole: string;
   reelected: string;
+  hdndPosition?: string;
 }
 
 export interface NADeputy {

@@ -41,7 +41,8 @@ export const deputiesData: Deputy[] = [
     workplace: 'Tỉnh ủy Thanh Hóa',
     partyDate: '14/8/2003',
     councilRole: '',
-    reelected: 'Không'
+    reelected: 'Không',
+    hdndPosition: 'Ủy viên dự khuyết Ban Chấp hành Trung ương Đảng, Phó Bí thư Thường trực Tỉnh ủy, Chủ tịch Hội đồng nhân dân tỉnh Thanh Hóa khóa XIX, nhiệm kỳ 2026 - 2031'
   },
   {
     id: '3',
@@ -188,7 +189,8 @@ export const deputiesData: Deputy[] = [
     workplace: 'Hội đồng nhân dân tỉnh Thanh Hóa',
     partyDate: '09/02/2001',
     councilRole: 'Đại biểu HĐND tỉnh',
-    reelected: '1'
+    reelected: '1',
+    hdndPosition: 'Ủy viên Ban Thường vụ Tỉnh ủy, Phó Chủ tịch Thường trực Hội đồng nhân dân tỉnh Thanh Hóa khóa XIX, nhiệm kỳ 2026 - 2031'
   },
   {
     id: '10',
@@ -209,7 +211,8 @@ export const deputiesData: Deputy[] = [
     workplace: 'Hội đồng nhân dân tỉnh Thanh Hóa',
     partyDate: '18/7/1994',
     councilRole: 'Đại biểu HĐND tỉnh',
-    reelected: '1'
+    reelected: '1',
+    hdndPosition: 'Ủy viên Ban Chấp hành Đảng bộ tỉnh, Phó Chủ tịch Hội đồng nhân dân tỉnh Thanh Hóa khóa XIX, nhiệm kỳ 2026 - 2031'
   },
   {
     id: '11',
@@ -251,7 +254,8 @@ export const deputiesData: Deputy[] = [
     workplace: 'Hội đồng nhân dân tỉnh Thanh Hóa',
     partyDate: '29/7/1966',
     councilRole: 'Đại biểu HĐND tỉnh',
-    reelected: '1'
+    reelected: '1',
+    hdndPosition: 'Tỉnh ủy viên, Trưởng Ban Kinh tế - Ngân sách HĐND tỉnh'
   },
   {
     id: '13',
@@ -314,7 +318,8 @@ export const deputiesData: Deputy[] = [
     workplace: 'Hội đồng nhân dân tỉnh Thanh Hóa',
     partyDate: '04/6/2008',
     councilRole: 'Đại biểu HĐND tỉnh',
-    reelected: '1'
+    reelected: '1',
+    hdndPosition: 'Trưởng Ban Pháp chế HĐND tỉnh'
   },
   {
     id: '16',
@@ -377,7 +382,8 @@ export const deputiesData: Deputy[] = [
     workplace: 'Hội đồng nhân dân tỉnh Thanh Hóa',
     partyDate: '01/8/1998',
     councilRole: 'Đại biểu HĐND tỉnh',
-    reelected: '1'
+    reelected: '1',
+    hdndPosition: 'Tỉnh ủy viên, Trưởng Ban Văn hóa - Xã hội HĐND tỉnh'
   },
   {
     id: '19',
@@ -440,7 +446,8 @@ export const deputiesData: Deputy[] = [
     workplace: 'Văn phòng Đoàn ĐBQH và HĐND tỉnh Thanh Hóa',
     partyDate: '03/6/2024',
     councilRole: 'Đại biểu HĐND tỉnh',
-    reelected: '1'
+    reelected: '1',
+    hdndPosition: 'Trưởng Ban Dân tộc HĐND tỉnh'
   },
   {
     id: '22',
