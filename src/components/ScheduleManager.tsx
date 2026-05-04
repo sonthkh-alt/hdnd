@@ -7,7 +7,7 @@ import { EventSchedule } from '../types';
 
 export function ScheduleManager() {
   const { schedules, addSchedule, currentUser } = useApp();
-  const [selectedWeek, setSelectedWeek] = useState('Tuần này');
+  const [selectedPeriod, setSelectedPeriod] = useState('Tuần này');
   
   const [isAdding, setIsAdding] = useState(false);
   const [formData, setFormData] = useState<Partial<EventSchedule>>({ type: 'Họp Thường trực' });
@@ -46,9 +46,22 @@ export function ScheduleManager() {
   };
 
   const getFilteredSchedules = () => {
+    if (selectedPeriod === 'Tất cả lịch') {
+      return [...schedules].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    }
+
+    if (selectedPeriod.startsWith('Tháng')) {
+      const monthStr = selectedPeriod.split(' ')[1];
+      const monthIndex = parseInt(monthStr, 10) - 1;
+      return schedules.filter(schedule => {
+        const scheduleDate = new Date(schedule.date);
+        return scheduleDate.getMonth() === monthIndex;
+      }).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    }
+
     let offset = 0;
-    if (selectedWeek === 'Tuần trước') offset = -1;
-    if (selectedWeek === 'Tuần sau') offset = 1;
+    if (selectedPeriod === 'Tuần trước') offset = -1;
+    if (selectedPeriod === 'Tuần sau') offset = 1;
 
     const { start, end } = getWeekRange(offset);
 
@@ -59,6 +72,7 @@ export function ScheduleManager() {
   };
 
   const displaySchedules = getFilteredSchedules();
+  const months = Array.from({ length: 12 }, (_, i) => `Tháng ${i + 1}`);
 
   const canManageSchedules = currentUser?.role === 'ADMIN' || currentUser?.role === 'MANAGER';
 
@@ -89,20 +103,39 @@ export function ScheduleManager() {
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 print:border-none print:shadow-none">
-         <div className="flex items-center gap-4 mb-6 border-b border-slate-100 pb-4 print:hidden">
-            {['Tuần trước', 'Tuần này', 'Tuần sau'].map((week) => (
+         <div className="flex flex-wrap items-center gap-4 mb-6 border-b border-slate-100 pb-4 print:hidden">
+            {['Tất cả lịch', 'Tuần trước', 'Tuần này', 'Tuần sau'].map((period) => (
               <button
-                key={week}
-                onClick={() => setSelectedWeek(week)}
+                key={period}
+                onClick={() => setSelectedPeriod(period)}
                 className={`px-4 py-2 rounded-md font-medium transition-colors ${
-                  selectedWeek === week 
+                  selectedPeriod === period 
                     ? 'bg-blue-50 text-blue-700 border border-blue-200' 
                     : 'text-slate-600 hover:bg-slate-50'
                 }`}
               >
-                {week}
+                {period}
               </button>
             ))}
+
+            <select 
+              value={selectedPeriod.startsWith('Tháng') ? selectedPeriod : ''} 
+              onChange={(e) => {
+                if (e.target.value) {
+                  setSelectedPeriod(e.target.value);
+                }
+              }}
+              className={`px-4 py-2 rounded-md font-medium transition-colors border outline-none ${
+                selectedPeriod.startsWith('Tháng') 
+                  ? 'bg-blue-50 text-blue-700 border-blue-200' 
+                  : 'text-slate-600 border-transparent hover:bg-slate-50'
+               }`}
+            >
+              <option value="" disabled>Chọn tháng</option>
+              {months.map(m => (
+                <option key={m} value={m}>{m}</option>
+              ))}
+            </select>
          </div>
 
          <div className="space-y-4">
@@ -144,7 +177,7 @@ export function ScheduleManager() {
             
             {displaySchedules.length === 0 && (
               <div className="text-center p-8 text-slate-500">
-                Không có sự kiện nào trong {selectedWeek.toLowerCase()}.
+                Không có sự kiện nào trong {selectedPeriod.toLowerCase()}.
               </div>
             )}
          </div>
