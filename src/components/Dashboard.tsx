@@ -1,8 +1,10 @@
 import { Users, Calendar, AlertCircle, Contact } from 'lucide-react';
 import { useApp } from '../store';
+import { mockNADeputies } from '../data/naDeputies';
+import { deputiesData } from '../data/deputies';
 
 export function Dashboard() {
-  const { employees, schedules, currentUser, naDeputies, deputiesData } = useApp();
+  const { employees, schedules, currentUser } = useApp();
 
   const getWeekRange = (weekOffset: number) => {
     const today = new Date();
@@ -48,7 +50,7 @@ export function Dashboard() {
             </div>
             <div>
               <p className="text-slate-500 font-medium">Đại biểu QH</p>
-              <h3 className="text-3xl font-bold text-slate-800">{naDeputies.length}</h3>
+              <h3 className="text-3xl font-bold text-slate-800">{mockNADeputies.length}</h3>
             </div>
           </div>
         </div>
