@@ -90,8 +90,8 @@ export function EmployeeManager() {
   };
 
   const filteredEmployees = employees.filter(e => 
-    e.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    e.role.toLowerCase().includes(searchTerm.toLowerCase())
+    (e.name || '').toLowerCase().includes((searchTerm || '').toLowerCase()) ||
+    (e.role || '').toLowerCase().includes((searchTerm || '').toLowerCase())
   );
 
   const isAdmin = currentUser?.role === 'ADMIN';

@@ -64,8 +64,8 @@ export function TaskManager() {
     : sortedTasks;
 
   const filteredTasks = viewableTasks.filter(t => 
-    t.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    t.documentRef?.toLowerCase().includes(searchTerm.toLowerCase())
+    (t.title || '').toLowerCase().includes((searchTerm || '').toLowerCase()) ||
+    (t.documentRef || '').toLowerCase().includes((searchTerm || '').toLowerCase())
   );
 
   const canManageTasks = currentUser?.role === 'ADMIN' || currentUser?.role === 'MANAGER';

@@ -8,9 +8,9 @@ export function NADeputiesManager() {
   const [selectedDeputy, setSelectedDeputy] = useState<NADeputy | null>(null);
 
   const filtered = mockNADeputies.filter(d => 
-    d.fullName.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    d.hometown.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    d.jobTitle.toLowerCase().includes(searchTerm.toLowerCase())
+    (d.fullName || '').toLowerCase().includes(searchTerm.toLowerCase()) || 
+    (d.hometown || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (d.jobTitle || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (

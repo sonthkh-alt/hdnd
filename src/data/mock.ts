@@ -89,21 +89,544 @@ export const mockTasks: Task[] = [
 
 export const mockSchedules: EventSchedule[] = [
   {
-    id: 's1',
-    title: 'Tiếp xúc cử tri chuyên đề',
-    date: '2024-05-18',
-    time: '08:00',
-    location: 'Hội trường UBND Huyện X',
-    attendees: ['Đoàn ĐBQH', 'Lãnh đạo UBND'],
-    type: 'Tiếp cử tri'
+    "id": "s2026-01-25",
+    "title": "Họp phiên thường kỳ để đánh giá kết quả hoạt động tháng 01, thảo luận và triển khai nhiệm vụ trọng tâm tháng 02 năm 2026",
+    "date": "2026-01-25",
+    "time": "08:00",
+    "location": "Phòng họp Thường trực HĐND",
+    "attendees": [
+      "Thường trực HĐND",
+      "Trưởng/Phó các Ban HĐND"
+    ],
+    "type": "Họp Thường trực"
   },
   {
-    id: 's2',
-    title: 'Họp Thường trực HĐND tháng 5',
-    date: '2024-05-25',
-    time: '14:00',
-    location: 'Phòng họp số 1',
-    attendees: ['Thường trực HĐND', 'Trưởng/Phó các Ban'],
-    type: 'Họp Thường trực'
+    "id": "s2026-01-20",
+    "title": "Kiểm tra tình hình sản xuất, đời sống Nhân dân, thăm tặng quà các gia đình chính sách, các đơn vị theo sự phân công của Ban Thường vụ Tỉnh ủy",
+    "date": "2026-01-20",
+    "time": "08:30",
+    "location": "Các địa phương trong tỉnh",
+    "attendees": [
+      "Thường trực HĐND"
+    ],
+    "type": "Khác"
+  },
+  {
+    "id": "s2026-01-15",
+    "title": "Thường trực HĐND tỉnh chỉ đạo, kiểm tra, giám sát công tác chuẩn bị bầu cử đại biểu Quốc hội...",
+    "date": "2026-01-15",
+    "time": "09:00",
+    "location": "Các Tổ bầu cử",
+    "attendees": [
+      "Thường trực HĐND",
+      "Ban Pháp chế"
+    ],
+    "type": "Giám sát chuyên đề"
+  },
+  {
+    "id": "s2026-01-10",
+    "title": "Đại biểu HĐND tỉnh tiếp công dân định kỳ tháng 1",
+    "date": "2026-01-10",
+    "time": "08:00",
+    "location": "Trụ sở Tiếp công dân",
+    "attendees": [
+      "Đại biểu HĐND tỉnh"
+    ],
+    "type": "Tiếp cử tri"
+  },
+  {
+    "id": "s2026-02-25",
+    "title": "Họp phiên thường kỳ để đánh giá kết quả hoạt động tháng 02, thảo luận và triển khai nhiệm vụ trọng tâm tháng 03 năm 2026",
+    "date": "2026-02-25",
+    "time": "08:00",
+    "location": "Phòng họp Thường trực HĐND",
+    "attendees": [
+      "Thường trực HĐND",
+      "Trưởng/Phó các Ban HĐND"
+    ],
+    "type": "Họp Thường trực"
+  },
+  {
+    "id": "s2026-02-15",
+    "title": "Đại biểu HĐND tỉnh tiếp công dân định kỳ tháng 2",
+    "date": "2026-02-15",
+    "time": "08:00",
+    "location": "Trụ sở Tiếp công dân",
+    "attendees": [
+      "Đại biểu HĐND tỉnh"
+    ],
+    "type": "Tiếp cử tri"
+  },
+  {
+    "id": "s2026-02-10",
+    "title": "Thường trực HĐND tỉnh chỉ đạo, kiểm tra, giám sát công tác chuẩn bị bầu cử...",
+    "date": "2026-02-10",
+    "time": "08:30",
+    "location": "Các cơ quan bầu cử",
+    "attendees": [
+      "Thường trực HĐND"
+    ],
+    "type": "Giám sát chuyên đề"
+  },
+  {
+    "id": "s2026-02-28",
+    "title": "Tổ chức tổng kết nhiệm kỳ của HĐND tỉnh khóa XVIII nhiệm kỳ 2021 - 2026",
+    "date": "2026-02-28",
+    "time": "08:00",
+    "location": "Hội trường HĐND tỉnh",
+    "attendees": [
+      "Đại biểu HĐND tỉnh Khóa XVIII",
+      "Khách mời"
+    ],
+    "type": "Họp Thường trực"
+  },
+  {
+    "id": "s2026-03-25",
+    "title": "Họp phiên thường kỳ để đánh giá kết quả hoạt động tháng 3, thảo luận và triển khai nhiệm vụ trọng tâm tháng 4 năm 2026",
+    "date": "2026-03-25",
+    "time": "08:00",
+    "location": "Phòng họp Thường trực HĐND",
+    "attendees": [
+      "Thường trực HĐND",
+      "Trưởng/Phó các Ban HĐND"
+    ],
+    "type": "Họp Thường trực"
+  },
+  {
+    "id": "s2026-03-10",
+    "title": "Thường trực HĐND tỉnh chỉ đạo, kiểm tra, giám sát công tác chuẩn bị bầu cử...",
+    "date": "2026-03-10",
+    "time": "08:30",
+    "location": "Các cơ quan bầu cử",
+    "attendees": [
+      "Thường trực HĐND"
+    ],
+    "type": "Giám sát chuyên đề"
+  },
+  {
+    "id": "s2026-03-15",
+    "title": "Tổ chức kỳ họp thứ Nhất HĐND khóa XIX, nhiệm kỳ 2026 - 2031",
+    "date": "2026-03-15",
+    "time": "08:00",
+    "location": "Hội trường HĐND tỉnh",
+    "attendees": [
+      "Đại biểu HĐND tỉnh Khóa XIX"
+    ],
+    "type": "Khác"
+  },
+  {
+    "id": "s2026-03-20",
+    "title": "Đại biểu HĐND tỉnh tiếp công dân định kỳ tháng 3",
+    "date": "2026-03-20",
+    "time": "08:00",
+    "location": "Trụ sở Tiếp công dân",
+    "attendees": [
+      "Đại biểu HĐND tỉnh"
+    ],
+    "type": "Tiếp cử tri"
+  },
+  {
+    "id": "s2026-04-25",
+    "title": "Họp phiên thường kỳ để đánh giá kết quả hoạt động tháng 4, thảo luận và triển khai nhiệm vụ trọng tâm tháng 5 năm 2026",
+    "date": "2026-04-25",
+    "time": "08:00",
+    "location": "Phòng họp Thường trực HĐND",
+    "attendees": [
+      "Thường trực HĐND",
+      "Trưởng/Phó các Ban HĐND"
+    ],
+    "type": "Họp Thường trực"
+  },
+  {
+    "id": "s2026-04-10",
+    "title": "Xây dựng Quy chế hoạt động của HĐND tỉnh khóa XIX, nhiệm kỳ 2026 - 2031...",
+    "date": "2026-04-10",
+    "time": "14:00",
+    "location": "Phòng họp Thường trực HĐND",
+    "attendees": [
+      "Thường trực HĐND",
+      "Văn phòng HĐND"
+    ],
+    "type": "Khác"
+  },
+  {
+    "id": "s2026-04-15",
+    "title": "Đại biểu HĐND tỉnh tiếp công dân định kỳ tháng 4",
+    "date": "2026-04-15",
+    "time": "08:00",
+    "location": "Trụ sở Tiếp công dân",
+    "attendees": [
+      "Đại biểu HĐND tỉnh"
+    ],
+    "type": "Tiếp cử tri"
+  },
+  {
+    "id": "s2026-04-20",
+    "title": "Tổ chức tập huấn cho đại biểu HĐND các cấp nhiệm kỳ 2026 - 2031",
+    "date": "2026-04-20",
+    "time": "08:00",
+    "location": "Trung tâm Hội nghị tỉnh",
+    "attendees": [
+      "Đại biểu HĐND các cấp",
+      "Thường trực HĐND"
+    ],
+    "type": "Khác"
+  },
+  {
+    "id": "s2026-05-25",
+    "title": "Họp phiên thường kỳ để đánh giá kết quả hoạt động tháng 5, thảo luận và triển khai nhiệm vụ trọng tâm tháng 6 năm 2026...",
+    "date": "2026-05-25",
+    "time": "08:00",
+    "location": "Phòng họp Thường trực HĐND",
+    "attendees": [
+      "Thường trực HĐND",
+      "Trưởng/Phó các Ban HĐND"
+    ],
+    "type": "Họp Thường trực"
+  },
+  {
+    "id": "s2026-05-15",
+    "title": "Ban hành kế hoạch tiếp xúc cử tri trước kỳ họp thường lệ HĐND tỉnh giữa năm 2026",
+    "date": "2026-05-15",
+    "time": "14:00",
+    "location": "Văn phòng HĐND",
+    "attendees": [
+      "Thường trực HĐND",
+      "Văn phòng HĐND"
+    ],
+    "type": "Khác"
+  },
+  {
+    "id": "s2026-05-20",
+    "title": "Đại biểu HĐND tỉnh tiếp công dân định kỳ tháng 5",
+    "date": "2026-05-20",
+    "time": "08:00",
+    "location": "Trụ sở Tiếp công dân",
+    "attendees": [
+      "Đại biểu HĐND tỉnh"
+    ],
+    "type": "Tiếp cử tri"
+  },
+  {
+    "id": "s2026-06-25",
+    "title": "Họp phiên thường kỳ để đánh giá kết quả hoạt động tháng 6, thảo luận và triển khai nhiệm vụ trọng tâm tháng 7 năm 2026...",
+    "date": "2026-06-25",
+    "time": "08:00",
+    "location": "Phòng họp Thường trực HĐND",
+    "attendees": [
+      "Thường trực HĐND",
+      "Trưởng/Phó các Ban HĐND"
+    ],
+    "type": "Họp Thường trực"
+  },
+  {
+    "id": "s2026-06-10",
+    "title": "Đại biểu HĐND tỉnh tiếp xúc cử tri trước kỳ họp HĐND tỉnh giữa năm 2026",
+    "date": "2026-06-10",
+    "time": "08:00",
+    "location": "Các điểm tiếp xúc cử tri",
+    "attendees": [
+      "Đại biểu HĐND tỉnh"
+    ],
+    "type": "Tiếp cử tri"
+  },
+  {
+    "id": "s2026-06-15",
+    "title": "Ban hành kế hoạch, đề cương và thành lập Đoàn giám sát chuyên đề của Thường trực HĐND...",
+    "date": "2026-06-15",
+    "time": "08:30",
+    "location": "Phòng họp số 2",
+    "attendees": [
+      "Thường trực HĐND"
+    ],
+    "type": "Khác"
+  },
+  {
+    "id": "s2026-06-20",
+    "title": "Đại biểu HĐND tỉnh tiếp công dân định kỳ tháng 6",
+    "date": "2026-06-20",
+    "time": "08:00",
+    "location": "Trụ sở Tiếp công dân",
+    "attendees": [
+      "Đại biểu HĐND tỉnh"
+    ],
+    "type": "Tiếp cử tri"
+  },
+  {
+    "id": "s2026-07-25",
+    "title": "Họp phiên thường kỳ để đánh giá kết quả hoạt động 6 tháng đầu năm, nhiệm vụ trọng tâm 6 tháng cuối năm 2026...",
+    "date": "2026-07-25",
+    "time": "08:00",
+    "location": "Phòng họp Thường trực HĐND",
+    "attendees": [
+      "Thường trực HĐND",
+      "Trưởng/Phó các Ban HĐND"
+    ],
+    "type": "Họp Thường trực"
+  },
+  {
+    "id": "s2026-07-20",
+    "title": "Tổ chức kỳ họp thường lệ giữa năm HĐND tỉnh",
+    "date": "2026-07-20",
+    "time": "08:00",
+    "location": "Hội trường HĐND tỉnh",
+    "attendees": [
+      "Đại biểu HĐND tỉnh",
+      "Khách mời"
+    ],
+    "type": "Khác"
+  },
+  {
+    "id": "s2026-07-15",
+    "title": "Đại biểu HĐND tỉnh tiếp công dân định kỳ tháng 7",
+    "date": "2026-07-15",
+    "time": "08:00",
+    "location": "Trụ sở Tiếp công dân",
+    "attendees": [
+      "Đại biểu HĐND tỉnh"
+    ],
+    "type": "Tiếp cử tri"
+  },
+  {
+    "id": "s2026-08-25",
+    "title": "Họp phiên thường kỳ để đánh giá kết quả hoạt động tháng 8, thảo luận và triển khai nhiệm vụ trọng tâm tháng 9 năm 2026",
+    "date": "2026-08-25",
+    "time": "08:00",
+    "location": "Phòng họp Thường trực HĐND",
+    "attendees": [
+      "Thường trực HĐND",
+      "Trưởng/Phó các Ban HĐND"
+    ],
+    "type": "Họp Thường trực"
+  },
+  {
+    "id": "s2026-08-10",
+    "title": "Giám sát chuyên đề của Thường trực HĐND tỉnh việc thực hiện các quy định của pháp luật về tổ chức, hoạt động bộ máy sau sắp xếp...",
+    "date": "2026-08-10",
+    "time": "08:30",
+    "location": "Các cơ quan/Đơn vị hành chính",
+    "attendees": [
+      "Đoàn giám sát"
+    ],
+    "type": "Giám sát chuyên đề"
+  },
+  {
+    "id": "s2026-08-15",
+    "title": "Tổ chức Hội nghị trao đổi kinh nghiệm hoạt động với Thường trực HĐND cấp xã, nhiệm kỳ 2026 - 2031",
+    "date": "2026-08-15",
+    "time": "08:00",
+    "location": "Trung tâm Hội nghị tỉnh",
+    "attendees": [
+      "Thường trực HĐND tỉnh",
+      "Thường trực HĐND cấp xã"
+    ],
+    "type": "Khác"
+  },
+  {
+    "id": "s2026-08-20",
+    "title": "Xây dựng dự thảo Kế hoạch, Quyết định thành lập các Đoàn giám sát chuyên đề của HĐND tỉnh năm 2027",
+    "date": "2026-08-20",
+    "time": "14:00",
+    "location": "Phòng họp Thường trực HĐND",
+    "attendees": [
+      "Thường trực HĐND",
+      "Văn phòng HĐND"
+    ],
+    "type": "Khác"
+  },
+  {
+    "id": "s2026-08-05",
+    "title": "Đại biểu HĐND tỉnh tiếp công dân định kỳ tháng 8",
+    "date": "2026-08-05",
+    "time": "08:00",
+    "location": "Trụ sở Tiếp công dân",
+    "attendees": [
+      "Đại biểu HĐND tỉnh"
+    ],
+    "type": "Tiếp cử tri"
+  },
+  {
+    "id": "s2026-09-25",
+    "title": "Họp phiên thường kỳ để đánh giá kết quả hoạt động tháng 9, thảo luận và triển khai nhiệm vụ trọng tâm tháng 10 năm 2026...",
+    "date": "2026-09-25",
+    "time": "08:00",
+    "location": "Phòng họp Thường trực HĐND",
+    "attendees": [
+      "Thường trực HĐND",
+      "Trưởng/Phó các Ban HĐND"
+    ],
+    "type": "Họp Thường trực"
+  },
+  {
+    "id": "s2026-09-15",
+    "title": "Tổ chức kỳ họp chuyên đề HĐND tỉnh",
+    "date": "2026-09-15",
+    "time": "08:00",
+    "location": "Hội trường HĐND tỉnh",
+    "attendees": [
+      "Đại biểu HĐND tỉnh",
+      "Khách mời"
+    ],
+    "type": "Khác"
+  },
+  {
+    "id": "s2026-09-10",
+    "title": "Tiếp tục giám sát chuyên đề của Thường trực HĐND tỉnh việc thực hiện các quy định pháp luật về tổ chức, hoạt động bộ máy...",
+    "date": "2026-09-10",
+    "time": "08:30",
+    "location": "Các cơ quan/Đơn vị",
+    "attendees": [
+      "Đoàn giám sát"
+    ],
+    "type": "Giám sát chuyên đề"
+  },
+  {
+    "id": "s2026-09-20",
+    "title": "Đại biểu HĐND tỉnh tiếp công dân định kỳ tháng 9",
+    "date": "2026-09-20",
+    "time": "08:00",
+    "location": "Trụ sở Tiếp công dân",
+    "attendees": [
+      "Đại biểu HĐND tỉnh"
+    ],
+    "type": "Tiếp cử tri"
+  },
+  {
+    "id": "s2026-10-25",
+    "title": "Họp phiên thường kỳ để đánh giá kết quả hoạt động tháng 10, thảo luận và triển khai nhiệm vụ trọng tâm tháng 11 năm 2026...",
+    "date": "2026-10-25",
+    "time": "08:00",
+    "location": "Phòng họp Thường trực HĐND",
+    "attendees": [
+      "Thường trực HĐND",
+      "Trưởng/Phó các Ban HĐND"
+    ],
+    "type": "Họp Thường trực"
+  },
+  {
+    "id": "s2026-10-10",
+    "title": "Tiếp tục giám sát chuyên đề của Thường trực HĐND tỉnh...",
+    "date": "2026-10-10",
+    "time": "08:30",
+    "location": "Các cơ quan/Đơn vị",
+    "attendees": [
+      "Đoàn giám sát"
+    ],
+    "type": "Giám sát chuyên đề"
+  },
+  {
+    "id": "s2026-10-05",
+    "title": "Ban hành kế hoạch tiếp xúc cử tri trước kỳ họp thường lệ HĐND tỉnh cuối năm 2026",
+    "date": "2026-10-05",
+    "time": "14:00",
+    "location": "Văn phòng HĐND",
+    "attendees": [
+      "Thường trực HĐND",
+      "Văn phòng"
+    ],
+    "type": "Khác"
+  },
+  {
+    "id": "s2026-10-15",
+    "title": "Chỉ đạo xây dựng Đề cương báo cáo giám sát chuyên đề của HĐND tỉnh năm 2027",
+    "date": "2026-10-15",
+    "time": "09:00",
+    "location": "Phòng họp số 3",
+    "attendees": [
+      "Thường trực HĐND",
+      "Lãnh đạo các Ban"
+    ],
+    "type": "Khác"
+  },
+  {
+    "id": "s2026-10-20",
+    "title": "Đại biểu HĐND tỉnh tiếp công dân định kỳ tháng 10",
+    "date": "2026-10-20",
+    "time": "08:00",
+    "location": "Trụ sở Tiếp công dân",
+    "attendees": [
+      "Đại biểu HĐND tỉnh"
+    ],
+    "type": "Tiếp cử tri"
+  },
+  {
+    "id": "s2026-11-25",
+    "title": "Họp phiên thường kỳ để đánh giá kết quả hoạt động tháng 11, thảo luận và triển khai nhiệm vụ trọng tâm tháng 12 năm 2026...",
+    "date": "2026-11-25",
+    "time": "08:00",
+    "location": "Phòng họp Thường trực HĐND",
+    "attendees": [
+      "Thường trực HĐND",
+      "Trưởng/Phó các Ban HĐND"
+    ],
+    "type": "Họp Thường trực"
+  },
+  {
+    "id": "s2026-11-15",
+    "title": "Đại biểu HĐND tỉnh tiếp xúc cử tri trước kỳ họp thường lệ HĐND tỉnh cuối năm 2026",
+    "date": "2026-11-15",
+    "time": "08:00",
+    "location": "Các điểm tiếp xúc cử tri",
+    "attendees": [
+      "Đại biểu HĐND tỉnh"
+    ],
+    "type": "Tiếp cử tri"
+  },
+  {
+    "id": "s2026-11-20",
+    "title": "Đại biểu HĐND tỉnh tiếp công dân định kỳ tháng 11",
+    "date": "2026-11-20",
+    "time": "08:00",
+    "location": "Trụ sở Tiếp công dân",
+    "attendees": [
+      "Đại biểu HĐND tỉnh"
+    ],
+    "type": "Tiếp cử tri"
+  },
+  {
+    "id": "s2026-12-25",
+    "title": "Họp phiên thường kỳ để đánh giá kết quả hoạt động năm 2026, nhiệm vụ trọng tâm năm 2027...",
+    "date": "2026-12-25",
+    "time": "08:00",
+    "location": "Phòng họp Thường trực HĐND",
+    "attendees": [
+      "Thường trực HĐND",
+      "Trưởng/Phó các Ban HĐND"
+    ],
+    "type": "Họp Thường trực"
+  },
+  {
+    "id": "s2026-12-15",
+    "title": "Tổ chức kỳ họp thường lệ HĐND tỉnh cuối năm 2026",
+    "date": "2026-12-15",
+    "time": "08:00",
+    "location": "Hội trường HĐND tỉnh",
+    "attendees": [
+      "Đại biểu HĐND tỉnh",
+      "Khách mời"
+    ],
+    "type": "Khác"
+  },
+  {
+    "id": "s2026-12-20",
+    "title": "Đại biểu HĐND tỉnh tiếp công dân định kỳ tháng 12",
+    "date": "2026-12-20",
+    "time": "08:00",
+    "location": "Trụ sở Tiếp công dân",
+    "attendees": [
+      "Đại biểu HĐND tỉnh"
+    ],
+    "type": "Tiếp cử tri"
+  },
+  {
+    "id": "s2026-12-30",
+    "title": "Chỉ đạo công tác kiểm điểm, xếp loại, tổng kết năm 2026",
+    "date": "2026-12-30",
+    "time": "08:00",
+    "location": "Hội trường HĐND tỉnh",
+    "attendees": [
+      "Thường trực HĐND"
+    ],
+    "type": "Khác"
   }
 ];

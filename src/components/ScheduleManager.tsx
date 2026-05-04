@@ -34,6 +34,32 @@ export function ScheduleManager() {
     setIsAdding(false);
   };
 
+  const getWeekRange = (weekOffset: number) => {
+    const today = new Date();
+    const day = today.getDay();
+    const diff = today.getDate() - day + (day === 0 ? -6 : 1);
+    const start = new Date(today.getFullYear(), today.getMonth(), diff + (weekOffset * 7));
+    const end = new Date(start);
+    end.setDate(start.getDate() + 6);
+    end.setHours(23, 59, 59, 999);
+    return { start, end };
+  };
+
+  const getFilteredSchedules = () => {
+    let offset = 0;
+    if (selectedWeek === 'Tuần trước') offset = -1;
+    if (selectedWeek === 'Tuần sau') offset = 1;
+
+    const { start, end } = getWeekRange(offset);
+
+    return schedules.filter(schedule => {
+      const scheduleDate = new Date(schedule.date);
+      return scheduleDate >= start && scheduleDate <= end;
+    }).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  };
+
+  const displaySchedules = getFilteredSchedules();
+
   const canManageSchedules = currentUser?.role === 'ADMIN' || currentUser?.role === 'MANAGER';
 
   return (
@@ -80,7 +106,7 @@ export function ScheduleManager() {
          </div>
 
          <div className="space-y-4">
-            {schedules.map(schedule => (
+            {displaySchedules.map(schedule => (
               <div key={schedule.id} className="flex gap-4 p-4 border border-slate-200 rounded-lg hover:border-blue-300 transition-colors bg-slate-50/50 print:border-slate-300 print:break-inside-avoid">
                 <div className="w-32 shrink-0 flex flex-col items-center justify-center bg-blue-600 text-white rounded-lg p-3 print:bg-slate-800">
                   <span className="text-sm font-medium opacity-90">Ngày</span>
@@ -116,9 +142,9 @@ export function ScheduleManager() {
               </div>
             ))}
             
-            {schedules.length === 0 && (
+            {displaySchedules.length === 0 && (
               <div className="text-center p-8 text-slate-500">
-                Trống lịch công tác.
+                Không có sự kiện nào trong {selectedWeek.toLowerCase()}.
               </div>
             )}
          </div>

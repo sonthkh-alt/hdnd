@@ -1,6 +1,7 @@
 import { LayoutDashboard, Users, CheckSquare, Calendar, Bot, Building2, LogOut, UserCircle, Contact } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { useApp } from '../store';
+import { useEffect, useState } from 'react';
 
 export type TabId = 'dashboard' | 'departments' | 'employees' | 'commune-directory' | 'deputies' | 'na-deputies' | 'tasks' | 'schedules' | 'assistant' | 'approvals';
 
@@ -11,15 +12,20 @@ interface SidebarProps {
 
 export function Sidebar({ activeTab, onChangeTab }: SidebarProps) {
   const { currentUser, logout, pendingRegistrations } = useApp();
-  
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   const tabs = [
     { id: 'dashboard', label: 'Tổng quan', icon: LayoutDashboard },
     { id: 'departments', label: 'Phòng ban', icon: Building2 },
     { id: 'employees', label: 'Hồ sơ Cán bộ', icon: Users },
-    { id: 'commune-directory', label: 'Danh bạ 166 xã, phường', icon: Contact },
+    { id: 'commune-directory', label: 'Danh bạ điện thoại', icon: Contact },
     { id: 'na-deputies', label: 'Đại biểu Quốc hội', icon: Contact },
     { id: 'deputies', label: 'Đại biểu HĐND', icon: Contact },
-    { id: 'tasks', label: 'Công việc', icon: CheckSquare },
     { id: 'schedules', label: 'Lịch công tác', icon: Calendar },
     { id: 'assistant', label: 'Trợ lý số', icon: Bot },
   ] as any[];
@@ -86,8 +92,8 @@ export function Sidebar({ activeTab, onChangeTab }: SidebarProps) {
            </button>
         </div>
         <div className="px-2 text-slate-500 font-medium">
-          <p>Phiên bản 1.0</p>
-          <p className="mt-1">Dữ liệu nội bộ</p>
+          <p>{time.toLocaleDateString('vi-VN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+          <p className="mt-1">{time.toLocaleTimeString('vi-VN')}</p>
         </div>
       </div>
     </div>

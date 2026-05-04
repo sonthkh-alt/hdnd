@@ -10,10 +10,10 @@ export function CommuneDirectoryManager() {
 
   const filtered = communeOfficials.filter(o => {
     const matchesSearch = 
-      o.fullName.toLowerCase().includes(searchTerm.toLowerCase()) || 
-      o.commune.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      o.phone.includes(searchTerm) ||
-      o.email.toLowerCase().includes(searchTerm.toLowerCase());
+      (o.name || '').toLowerCase().includes(searchTerm.toLowerCase()) || 
+      (o.commune || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (o.phone || '').includes(searchTerm) ||
+      (o.email || '').toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesDistrict = districtFilter ? o.district === districtFilter : true;
     
@@ -24,7 +24,7 @@ export function CommuneDirectoryManager() {
     <div className="p-8 max-w-full mx-auto h-full flex flex-col">
       <div className="flex justify-between items-end mb-6">
         <div>
-          <h2 className="text-3xl font-bold text-slate-800 tracking-tight">Danh bạ 166 xã, phường</h2>
+          <h2 className="text-3xl font-bold text-slate-800 tracking-tight">Danh bạ điện thoại</h2>
           <p className="text-slate-500 mt-2 text-lg">Tra cứu thông tin liên hệ cán bộ cấp xã/phường ({filtered.length} kết quả)</p>
         </div>
       </div>
@@ -74,7 +74,7 @@ export function CommuneDirectoryManager() {
                     </div>
                   </td>
                   <td className="p-4">
-                    <div className="font-bold text-blue-900">{official.fullName}</div>
+                    <div className="font-bold text-blue-900">{official.name}</div>
                   </td>
                   <td className="p-4 text-sm font-medium text-slate-700">
                     {official.position}

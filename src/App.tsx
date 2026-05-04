@@ -41,7 +41,6 @@ function AppContent() {
         {activeTab === 'commune-directory' && <CommuneDirectoryManager />}
         {activeTab === 'na-deputies' && <NADeputiesManager />}
         {activeTab === 'deputies' && <DeputiesManager />}
-        {activeTab === 'tasks' && <TaskManager />}
         {activeTab === 'schedules' && <ScheduleManager />}
         {activeTab === 'assistant' && <AIAssistant />}
         {activeTab === 'approvals' && <ApprovalManager />}

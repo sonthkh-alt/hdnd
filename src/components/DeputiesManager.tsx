@@ -8,9 +8,9 @@ export function DeputiesManager() {
   const [selectedDeputy, setSelectedDeputy] = useState<Deputy | null>(null);
 
   const filtered = deputiesData.filter(d => 
-    d.fullName.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    d.hometown.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    d.jobTitle.toLowerCase().includes(searchTerm.toLowerCase())
+    (d.fullName || '').toLowerCase().includes(searchTerm.toLowerCase()) || 
+    (d.hometown || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (d.jobTitle || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
