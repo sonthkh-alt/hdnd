@@ -7,7 +7,8 @@ import { EventSchedule } from '../types';
 
 export function ScheduleManager() {
   const { schedules, addSchedule, currentUser } = useApp();
-  const [selectedPeriod, setSelectedPeriod] = useState('Tuần này');
+  const currentMonth = new Date().getMonth();
+  const [selectedPeriod, setSelectedPeriod] = useState('Lịch tháng');
   
   const [isAdding, setIsAdding] = useState(false);
   const [formData, setFormData] = useState<Partial<EventSchedule>>({ type: 'Họp Thường trực' });
@@ -34,20 +35,16 @@ export function ScheduleManager() {
     setIsAdding(false);
   };
 
-  const getWeekRange = (weekOffset: number) => {
-    const today = new Date();
-    const day = today.getDay();
-    const diff = today.getDate() - day + (day === 0 ? -6 : 1);
-    const start = new Date(today.getFullYear(), today.getMonth(), diff + (weekOffset * 7));
-    const end = new Date(start);
-    end.setDate(start.getDate() + 6);
-    end.setHours(23, 59, 59, 999);
-    return { start, end };
-  };
-
   const getFilteredSchedules = () => {
     if (selectedPeriod === 'Tất cả lịch') {
       return [...schedules].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    }
+
+    if (selectedPeriod === 'Lịch tháng') {
+      return schedules.filter(schedule => {
+        const scheduleDate = new Date(schedule.date);
+        return scheduleDate.getMonth() === currentMonth;
+      }).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     }
 
     if (selectedPeriod.startsWith('Tháng')) {
@@ -59,16 +56,7 @@ export function ScheduleManager() {
       }).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     }
 
-    let offset = 0;
-    if (selectedPeriod === 'Tuần trước') offset = -1;
-    if (selectedPeriod === 'Tuần sau') offset = 1;
-
-    const { start, end } = getWeekRange(offset);
-
-    return schedules.filter(schedule => {
-      const scheduleDate = new Date(schedule.date);
-      return scheduleDate >= start && scheduleDate <= end;
-    }).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    return [...schedules].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   };
 
   const displaySchedules = getFilteredSchedules();
@@ -104,7 +92,7 @@ export function ScheduleManager() {
 
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 print:border-none print:shadow-none">
          <div className="flex flex-wrap items-center gap-4 mb-6 border-b border-slate-100 pb-4 print:hidden">
-            {['Tất cả lịch', 'Tuần trước', 'Tuần này', 'Tuần sau'].map((period) => (
+            {['Tất cả lịch', 'Lịch tháng'].map((period) => (
               <button
                 key={period}
                 onClick={() => setSelectedPeriod(period)}

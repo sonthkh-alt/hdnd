@@ -7,8 +7,8 @@ import { EmployeeManager } from './components/EmployeeManager';
 import { DeputiesManager } from './components/DeputiesManager';
 import { NADeputiesManager } from './components/NADeputiesManager';
 import { CommuneDirectoryManager } from './components/CommuneDirectoryManager';
-import { TaskManager } from './components/TaskManager';
 import { ScheduleManager } from './components/ScheduleManager';
+import { KTNSSchedule } from './components/KTNSSchedule';
 import { AIAssistant } from './components/AIAssistant';
 import { Login } from './components/Login';
 import { Registration } from './components/Registration';
@@ -42,6 +42,7 @@ function AppContent() {
         {activeTab === 'na-deputies' && <NADeputiesManager />}
         {activeTab === 'deputies' && <DeputiesManager />}
         {activeTab === 'schedules' && <ScheduleManager />}
+        {activeTab === 'ktns-schedules' && <KTNSSchedule />}
         {activeTab === 'assistant' && <AIAssistant />}
         {activeTab === 'approvals' && <ApprovalManager />}
       </main>

@@ -1,9 +1,9 @@
-import { LayoutDashboard, Users, CheckSquare, Calendar, Bot, Building2, LogOut, UserCircle, Contact } from 'lucide-react';
+import { LayoutDashboard, Users, CheckSquare, Calendar, Bot, Building2, LogOut, UserCircle, Contact, ChevronRight } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { useApp } from '../store';
 import { useEffect, useState } from 'react';
 
-export type TabId = 'dashboard' | 'departments' | 'employees' | 'commune-directory' | 'deputies' | 'na-deputies' | 'tasks' | 'schedules' | 'assistant' | 'approvals';
+export type TabId = 'dashboard' | 'departments' | 'employees' | 'commune-directory' | 'deputies' | 'na-deputies' | 'ktns-schedules' | 'schedules' | 'assistant' | 'approvals';
 
 interface SidebarProps {
   activeTab: TabId;
@@ -19,6 +19,8 @@ export function Sidebar({ activeTab, onChangeTab }: SidebarProps) {
     return () => clearInterval(timer);
   }, []);
 
+  const [isSchedulesOpen, setIsSchedulesOpen] = useState(true);
+
   const tabs = [
     { id: 'dashboard', label: 'Tổng quan', icon: LayoutDashboard },
     { id: 'departments', label: 'Phòng ban', icon: Building2 },
@@ -26,7 +28,15 @@ export function Sidebar({ activeTab, onChangeTab }: SidebarProps) {
     { id: 'commune-directory', label: 'Danh bạ điện thoại', icon: Contact },
     { id: 'na-deputies', label: 'Đại biểu Quốc hội', icon: Contact },
     { id: 'deputies', label: 'Đại biểu HĐND', icon: Contact },
-    { id: 'schedules', label: 'Lịch công tác', icon: Calendar },
+    { 
+      id: 'schedules', 
+      label: 'Lịch công tác', 
+      icon: Calendar,
+      subItems: [
+        { id: 'schedules', label: 'Lịch cơ quan' },
+        { id: 'ktns-schedules', label: 'Lịch Ban KTNS' },
+      ]
+    },
     { id: 'assistant', label: 'Trợ lý số', icon: Bot },
   ] as any[];
 
@@ -50,7 +60,42 @@ export function Sidebar({ activeTab, onChangeTab }: SidebarProps) {
       <nav className="w-full px-3 flex flex-col gap-1 flex-1">
         {tabs.map((tab) => {
           const Icon = tab.icon;
-          const isActive = activeTab === tab.id;
+          const isActive = activeTab === tab.id || tab.subItems?.some((s: any) => s.id === activeTab);
+          
+          if (tab.subItems) {
+            return (
+              <div key={tab.id} className="w-full">
+                <button
+                  onClick={() => setIsSchedulesOpen(!isSchedulesOpen)}
+                  className={cn(
+                    "flex items-center gap-3 w-full px-4 py-3 rounded-md transition-colors font-medium relative",
+                    isActive ? "text-white" : "hover:bg-slate-800/50 hover:text-white"
+                  )}
+                >
+                  <Icon size={20} className={cn(isActive ? "text-blue-400" : "text-slate-400")} />
+                  {tab.label}
+                  <ChevronRight size={16} className={cn("ml-auto transition-transform", isSchedulesOpen ? "rotate-90" : "")} />
+                </button>
+                {isSchedulesOpen && (
+                  <div className="mt-1 ml-9 flex flex-col gap-1 border-l border-slate-800 pl-2">
+                    {tab.subItems.map((sub: any) => (
+                      <button
+                        key={sub.id}
+                        onClick={() => onChangeTab(sub.id)}
+                        className={cn(
+                          "px-3 py-2 rounded text-sm font-medium transition-colors text-left",
+                          activeTab === sub.id ? "bg-blue-600/20 text-blue-400 border border-blue-500/30" : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/30"
+                        )}
+                      >
+                        {sub.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          }
+
           return (
             <button
               key={tab.id}
