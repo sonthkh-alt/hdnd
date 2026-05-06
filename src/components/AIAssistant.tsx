@@ -39,7 +39,6 @@ export function AIAssistant() {
     try {
       const apiKey = (import.meta as any).env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
       const ai = new GoogleGenAI(apiKey);
-      const model = ai.getGenerativeModel({ model: "gemini-1.5-pro" });
       
       const prompt = `HỆ THỐNG TRỢ LÝ QUẢN TRỊ THÔNG MINH (E-OFFICE)
 1. ĐỊNH DANH: Bạn là trợ lý số hỗ trợ nhanh. 
@@ -48,9 +47,12 @@ export function AIAssistant() {
 
 YÊU CẦU: ${input}`;
 
-      const result = await model.generateContent(prompt);
-      const response = await result.response;
-      const text = response.text();
+      const response = await ai.models.generateContent({
+        model: 'gemini-1.5-pro',
+        contents: [{ role: 'user', parts: [{ text: prompt }] }]
+      });
+
+      const text = response.text || "Đã xảy ra lỗi khi kết nối với hệ thống AI.";
       setMessages(prev => [...prev, { id: Date.now().toString(), role: 'assistant', content: text }]);
     } catch (error) {
       console.error(error);

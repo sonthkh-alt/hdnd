@@ -10,6 +10,7 @@ import { CommuneDirectoryManager } from './components/CommuneDirectoryManager';
 import { ScheduleManager } from './components/ScheduleManager';
 import { KTNSSchedule } from './components/KTNSSchedule';
 import { PCNSchedule } from './components/PCNSchedule';
+import { DocumentManagement } from './components/DocumentManagement';
 import { AIAssistant } from './components/AIAssistant';
 import { Login } from './components/Login';
 import { Registration } from './components/Registration';
@@ -36,9 +37,10 @@ function AppContent() {
     <div className="flex h-screen w-full bg-slate-50 font-sans text-slate-900 overflow-hidden">
       <Sidebar activeTab={activeTab} onChangeTab={setActiveTab} />
       <main className="flex-1 overflow-y-auto w-full relative">
-        {activeTab === 'dashboard' && <Dashboard />}
+        {activeTab === 'dashboard' && <Dashboard onTabChange={setActiveTab} />}
         {activeTab === 'departments' && <DepartmentManager />}
         {activeTab === 'employees' && <EmployeeManager />}
+        {activeTab === 'document-management' && <DocumentManagement />}
         {activeTab === 'commune-directory' && <CommuneDirectoryManager />}
         {activeTab === 'na-deputies' && <NADeputiesManager />}
         {activeTab === 'deputies' && <DeputiesManager />}

@@ -1,9 +1,9 @@
-import { LayoutDashboard, Users, CheckSquare, Calendar, Bot, Building2, LogOut, UserCircle, Contact, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, Users, CheckSquare, Calendar, Bot, Building2, LogOut, UserCircle, Contact, ChevronRight, FileText } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { useApp } from '../store';
 import { useEffect, useState } from 'react';
 
-export type TabId = 'dashboard' | 'departments' | 'employees' | 'commune-directory' | 'deputies' | 'na-deputies' | 'ktns-schedules' | 'pcn-schedules' | 'schedules' | 'assistant' | 'approvals';
+export type TabId = 'dashboard' | 'departments' | 'employees' | 'commune-directory' | 'deputies' | 'na-deputies' | 'ktns-schedules' | 'pcn-schedules' | 'schedules' | 'assistant' | 'approvals' | 'document-management';
 
 interface SidebarProps {
   activeTab: TabId;
@@ -25,6 +25,7 @@ export function Sidebar({ activeTab, onChangeTab }: SidebarProps) {
     { id: 'dashboard', label: 'Tổng quan', icon: LayoutDashboard },
     { id: 'departments', label: 'Phòng ban', icon: Building2 },
     { id: 'employees', label: 'Hồ sơ Cán bộ', icon: Users },
+    { id: 'document-management', label: 'Quản lý văn bản', icon: FileText },
     { id: 'commune-directory', label: 'Danh bạ điện thoại', icon: Contact },
     { id: 'na-deputies', label: 'Đại biểu Quốc hội', icon: Contact },
     { id: 'deputies', label: 'Đại biểu HĐND', icon: Contact },
@@ -62,6 +63,7 @@ export function Sidebar({ activeTab, onChangeTab }: SidebarProps) {
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id || tab.subItems?.some((s: any) => s.id === activeTab);
+          const isDocManagement = tab.id === 'document-management';
           
           if (tab.subItems) {
             return (
@@ -102,13 +104,13 @@ export function Sidebar({ activeTab, onChangeTab }: SidebarProps) {
               key={tab.id}
               onClick={() => onChangeTab(tab.id as TabId)}
               className={cn(
-                "flex items-center gap-3 w-full px-4 py-3 rounded-md transition-colors font-medium relative",
+                "flex items-center gap-3 w-full px-4 py-3 rounded-md transition-all font-medium relative border-l-4",
                 isActive 
-                  ? "bg-slate-800 text-white shadow-sm" 
-                  : "hover:bg-slate-800/50 hover:text-white"
+                  ? (isDocManagement ? "bg-red-900 border-red-500 text-white shadow-lg" : "bg-slate-800 text-white shadow-sm border-blue-500") 
+                  : (isDocManagement ? "bg-red-600/10 hover:bg-red-600/20 text-red-400 border-red-500/30" : "hover:bg-slate-800/50 hover:text-white border-transparent")
               )}
             >
-              <Icon size={20} className={cn(isActive ? "text-blue-400" : "text-slate-400")} />
+              <Icon size={20} className={cn(isActive ? (isDocManagement ? "text-white" : "text-blue-400") : (isDocManagement ? "text-red-400" : "text-slate-400"))} />
               {tab.label}
               {tab.id === 'approvals' && pendingCount > 0 && (
                  <span className="ml-auto bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">

@@ -2,8 +2,13 @@ import { Users, Calendar, AlertCircle, Contact } from 'lucide-react';
 import { useApp } from '../store';
 import { mockNADeputies } from '../data/naDeputies';
 import { deputiesData } from '../data/deputies';
+import { TabId } from './Sidebar';
 
-export function Dashboard() {
+interface DashboardProps {
+  onTabChange: (tab: TabId) => void;
+}
+
+export function Dashboard({ onTabChange }: DashboardProps) {
   const { employees, schedules, currentUser } = useApp();
 
   const getWeekRange = (weekOffset: number) => {
@@ -31,9 +36,12 @@ export function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        <button 
+          onClick={() => onTabChange('employees')}
+          className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:border-blue-400 hover:shadow-md transition-all text-left group"
+        >
           <div className="flex items-center gap-4">
-            <div className="bg-blue-100 p-4 rounded-lg">
+            <div className="bg-blue-100 p-4 rounded-lg group-hover:bg-blue-200 transition-colors">
               <Users size={24} className="text-blue-700" />
             </div>
             <div>
@@ -41,11 +49,14 @@ export function Dashboard() {
               <h3 className="text-3xl font-bold text-slate-800">{employees.length}</h3>
             </div>
           </div>
-        </div>
+        </button>
 
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        <button 
+          onClick={() => onTabChange('na-deputies')}
+          className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:border-indigo-400 hover:shadow-md transition-all text-left group"
+        >
           <div className="flex items-center gap-4">
-            <div className="bg-indigo-100 p-4 rounded-lg">
+            <div className="bg-indigo-100 p-4 rounded-lg group-hover:bg-indigo-200 transition-colors">
               <Contact size={24} className="text-indigo-700" />
             </div>
             <div>
@@ -53,11 +64,14 @@ export function Dashboard() {
               <h3 className="text-3xl font-bold text-slate-800">{mockNADeputies.length}</h3>
             </div>
           </div>
-        </div>
+        </button>
 
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        <button 
+          onClick={() => onTabChange('deputies')}
+          className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:border-amber-400 hover:shadow-md transition-all text-left group"
+        >
           <div className="flex items-center gap-4">
-            <div className="bg-amber-100 p-4 rounded-lg">
+            <div className="bg-amber-100 p-4 rounded-lg group-hover:bg-amber-200 transition-colors">
               <Contact size={24} className="text-amber-700" />
             </div>
             <div>
@@ -65,11 +79,14 @@ export function Dashboard() {
               <h3 className="text-3xl font-bold text-slate-800">{deputiesData.length}</h3>
             </div>
           </div>
-        </div>
+        </button>
 
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        <button 
+          onClick={() => onTabChange('schedules')}
+          className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:border-green-400 hover:shadow-md transition-all text-left group"
+        >
           <div className="flex items-center gap-4">
-            <div className="bg-green-100 p-4 rounded-lg">
+            <div className="bg-green-100 p-4 rounded-lg group-hover:bg-green-200 transition-colors">
               <Calendar size={24} className="text-green-700" />
             </div>
             <div>
@@ -77,7 +94,7 @@ export function Dashboard() {
               <h3 className="text-3xl font-bold text-slate-800">{thisWeekSchedules.length}</h3>
             </div>
           </div>
-        </div>
+        </button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
