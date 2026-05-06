@@ -1,9 +1,9 @@
-import { LayoutDashboard, Users, CheckSquare, Calendar, Bot, Building2, LogOut, UserCircle, Contact, ChevronRight, FileText } from 'lucide-react';
+import { LayoutDashboard, Users, CheckSquare, Calendar, Bot, Building2, LogOut, UserCircle, Contact, ChevronRight, FileText, Zap } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { useApp } from '../store';
 import { useEffect, useState } from 'react';
 
-export type TabId = 'dashboard' | 'departments' | 'employees' | 'commune-directory' | 'deputies' | 'na-deputies' | 'ktns-schedules' | 'pcn-schedules' | 'schedules' | 'assistant' | 'approvals' | 'document-management';
+export type TabId = 'dashboard' | 'departments' | 'employees' | 'commune-directory' | 'deputies' | 'na-deputies' | 'ktns-schedules' | 'pcn-schedules' | 'schedules' | 'assistant' | 'approvals' | 'document-management' | 'digital-transformation' | 'login';
 
 interface SidebarProps {
   activeTab: TabId;
@@ -26,6 +26,7 @@ export function Sidebar({ activeTab, onChangeTab }: SidebarProps) {
     { id: 'departments', label: 'Phòng ban', icon: Building2 },
     { id: 'employees', label: 'Hồ sơ Cán bộ', icon: Users },
     { id: 'document-management', label: 'Quản lý văn bản', icon: FileText },
+    { id: 'digital-transformation', label: 'Chuyển đổi số', icon: Zap },
     { id: 'commune-directory', label: 'Danh bạ điện thoại', icon: Contact },
     { id: 'na-deputies', label: 'Đại biểu Quốc hội', icon: Contact },
     { id: 'deputies', label: 'Đại biểu HĐND', icon: Contact },
@@ -64,6 +65,7 @@ export function Sidebar({ activeTab, onChangeTab }: SidebarProps) {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id || tab.subItems?.some((s: any) => s.id === activeTab);
           const isDocManagement = tab.id === 'document-management';
+          const isDigitalTransformation = tab.id === 'digital-transformation';
           
           if (tab.subItems) {
             return (
@@ -106,11 +108,18 @@ export function Sidebar({ activeTab, onChangeTab }: SidebarProps) {
               className={cn(
                 "flex items-center gap-3 w-full px-4 py-3 rounded-md transition-all font-medium relative border-l-4",
                 isActive 
-                  ? (isDocManagement ? "bg-red-900 border-red-500 text-white shadow-lg" : "bg-slate-800 text-white shadow-sm border-blue-500") 
-                  : (isDocManagement ? "bg-red-600/10 hover:bg-red-600/20 text-red-400 border-red-500/30" : "hover:bg-slate-800/50 hover:text-white border-transparent")
+                  ? (isDocManagement ? "bg-red-900 border-red-500 text-white shadow-lg" : 
+                     isDigitalTransformation ? "bg-amber-900 border-amber-500 text-white shadow-lg" :
+                     "bg-slate-800 text-white shadow-sm border-blue-500") 
+                  : (isDocManagement ? "bg-red-600/10 hover:bg-red-600/20 text-red-400 border-red-500/30" : 
+                     isDigitalTransformation ? "bg-amber-600/10 hover:bg-amber-600/20 text-amber-400 border-amber-500/30" :
+                     "hover:bg-slate-800/50 hover:text-white border-transparent")
               )}
             >
-              <Icon size={20} className={cn(isActive ? (isDocManagement ? "text-white" : "text-blue-400") : (isDocManagement ? "text-red-400" : "text-slate-400"))} />
+              <Icon size={20} className={cn(isActive 
+                ? (isDocManagement ? "text-white" : isDigitalTransformation ? "text-white" : "text-blue-400") 
+                : (isDocManagement ? "text-red-400" : isDigitalTransformation ? "text-amber-400" : "text-slate-400")
+              )} />
               {tab.label}
               {tab.id === 'approvals' && pendingCount > 0 && (
                  <span className="ml-auto bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
@@ -123,22 +132,35 @@ export function Sidebar({ activeTab, onChangeTab }: SidebarProps) {
       </nav>
 
       <div className="mt-auto w-full px-4 text-xs">
-        <div className="bg-slate-800 rounded-lg p-3 mb-2 border border-slate-700">
-           <div className="flex items-center gap-2 mb-3">
-             <UserCircle size={24} className="text-blue-400" />
-             <div className="overflow-hidden">
-               <p className="font-bold text-white truncate text-sm">{currentUser?.name}</p>
-               <p className="text-slate-400 truncate mt-0.5">{currentUser?.role === 'ADMIN' ? 'Quản trị viên' : (currentUser?.role === 'MANAGER' ? 'Lãnh đạo' : 'Chuyên viên')}</p>
+        {currentUser ? (
+          <div className="bg-slate-800 rounded-lg p-3 mb-2 border border-slate-700">
+             <div className="flex items-center gap-2 mb-3">
+               <UserCircle size={24} className="text-blue-400" />
+               <div className="overflow-hidden">
+                 <p className="font-bold text-white truncate text-sm">{currentUser.name}</p>
+                 <p className="text-slate-400 truncate mt-0.5">{currentUser.role === 'ADMIN' ? 'Quản trị viên' : (currentUser.role === 'MANAGER' ? 'Lãnh đạo' : 'Chuyên viên')}</p>
+               </div>
              </div>
-           </div>
-           <button 
-             onClick={logout}
-             className="w-full flex items-center justify-center gap-2 py-2 bg-slate-700 hover:bg-red-600/90 hover:text-white text-slate-300 rounded font-medium transition-colors"
-           >
-             <LogOut size={16} />
-             Đăng xuất
-           </button>
-        </div>
+             <button 
+               onClick={logout}
+               className="w-full flex items-center justify-center gap-2 py-2 bg-slate-700 hover:bg-red-600/90 hover:text-white text-slate-300 rounded font-medium transition-colors"
+             >
+               <LogOut size={16} />
+               Đăng xuất
+             </button>
+          </div>
+        ) : (
+          <div className="bg-slate-800 rounded-lg p-3 mb-2 border border-slate-700">
+            <button 
+              onClick={() => onChangeTab('login')}
+              className="w-full flex items-center justify-center gap-2 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded font-bold transition-all shadow-lg active:scale-95"
+            >
+              <LogOut size={16} className="rotate-180" />
+              Đăng nhập
+            </button>
+            <p className="text-center text-slate-500 mt-2">Chế độ khách</p>
+          </div>
+        )}
         <div className="px-2 text-slate-500 font-medium">
           <p>{time.toLocaleDateString('vi-VN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
           <p className="mt-1">{time.toLocaleTimeString('vi-VN')}</p>

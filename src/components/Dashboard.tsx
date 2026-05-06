@@ -1,4 +1,4 @@
-import { Users, Calendar, AlertCircle, Contact } from 'lucide-react';
+import { Users, Calendar, AlertCircle, Contact, Zap } from 'lucide-react';
 import { useApp } from '../store';
 import { mockNADeputies } from '../data/naDeputies';
 import { deputiesData } from '../data/deputies';
@@ -92,6 +92,26 @@ export function Dashboard({ onTabChange }: DashboardProps) {
             <div>
               <p className="text-slate-500 font-medium">Sự kiện tuần này</p>
               <h3 className="text-3xl font-bold text-slate-800">{thisWeekSchedules.length}</h3>
+            </div>
+          </div>
+        </button>
+
+        <button 
+          onClick={() => onTabChange('digital-transformation')}
+          className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:border-amber-400 hover:shadow-md transition-all text-left group md:col-span-4"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="bg-amber-100 p-4 rounded-lg group-hover:bg-amber-200 transition-colors">
+                <Zap size={24} className="text-amber-700" />
+              </div>
+              <div>
+                <h4 className="text-xl font-bold text-slate-800 tracking-tight">Kế hoạch Chuyển đổi số & AI</h4>
+                <p className="text-slate-500 text-sm">Hướng dẫn sử dụng Gemini, NotebookLM và công cụ số mới</p>
+              </div>
+            </div>
+            <div className="bg-slate-50 px-4 py-2 rounded-lg text-amber-600 font-bold border border-amber-100 group-hover:bg-amber-600 group-hover:text-white transition-all">
+              Hành trình mới
             </div>
           </div>
         </button>

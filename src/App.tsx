@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AppProvider, useApp } from './store';
 import { Sidebar, TabId } from './components/Sidebar';
 import { Dashboard } from './components/Dashboard';
@@ -11,6 +11,7 @@ import { ScheduleManager } from './components/ScheduleManager';
 import { KTNSSchedule } from './components/KTNSSchedule';
 import { PCNSchedule } from './components/PCNSchedule';
 import { DocumentManagement } from './components/DocumentManagement';
+import { DigitalTransformation } from './components/DigitalTransformation';
 import { AIAssistant } from './components/AIAssistant';
 import { Login } from './components/Login';
 import { Registration } from './components/Registration';
@@ -21,9 +22,12 @@ function AppContent() {
   const { currentUser, authState } = useApp();
   const [activeTab, setActiveTab] = useState<TabId>('dashboard');
 
-  if (authState === 'LOGGED_OUT' && !currentUser) {
-    return <Login />;
-  }
+  // Automatically return to dashboard after login
+  useEffect(() => {
+    if (currentUser && activeTab === 'login') {
+      setActiveTab('dashboard');
+    }
+  }, [currentUser, activeTab]);
 
   if (authState === 'REGISTERING') {
     return <Registration />;
@@ -33,6 +37,7 @@ function AppContent() {
     return <PendingApproval />;
   }
 
+  // Allow 'LOGGED_OUT' users to see the dashboard as guests
   return (
     <div className="flex h-screen w-full bg-slate-50 font-sans text-slate-900 overflow-hidden">
       <Sidebar activeTab={activeTab} onChangeTab={setActiveTab} />
@@ -41,6 +46,7 @@ function AppContent() {
         {activeTab === 'departments' && <DepartmentManager />}
         {activeTab === 'employees' && <EmployeeManager />}
         {activeTab === 'document-management' && <DocumentManagement />}
+        {activeTab === 'digital-transformation' && <DigitalTransformation />}
         {activeTab === 'commune-directory' && <CommuneDirectoryManager />}
         {activeTab === 'na-deputies' && <NADeputiesManager />}
         {activeTab === 'deputies' && <DeputiesManager />}
@@ -49,6 +55,7 @@ function AppContent() {
         {activeTab === 'pcn-schedules' && <PCNSchedule />}
         {activeTab === 'assistant' && <AIAssistant />}
         {activeTab === 'approvals' && <ApprovalManager />}
+        {activeTab === 'login' && <Login />}
       </main>
     </div>
   );
