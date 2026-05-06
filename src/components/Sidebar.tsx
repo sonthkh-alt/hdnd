@@ -3,7 +3,7 @@ import { cn } from '../lib/utils';
 import { useApp } from '../store';
 import { useEffect, useState } from 'react';
 
-export type TabId = 'dashboard' | 'departments' | 'employees' | 'commune-directory' | 'deputies' | 'na-deputies' | 'ktns-schedules' | 'schedules' | 'assistant' | 'approvals';
+export type TabId = 'dashboard' | 'departments' | 'employees' | 'commune-directory' | 'deputies' | 'na-deputies' | 'ktns-schedules' | 'pcn-schedules' | 'schedules' | 'assistant' | 'approvals';
 
 interface SidebarProps {
   activeTab: TabId;
@@ -34,6 +34,7 @@ export function Sidebar({ activeTab, onChangeTab }: SidebarProps) {
       icon: Calendar,
       subItems: [
         { id: 'schedules', label: 'Lịch cơ quan' },
+        { id: 'pcn-schedules', label: 'Lịch Ban Pháp chế' },
         { id: 'ktns-schedules', label: 'Lịch Ban KTNS' },
       ]
     },

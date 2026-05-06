@@ -9,6 +9,7 @@ import { NADeputiesManager } from './components/NADeputiesManager';
 import { CommuneDirectoryManager } from './components/CommuneDirectoryManager';
 import { ScheduleManager } from './components/ScheduleManager';
 import { KTNSSchedule } from './components/KTNSSchedule';
+import { PCNSchedule } from './components/PCNSchedule';
 import { AIAssistant } from './components/AIAssistant';
 import { Login } from './components/Login';
 import { Registration } from './components/Registration';
@@ -43,6 +44,7 @@ function AppContent() {
         {activeTab === 'deputies' && <DeputiesManager />}
         {activeTab === 'schedules' && <ScheduleManager />}
         {activeTab === 'ktns-schedules' && <KTNSSchedule />}
+        {activeTab === 'pcn-schedules' && <PCNSchedule />}
         {activeTab === 'assistant' && <AIAssistant />}
         {activeTab === 'approvals' && <ApprovalManager />}
       </main>
