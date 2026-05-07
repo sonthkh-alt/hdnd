@@ -13,8 +13,9 @@ export function DepartmentManager() {
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newName.trim()) return;
+    const id = `d${Date.now()}-${Math.random().toString(36).substring(2, 5)}`;
     const newDept: Department = {
-      id: `d${Date.now()}`,
+      id,
       name: newName.trim(),
       description: newDesc.trim()
     };

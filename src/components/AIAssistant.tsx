@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Bot, Send, ShieldAlert, FileSearch, ExternalLink } from 'lucide-react';
-import { GoogleGenAI } from '@google/genai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 interface Message {
   id: string;
@@ -31,14 +31,19 @@ export function AIAssistant() {
   const handleSend = async () => {
     if (!input.trim()) return;
 
-    const newMessage: Message = { id: Date.now().toString(), role: 'user', content: input };
+    const id = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+    const newMessage: Message = { id, role: 'user', content: input };
     setMessages(prev => [...prev, newMessage]);
     setInput('');
     setIsLoading(true);
 
     try {
-      const apiKey = (import.meta as any).env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
-      const ai = new GoogleGenAI(apiKey);
+      const apiKey = process.env.GEMINI_API_KEY;
+      if (!apiKey) {
+        throw new Error('GEMINI_API_KEY is not defined. Please check your environment variables.');
+      }
+      const genAI = new GoogleGenerativeAI(apiKey);
+      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
       
       const prompt = `HỆ THỐNG TRỢ LÝ QUẢN TRỊ THÔNG MINH (E-OFFICE)
 1. ĐỊNH DANH: Bạn là trợ lý số hỗ trợ nhanh. 
@@ -47,16 +52,13 @@ export function AIAssistant() {
 
 YÊU CẦU: ${input}`;
 
-      const response = await ai.models.generateContent({
-        model: 'gemini-1.5-pro',
-        contents: [{ role: 'user', parts: [{ text: prompt }] }]
-      });
-
-      const text = response.text || "Đã xảy ra lỗi khi kết nối với hệ thống AI.";
-      setMessages(prev => [...prev, { id: Date.now().toString(), role: 'assistant', content: text }]);
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      const text = response.text() || "Đã xảy ra lỗi khi kết nối với hệ thống AI.";
+      setMessages(prev => [...prev, { id: `${Date.now()}-assistant`, role: 'assistant', content: text }]);
     } catch (error) {
       console.error(error);
-      setMessages(prev => [...prev, { id: Date.now().toString(), role: 'assistant', content: "Xin lỗi đồng chí, hệ thống đang bận. Vui lòng sử dụng NotebookLM để có kết quả chính xác nhất." }]);
+      setMessages(prev => [...prev, { id: `${Date.now()}-error`, role: 'assistant', content: "Xin lỗi đồng chí, hệ thống đang bận. Vui lòng sử dụng NotebookLM để có kết quả chính xác nhất." }]);
     } finally {
       setIsLoading(false);
     }

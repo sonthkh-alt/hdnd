@@ -21,8 +21,9 @@ export function ScheduleManager() {
     e.preventDefault();
     if (!formData.title || !formData.date || !formData.time) return;
     
+    const id = `s${Date.now()}-${Math.random().toString(36).substring(2, 5)}`;
     const newSchedule: EventSchedule = {
-      id: `s${Date.now()}`,
+      id,
       title: formData.title,
       date: formData.date,
       time: formData.time,

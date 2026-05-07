@@ -17,6 +17,33 @@ interface PCNProgram {
 }
 
 const pcnData: PCNProgram[] = [
+  // 2024
+  {
+    id: '2024-gs-1',
+    year: 2024,
+    type: 'Giám sát',
+    title: 'Giám sát việc thực hiện pháp luật về tiếp công dân và giải quyết khiếu nại, tố cáo tại các cơ quan hành chính nhà nước',
+    content: 'Chủ trì: Trưởng Ban. Đơn vị phối hợp: Ban Pháp chế các huyện, thị xã. Đối tượng: Một số sở và UBND cấp huyện.',
+    leader: 'Trưởng Ban',
+    timeline: [
+      { label: 'Lập đoàn giám sát', to: '2024-03-20' },
+      { label: 'Kiểm tra hồ sơ thực tế', from: '2024-04-05', to: '2024-05-15' },
+      { label: 'Báo cáo kết luận giám sát', to: '2024-06-15' },
+    ]
+  },
+  // 2025
+  {
+    id: '2025-ks-1',
+    year: 2025,
+    type: 'Khảo sát',
+    title: 'Khảo sát tình hình an ninh trật tự và công tác phòng ngừa tội phạm tại các khu kinh tế, khu công nghiệp trọng điểm',
+    content: 'Chủ trì: Lãnh đạo Ban. Phối hợp với Công an tỉnh.',
+    leader: 'Lãnh đạo Ban',
+    timeline: [
+      { label: 'Khảo sát tại Nghi Sơn và Lam Sơn', from: '2025-05-10', to: '2025-05-30' },
+      { label: 'Làm việc với Công an tỉnh', to: '2025-06-10' },
+    ]
+  },
   // 2026
   {
     id: '2026-gs-1',
@@ -94,6 +121,58 @@ const pcnData: PCNProgram[] = [
       { label: 'Triển khai giám sát trực tiếp', from: '2027-03-01', to: '2027-04-30' },
       { label: 'Báo cáo kết quả', to: '2027-05-31' },
     ]
+  },
+  // 2028
+  {
+    id: '2028-gs-1',
+    year: 2028,
+    type: 'Giám sát',
+    title: 'Giám sát việc thực hiện các nghị quyết của HĐND tỉnh về biên chế và chế độ chính sách cho cán bộ bán chuyên trách',
+    content: 'Chủ trì: Lãnh đạo Ban. Đơn vị phối hợp: Sở Nội vụ.',
+    leader: 'Trưởng Ban',
+    timeline: [
+      { label: 'Kế hoạch giám sát', to: '2028-04-15' },
+      { label: 'Giám sát thực tế', from: '2028-05-01', to: '2028-06-15' },
+    ]
+  },
+  // 2029
+  {
+    id: '2029-tm-1',
+    year: 2029,
+    type: 'Tham mưu',
+    title: 'Tham mưu ban hành văn bản quy phạm pháp luật thuộc thẩm quyền HĐND tỉnh giai đoạn 2026-2030',
+    content: 'Chủ trì: Ban Pháp chế. Đối tượng: Các cơ quan trình văn bản.',
+    leader: 'Lãnh đạo Ban',
+    timeline: [
+      { label: 'Rà soát danh mục văn bản', to: '2029-01-31' },
+      { label: 'Thẩm tra văn bản', from: '2029-02-01', to: '2029-10-31' },
+    ]
+  },
+  // 2030
+  {
+    id: '2030-gs-1',
+    year: 2030,
+    type: 'Giám sát',
+    title: 'Giám sát tổng kết việc thực hiện các luật mới ban hành trên địa bàn tỉnh',
+    content: 'Đánh giá tác động pháp luật và thực thi tại cơ sở.',
+    leader: 'Trưởng Ban',
+    timeline: [
+       { label: 'Thu thập báo cáo', from: '2030-03-01', to: '2030-05-30' },
+       { label: 'Hội thảo đánh giá', to: '2030-06-15' },
+    ]
+  },
+  // 2031
+  {
+    id: '2031-tm-1',
+    year: 2031,
+    type: 'Tham mưu',
+    title: 'Tham mưu chuẩn bị công tác bầu cử đại biểu Quốc hội và HĐND các cấp nhiệm kỳ 2031-2036',
+    content: 'Trọng tâm công tác chuẩn bị nhân sự và hồ sơ pháp lý.',
+    leader: 'Trưởng Ban',
+    timeline: [
+       { label: 'Xây dựng kế hoạch bầu cử', to: '2031-01-15' },
+       { label: 'Hướng dẫn hồ sơ pháp lý', from: '2031-02-01', to: '2031-04-30' },
+    ]
   }
 ];
 
@@ -113,7 +192,7 @@ export function PCNSchedule() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 className="text-3xl font-bold text-slate-800 tracking-tight">Kế hoạch công tác Ban Pháp chế</h2>
-          <p className="text-slate-500 mt-2 text-lg">Chương trình công tác toàn khóa XIX (nhiệm kỳ 2026 - 2031)</p>
+          <p className="text-slate-500 mt-2 text-lg">Chương trình công tác (Hệ thống dữ liệu 2024 - 2031)</p>
         </div>
         <div className="flex items-center gap-3">
           <div className="relative">
@@ -139,9 +218,9 @@ export function PCNSchedule() {
                 : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
             }`}
           >
-            Tất cả năm
+            Tất cả
           </button>
-          {[2026, 2027, 2028, 2029, 2030, 2031].map((year) => (
+          {[2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031].map((year) => (
             <button
               key={year}
               onClick={() => setSelectedYear(year)}

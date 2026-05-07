@@ -59,8 +59,9 @@ export function EmployeeManager() {
     e.preventDefault();
     if (!formData.name || !formData.departmentId) return;
 
+    const id = `e${Date.now()}-${Math.random().toString(36).substring(2, 5)}`;
     const newEmp: Employee = {
-      id: `e${Date.now()}`,
+      id,
       name: formData.name,
       departmentId: formData.departmentId,
       role: formData.role || 'Chuyên viên',
