@@ -291,7 +291,7 @@ ${fileContext}
   };
 
   return (
-    <div className="flex flex-col h-full bg-slate-50 lg:flex-row overflow-hidden font-sans">
+    <div className="flex flex-col h-full bg-slate-50 lg:flex-row overflow-hidden font-sans antialiased">
       {/* Sidebar - Thư viện & Văn bản mẫu */}
       <motion.div 
         initial={false}
