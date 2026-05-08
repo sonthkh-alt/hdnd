@@ -1,9 +1,9 @@
-import { LayoutDashboard, Users, CheckSquare, Calendar, Bot, Building2, LogOut, UserCircle, Contact, ChevronRight, FileText, Zap } from 'lucide-react';
+import { LayoutDashboard, Users, CheckSquare, Calendar, Bot, Building2, LogOut, UserCircle, Contact, ChevronRight, FileText, Zap, Activity } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { useApp } from '../store';
 import { useEffect, useState } from 'react';
 
-export type TabId = 'dashboard' | 'departments' | 'employees' | 'commune-directory' | 'deputies' | 'na-deputies' | 'ktns-schedules' | 'pcn-schedules' | 'schedules' | 'assistant' | 'approvals' | 'document-management' | 'digital-transformation' | 'login';
+export type TabId = 'dashboard' | 'employees' | 'commune-directory' | 'deputies' | 'na-deputies' | 'ktns-schedules' | 'pcn-schedules' | 'schedules' | 'assistant' | 'approvals' | 'document-management' | 'document-draft' | 'digital-transformation' | 'login' | 'ioc-overview' | 'ioc-economic' | 'ioc-documents' | 'ioc-voters' | 'ioc-sessions';
 
 interface SidebarProps {
   activeTab: TabId;
@@ -20,16 +20,46 @@ export function Sidebar({ activeTab, onChangeTab }: SidebarProps) {
   }, []);
 
   const [isSchedulesOpen, setIsSchedulesOpen] = useState(true);
+  const [isIOCOpen, setIsIOCOpen] = useState(true);
+  const [isDirectoryOpen, setIsDirectoryOpen] = useState(true);
+  const [isDocManagementOpen, setIsDocManagementOpen] = useState(true);
 
   const tabs = [
     { id: 'dashboard', label: 'Tổng quan', icon: LayoutDashboard },
-    { id: 'departments', label: 'Phòng ban', icon: Building2 },
-    { id: 'employees', label: 'Hồ sơ Cán bộ', icon: Users },
-    { id: 'document-management', label: 'Quản lý văn bản', icon: FileText },
+    { 
+      id: 'ioc', 
+      label: 'IOC Điều hành', 
+      icon: Activity,
+      isSpecial: true,
+      subItems: [
+        { id: 'ioc-overview', label: 'Dashboard Trung tâm' },
+        { id: 'ioc-economic', label: 'Chỉ số Kinh tế - XH' },
+        { id: 'ioc-documents', label: 'Giám sát Văn bản' },
+        { id: 'ioc-voters', label: 'Phân tích Cử tri' },
+        { id: 'ioc-sessions', label: 'Giám sát Kỳ họp' },
+      ]
+    },
+    { 
+      id: 'document-management', 
+      label: 'Quản lý văn bản', 
+      icon: FileText,
+      subItems: [
+        { id: 'document-management', label: 'Văn phòng số' },
+        { id: 'document-draft', label: 'Dự thảo văn bản' },
+      ]
+    },
     { id: 'digital-transformation', label: 'Chuyển đổi số', icon: Zap },
-    { id: 'commune-directory', label: 'Danh bạ điện thoại', icon: Contact },
-    { id: 'na-deputies', label: 'Đại biểu Quốc hội', icon: Contact },
-    { id: 'deputies', label: 'Đại biểu HĐND', icon: Contact },
+    { 
+      id: 'directory', 
+      label: 'Danh bạ', 
+      icon: Contact,
+      subItems: [
+        { id: 'employees', label: 'Hồ sơ Cán bộ' },
+        { id: 'commune-directory', label: 'Danh bạ điện thoại' },
+        { id: 'na-deputies', label: 'Đại biểu Quốc hội' },
+        { id: 'deputies', label: 'Đại biểu HĐND' },
+      ]
+    },
     { 
       id: 'schedules', 
       label: 'Lịch công tác', 
@@ -66,22 +96,40 @@ export function Sidebar({ activeTab, onChangeTab }: SidebarProps) {
           const isActive = activeTab === tab.id || tab.subItems?.some((s: any) => s.id === activeTab);
           const isDocManagement = tab.id === 'document-management';
           const isDigitalTransformation = tab.id === 'digital-transformation';
+          const isIOC = tab.id === 'ioc';
           
           if (tab.subItems) {
+            let isOpen = true;
+            let toggleOpen = () => {};
+
+            if (tab.id === 'ioc') {
+              isOpen = isIOCOpen;
+              toggleOpen = () => setIsIOCOpen(!isIOCOpen);
+            } else if (tab.id === 'schedules') {
+              isOpen = isSchedulesOpen;
+              toggleOpen = () => setIsSchedulesOpen(!isSchedulesOpen);
+            } else if (tab.id === 'directory') {
+              isOpen = isDirectoryOpen;
+              toggleOpen = () => setIsDirectoryOpen(!isDirectoryOpen);
+            } else if (tab.id === 'document-management') {
+              isOpen = isDocManagementOpen;
+              toggleOpen = () => setIsDocManagementOpen(!isDocManagementOpen);
+            }
+
             return (
               <div key={tab.id} className="w-full">
                 <button
-                  onClick={() => setIsSchedulesOpen(!isSchedulesOpen)}
+                  onClick={toggleOpen}
                   className={cn(
                     "flex items-center gap-3 w-full px-4 py-3 rounded-md transition-colors font-medium relative",
-                    isActive ? "text-white" : "hover:bg-slate-800/50 hover:text-white"
+                    isActive ? (isIOC ? "bg-blue-600/10 text-blue-400" : "text-white") : "hover:bg-slate-800/50 hover:text-white"
                   )}
                 >
-                  <Icon size={20} className={cn(isActive ? "text-blue-400" : "text-slate-400")} />
+                  <Icon size={20} className={cn(isActive || isIOC ? "text-blue-400" : "text-slate-400")} />
                   {tab.label}
-                  <ChevronRight size={16} className={cn("ml-auto transition-transform", isSchedulesOpen ? "rotate-90" : "")} />
+                  <ChevronRight size={16} className={cn("ml-auto transition-transform", isOpen ? "rotate-90" : "")} />
                 </button>
-                {isSchedulesOpen && (
+                {isOpen && (
                   <div className="mt-1 ml-9 flex flex-col gap-1 border-l border-slate-800 pl-2">
                     {tab.subItems.map((sub: any) => (
                       <button

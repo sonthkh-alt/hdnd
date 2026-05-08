@@ -1,4 +1,4 @@
-import { Users, Calendar, AlertCircle, Contact, Zap } from 'lucide-react';
+import { Users, Calendar, AlertCircle, Contact, Zap, Activity, TrendingUp } from 'lucide-react';
 import { useApp } from '../store';
 import { mockNADeputies } from '../data/naDeputies';
 import { deputiesData } from '../data/deputies';
@@ -97,8 +97,25 @@ export function Dashboard({ onTabChange }: DashboardProps) {
         </button>
 
         <button 
+          onClick={() => onTabChange('ioc-overview')}
+          className="bg-slate-900 p-6 rounded-xl shadow-lg border border-slate-800 hover:bg-slate-800 transition-all text-left group md:col-span-2"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="bg-red-600 p-4 rounded-lg group-hover:scale-110 transition-transform">
+                <Activity size={24} className="text-white" />
+              </div>
+              <div>
+                <h4 className="text-xl font-bold text-white tracking-tight">Hệ thống IOC Điều hành</h4>
+                <p className="text-slate-400 text-sm">Theo dõi chỉ số và vận hành tập trung</p>
+              </div>
+            </div>
+          </div>
+        </button>
+
+        <button 
           onClick={() => onTabChange('digital-transformation')}
-          className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:border-amber-400 hover:shadow-md transition-all text-left group md:col-span-4"
+          className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:border-amber-400 transition-all text-left group md:col-span-2"
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -106,12 +123,9 @@ export function Dashboard({ onTabChange }: DashboardProps) {
                 <Zap size={24} className="text-amber-700" />
               </div>
               <div>
-                <h4 className="text-xl font-bold text-slate-800 tracking-tight">Kế hoạch Chuyển đổi số & AI</h4>
-                <p className="text-slate-500 text-sm">Hướng dẫn sử dụng Gemini, NotebookLM và công cụ số mới</p>
+                <h4 className="text-xl font-bold text-slate-800 tracking-tight">Chuyển đổi số & AI</h4>
+                <p className="text-slate-500 text-sm">Hướng dẫn NotebookLM & Gemini</p>
               </div>
-            </div>
-            <div className="bg-slate-50 px-4 py-2 rounded-lg text-amber-600 font-bold border border-amber-100 group-hover:bg-amber-600 group-hover:text-white transition-all">
-              Hành trình mới
             </div>
           </div>
         </button>
