@@ -6,7 +6,7 @@ import {
   FileBadge, StickyNote, Mail, ClipboardList
 } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
-import { Document, Packer, Paragraph, TextRun, AlignmentType, BorderStyle, Table, TableRow, TableCell, WidthType } from 'docx';
+import { Document, Packer, Paragraph, TextRun, AlignmentType, BorderStyle, Table, TableRow, TableCell, WidthType, Footer, PageNumber } from 'docx';
 import { saveAs } from 'file-saver';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -27,10 +27,35 @@ interface Message {
 }
 
 const DOCUMENT_TEMPLATES = [
-  { id: 'report', label: 'Báo cáo', icon: FileBadge, prompt: 'Soạn thảo Báo cáo kết quả thực hiện nhiệm vụ quý... ' },
-  { id: 'submission', label: 'Tờ trình', icon: ClipboardList, prompt: 'Soạn thảo Tờ trình về việc phê duyệt chủ trương... ' },
-  { id: 'official', label: 'Công văn', icon: Mail, prompt: 'Soạn thảo Công văn phúc đáp về việc... ' },
-  { id: 'notice', label: 'Thông báo', icon: StickyNote, prompt: 'Soạn thảo Thông báo kết luận cuộc họp về... ' },
+  { 
+    id: 'draft-normal', 
+    label: 'Mẫu 1: Soạn thảo chung', 
+    icon: Mail, 
+    prompt: '[YÊU CẦU CHI TIẾT]: Tham mưu công văn trả lời Sở Tài chính về việc đề xuất cấp kinh phí sửa chữa trụ sở. Từ chối do ngân sách đã phân bổ hết...\n[THÔNG TIN NỘI BỘ / CHỈ ĐẠO CỦA SẾP]: Vừa qua có cuộc họp giao ban, sếp chỉ đạo là năm nay thắt chặt chi tiêu, không duyệt chi các khoản ngoài dự toán.\n*(Tôi đã đính kèm các file công văn của Sở tài chính gửi sang, hãy đọc kỹ nội dung trong file).*' 
+  },
+  { 
+    id: 'draft-verify', 
+    label: 'Mẫu 2: Báo cáo Thẩm tra', 
+    icon: FileBadge, 
+    prompt: '[YÊU CẦU CHI TIẾT]: Đề nghị thẩm tra Tờ trình số 123 của UBND tỉnh về việc ban hành chính sách hỗ trợ gạo dịp Tết. Trọng tâm: Đánh giá nguồn kinh phí.\n[CĂN CỨ PHÁP LÝ]: (Bạn dán Luật, Nghị quyết làm căn cứ vào đây hoặc đính kèm file PDF của Luật).\n*(Tôi đã đính kèm Tờ trình & Dự thảo của UBND, hãy đọc kỹ để đối chiếu và phản biện).*' 
+  },
+  { 
+    id: 'draft-legal', 
+    label: 'Mẫu 3: KT tính pháp lý', 
+    icon: ClipboardList, 
+    prompt: 'Dựa vào các Căn cứ pháp lý tôi vừa cung cấp, hãy kiểm tra tính pháp lý của bản dự thảo ở trên.\n\nYêu cầu:\n1. Tóm tắt nhanh xem dự thảo đã áp dụng những điểm nào từ Kho tri thức tham chiếu.\n2. Kiểm tra tính pháp lý: Chỉ ra những điểm có thể chưa phù hợp, thiếu sót hoặc cần điều chỉnh.\n3. Đưa ra kết luận: Dự thảo có đạt yêu cầu pháp lý cơ bản hay không.' 
+  },
+];
+
+const DOCUMENT_TYPES = [
+  'Quyết định',
+  'Nghị quyết',
+  'Báo cáo',
+  'Báo cáo thẩm tra',
+  'Công văn',
+  'Tờ trình',
+  'Thông báo',
+  'Khác'
 ];
 
 export function DraftAssistant() {
@@ -38,9 +63,10 @@ export function DraftAssistant() {
     {
       id: '1',
       role: 'assistant',
-      content: 'Chào đồng chí. Tôi là Trợ lý Soạn thảo chuyên nghiệp. Hệ thống đã sẵn sàng hỗ trợ đồng chí soạn thảo văn bản đúng quy chuẩn Nghị định 30/2020/NĐ-CP.'
+      content: 'Chào đồng chí. Tôi là Trợ lý Soạn thảo chuyên nghiệp hỗ trợ tham mưu, soạn thảo văn bản hành chính nhà nước và thẩm tra văn bản cho Đoàn ĐBQH & HĐND tỉnh Thanh Hóa. Hệ thống đã sẵn sàng hỗ trợ đồng chí.'
     }
   ]);
+  const [docType, setDocType] = useState('Công văn');
   const [input, setInput] = useState('');
   const [template, setTemplate] = useState('');
   const [showConfig, setShowConfig] = useState(true);
@@ -117,7 +143,27 @@ export function DraftAssistant() {
         properties: {
           page: {
             margin: { top: 1134, right: 1134, bottom: 1134, left: 1701 },
+            pageNumbers: {
+              start: 1,
+              formatType: "decimal",
+            },
           },
+        },
+        footers: {
+          default: new Footer({
+            children: [
+              new Paragraph({
+                alignment: AlignmentType.CENTER,
+                children: [
+                  new TextRun({
+                    children: [PageNumber.CURRENT],
+                    size: 28,
+                    font: "Times New Roman"
+                  })
+                ]
+              })
+            ]
+          })
         },
         children: [
           // Elegant Header Table
@@ -138,17 +184,19 @@ export function DraftAssistant() {
                     width: { size: 45, type: WidthType.PERCENTAGE },
                     children: leftHeader.map((line, i) => new Paragraph({
                       alignment: AlignmentType.CENTER,
+                      spacing: { before: 0, after: 0, line: 240 },
                       children: [
                         new TextRun({ 
                           text: line, 
                           bold: i === leftHeader.length - 1, 
-                          size: 24, 
+                          size: i === leftHeader.length - 1 ? 26 : 24, // CQCH usually smaller (12pt), CQBH is 13pt
                           font: "Times New Roman" 
                         }),
                       ],
                     })).concat(leftHeader.length > 0 ? [
                        new Paragraph({
                         alignment: AlignmentType.CENTER,
+                        spacing: { before: 0, after: 0, line: 240 },
                         children: [new TextRun({ text: "───────", size: 12, font: "Times New Roman" })]
                       })
                     ] : []),
@@ -157,11 +205,13 @@ export function DraftAssistant() {
                     width: { size: 55, type: WidthType.PERCENTAGE },
                     children: rightHeader.map((line, i) => new Paragraph({
                       alignment: AlignmentType.CENTER,
+                      spacing: { before: 0, after: 0, line: 240 },
                       children: [
                         new TextRun({ 
                           text: line, 
                           bold: i < 2, 
-                          size: i === 1 ? 28 : 26, 
+                          size: i === 1 ? 28 : (i === 0 ? 26 : 28), // "Cộng..." 13pt (26) | "Độc lập..." 14pt (28) | Ngày tháng 14pt (28)
+                          italics: i > 1, // italicize date
                           font: "Times New Roman",
                           underline: i === 1 ? { type: BorderStyle.SINGLE, color: "000000" } : undefined
                         }),
@@ -180,16 +230,20 @@ export function DraftAssistant() {
             const isHeading = trimmedLine.startsWith('#') || 
                             (trimmedLine.toUpperCase() === trimmedLine && trimmedLine.length > 5 && trimmedLine.length < 150 && !trimmedLine.includes("NGÀY")) ||
                             /^(Điều|Chương|Mục|Phần)\s+\d+/.test(trimmedLine);
+                            
+            const isNoiNhan = trimmedLine.toLowerCase().startsWith('nơi nhận:');
+            const isDashListItem = trimmedLine.startsWith('-') || trimmedLine.startsWith('+');
 
             return new Paragraph({
-              alignment: isHeading ? AlignmentType.CENTER : AlignmentType.LEFT,
-              spacing: { before: 150, after: 150, line: 360 },
-              indent: isHeading ? undefined : { firstLine: 708 },
+              alignment: isHeading ? AlignmentType.CENTER : AlignmentType.JUSTIFIED,
+              spacing: { before: isHeading ? 120 : 0, after: 120, line: 312 }, // 312 is ~1.3 line spacing (120 is 6pt)
+              indent: isHeading || isNoiNhan ? undefined : (isDashListItem ? { left: 708, hanging: 354 } : { firstLine: 708 }),
               children: [
                 new TextRun({
                   text: trimmedLine.replace(/^#+\s*/, ''),
-                  bold: isHeading,
-                  size: docSize,
+                  bold: isHeading || isNoiNhan,
+                  italics: isNoiNhan,
+                  size: isNoiNhan ? 24 : docSize, // Nơi nhận size is 12 (24)
                   font: "Times New Roman"
                 }),
               ],
@@ -235,26 +289,47 @@ export function DraftAssistant() {
         ? `Người dùng có gửi kèm các tệp: ${currentFiles.map(f => f.name).join(', ')}. Hãy ưu tiên các thông tin trong tệp này.`
         : '';
 
-      const systemInstruction = `# ROLE
-Bạn là một Chuyên gia Pháp chế và Soạn thảo văn bản hành chính Nhà nước cấp cao.
+      const systemInstruction = `Bạn là một Trợ lý ảo chuyên nghiệp hỗ trợ tham mưu, soạn thảo văn bản hành chính nhà nước và thẩm tra văn bản cho Đoàn ĐBQH & HĐND tỉnh Thanh Hóa.
 
-# CƠ SỞ PHÁP LÝ & QUY ĐỊNH
-- Tuân thủ tuyệt đối Nghị định 30/2020/NĐ-CP về văn thư lưu trữ.
-- Sử dụng văn phong hành chính: Trang trọng, khách quan, chính xác (Văn phong công vụ).
+[YÊU CẦU ĐẶC BIỆT]:
+Loại văn bản người dùng đang muốn soạn thảo là: **${docType}**. Hãy đặc biệt áp dụng quy tắc cấu trúc cho loại văn bản này.
 
-# CHIẾN LƯỢC SOẠN THẢO (ƯU TIÊN 1)
-1. BÁM SÁT VĂN BẢN MẪU: Nếu có mẫu, bạn phải TRÙNG KHỚP 100% cấu trúc tiêu đề, headers, xưng hô và các phần mục từ mẫu đó.
-2. NỘI DUNG LOGIC: Diễn đạt mạch lạc, chặt chẽ, đúng thẩm quyền.
-3. KHÔNG GIẢI THÍCH: Tuyệt đối không thêm lời dẫn giải, lưu ý hay giải thích vào phần nội dung văn bản. 
+[KỸ NĂNG LỌC NHIỄU DỮ LIỆU (DENOISE)]
+- Khi đọc các tài liệu đính kèm, hãy TỰ ĐỘNG BỎ QUA các "rác" định dạng như: số trang ở góc, tiêu đề lặp lại ở đầu mỗi trang, dấu gạch ngang nối chữ bị rớt dòng. Chỉ chắt lọc nội dung lõi.
 
-# VĂN BẢN MẪU ĐỊNH HƯỚNG (PHẢI TUÂN THỦ)
+[VĂN PHONG NGOẠI GIAO HÀNH CHÍNH]
+- Văn phong cần trang trọng, súc tích, rõ ràng, đi thẳng vào vấn đề.
+- Gửi cấp trên: Dùng từ "Kính trình", "Báo cáo".
+- Gửi cơ quan ngang cấp hoặc phối hợp (Sở, Ban, Ngành): Dùng từ "Đề nghị", "Trân trọng".
+- Gửi cấp dưới: Dùng từ "Yêu cầu", "Chỉ đạo".
+- Viết hoa chữ cái đầu của các cơ quan, đơn vị theo quy chuẩn (Ví dụ: Ủy ban nhân dân tỉnh, Sở Tài chính).
+
+[QUY TẮC CẤU TRÚC THEO LOẠI VĂN BẢN]
+Khi người dùng yêu cầu soạn thảo, hãy dựa vào Loại văn bản để sinh cấu trúc tương ứng:
+- Quyết định: Bắt buộc sinh cấu trúc có Căn cứ pháp lý, và nội dung gồm Điều 1:..., Điều 2:..., Điều 3:...
+- Nghị quyết: Bắt buộc sinh cấu trúc có Căn cứ pháp lý, và nội dung là QUYẾT NGHỊ: Điều 1:..., Điều 2:...
+- Báo cáo: Bắt buộc chia cấu trúc rõ ràng: I. TÌNH HÌNH/ĐÁNH GIÁ, II. KẾT QUẢ ĐẠT ĐƯỢC, III. PHƯƠNG HƯỚNG NHIỆM VỤ.
+- Báo cáo thẩm tra (CHUYÊN GIA THẨM TRA HĐND): Bắt buộc viết báo cáo sắc bén gồm 4 phần:
+  1. Cơ sở pháp lý và sự cần thiết (Kiểm tra thẩm quyền ban hành).
+  2. Sự phù hợp của nội dung (Đánh giá đối tượng, mức hỗ trợ).
+  3. Khả năng cân đối nguồn lực (PHẢN BIỆN: Phân tích kỹ nguồn kinh phí. Nếu chưa nêu rõ nguồn tiền, phải 'bắt lỗi' và kiến nghị làm rõ).
+  4. Kết luận và Kiến nghị (Đồng ý trình HĐND thông qua hay yêu cầu sửa đổi).
+- Công văn / Tờ trình: Viết theo lối văn xuôi hành chính, chia thành các đoạn hoặc các mục nhỏ 1., 2., 3. rõ ràng.
+
+[NGUYÊN TẮC TỐI MẬT - CHỐNG BỊA ĐẶT DỮ LIỆU]
+Tuyệt đối KHÔNG tự sáng tác, bịa đặt số liệu, ngày tháng, tên cá nhân, hoặc số ký hiệu văn bản pháp luật nếu không có trong dữ liệu tham chiếu. Đối với các thông tin bị thiếu, bắt buộc dùng ngoặc vuông [...] (Ví dụ: ngày [...] tháng [...] năm 2026, hoặc Số: [...]/QĐ-UBND) để chuyên viên tự điền sau.
+
+[ĐỊNH DẠNG ĐẦU RA YÊU CẦU]
+Hãy trình bày văn bản đầu ra chi tiết, có đầy đủ Quốc hiệu, Tiêu ngữ, Tên cơ quan chủ quản (ĐOÀN ĐBQH VÀ HĐND TỈNH THANH HÓA), Tên cơ quan ban hành, Số ký hiệu, Địa danh ngày tháng, Tên loại văn bản, Trích yếu, Nội dung chính, Nơi nhận và Quyền hạn ký.
+
+# VĂN BẢN MẪU ĐỊNH HƯỚNG
+Nếu có văn bản mẫu dưới đây, hãy bắt buộc sử dụng lại cấu trúc (đặc biệt là Header, xưng hô, tiêu đề):
 ${template || "Sử dụng mẫu chuẩn quy định tại Nghị định 30/2020/NĐ-CP."}
 
 ${fileContext}
 
 # QUY TRÌNH XUẤT BẢN
 - Phản hồi của bạn CHỈ chứa nội dung văn bản hành chính hoàn chỉnh.
-- Bắt đầu văn bản bằng thông tin Cơ quan, Quốc hiệu như trong mẫu.
 - Kết thúc văn bản bằng dòng kẻ "---" và dòng chữ "Hệ thống đang xuất bản tệp văn bản chuẩn..." để kích hoạt bộ lọc xuất file.`;
 
       const response = await ai.models.generateContent({
@@ -419,7 +494,7 @@ ${fileContext}
             )}
             <div>
               <div className="flex items-center gap-3">
-                <h2 className="text-2xl font-black text-slate-900 tracking-tighter">PHÒNG THẢO VĂN BẢN</h2>
+                <h2 className="text-2xl font-black text-slate-900 tracking-tighter">SOẠN THẢO VĂN BẢN</h2>
                 <div className="px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full text-[10px] font-black tracking-widest flex items-center gap-1.5">
                   <CheckCircle2 size={10} />
                   CHUYÊN NGHIỆP
@@ -553,20 +628,59 @@ ${fileContext}
                 ))}
              </div>
 
-             <div className="relative group p-3 bg-slate-50 border border-slate-200 rounded-[3rem] focus-within:bg-white focus-within:border-blue-400 focus-within:ring-[12px] focus-within:ring-blue-50 transition-all duration-300 flex items-end">
-               <textarea 
-                  rows={2}
-                  className="flex-1 bg-transparent border-none py-6 pl-10 pr-24 focus:ring-0 text-xl font-bold text-slate-800 placeholder:text-slate-300 placeholder:font-medium resize-none scrollbar-hide leading-snug"
-                  placeholder="Đồng chí cần soạn thảo văn bản gì?"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault();
-                      handleSend();
-                    }
-                  }}
-               />
+             <div className="relative group p-3 bg-slate-50 border border-slate-200 rounded-[2rem] focus-within:bg-white focus-within:border-blue-400 focus-within:ring-[4px] focus-within:ring-blue-50 transition-all duration-300 flex flex-col gap-2">
+               <div className="flex items-center gap-2 px-4 pt-2">
+                 <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Loại văn bản:</label>
+                 <select 
+                   className="text-sm font-bold text-blue-700 bg-blue-50/50 border-none rounded-lg px-2 py-1 cursor-pointer outline-none focus:ring-0 transition-all"
+                   value={docType}
+                   onChange={e => setDocType(e.target.value)}
+                 >
+                   {DOCUMENT_TYPES.map(type => (
+                     <option key={type} value={type}>{type}</option>
+                   ))}
+                 </select>
+               </div>
+               
+               {attachedFiles.length > 0 && (
+                 <div className="flex flex-wrap gap-2 px-4 pt-2">
+                   {attachedFiles.map((file, idx) => (
+                     <div key={idx + file.name} className="flex items-center gap-2 bg-blue-50 border border-blue-100 text-blue-700 px-3 py-1.5 rounded-xl text-xs font-semibold shadow-sm transition-all hover:border-blue-300">
+                       <FileCheck size={14} className="text-blue-500" />
+                       <span className="truncate max-w-[150px]">{file.name}</span>
+                       <button 
+                         onClick={() => removeFile(idx)}
+                         className="text-blue-400 hover:text-red-500 hover:bg-red-50 p-1 -mr-1 rounded-md transition-colors"
+                         title="Xóa tệp"
+                       >
+                         <X size={14} strokeWidth={3} />
+                       </button>
+                     </div>
+                   ))}
+                 </div>
+               )}
+
+               <div className="flex items-end w-full px-2 pb-2">
+                 <button 
+                   onClick={() => fileInputRef.current?.click()}
+                   className="p-4 mr-2 mb-1 bg-slate-100/80 text-slate-500 rounded-full hover:bg-blue-100 hover:text-blue-600 transition-all active:scale-95 flex-shrink-0"
+                   title="Đính kèm tài liệu"
+                 >
+                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                 </button>
+                 <textarea 
+                    rows={2}
+                    className="flex-1 bg-transparent border-none py-4 px-2 focus:ring-0 text-xl font-bold text-slate-800 placeholder:text-slate-300 placeholder:font-medium resize-none scrollbar-hide leading-snug"
+                    placeholder="Đồng chí cần soạn thảo văn bản gì?"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSend();
+                      }
+                    }}
+                 />
                <button 
                   onClick={handleSend}
                   disabled={isLoading || (!input.trim() && attachedFiles.length === 0)}
@@ -574,6 +688,7 @@ ${fileContext}
                >
                  <Send size={28} />
                </button>
+             </div>
              </div>
              
              <div className="flex flex-wrap items-center justify-center gap-6 text-[11px] font-black text-slate-300 uppercase tracking-widest">

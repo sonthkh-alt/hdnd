@@ -3,7 +3,7 @@ import { cn } from '../lib/utils';
 import { useApp } from '../store';
 import { useEffect, useState } from 'react';
 
-export type TabId = 'dashboard' | 'employees' | 'commune-directory' | 'deputies' | 'na-deputies' | 'ktns-schedules' | 'pcn-schedules' | 'schedules' | 'assistant' | 'approvals' | 'document-management' | 'document-draft' | 'digital-transformation' | 'login' | 'ioc-overview' | 'ioc-economic' | 'ioc-documents' | 'ioc-voters' | 'ioc-sessions';
+export type TabId = 'dashboard' | 'employees' | 'commune-directory' | 'deputies' | 'na-deputies' | 'ktns-schedules' | 'pcn-schedules' | 'schedules' | 'personal-schedule' | 'assistant' | 'approvals' | 'document-management' | 'document-draft' | 'digital-transformation' | 'login' | 'ioc-overview' | 'ioc-economic' | 'ioc-documents' | 'ioc-voters' | 'ioc-sessions';
 
 interface SidebarProps {
   activeTab: TabId;
@@ -45,7 +45,7 @@ export function Sidebar({ activeTab, onChangeTab }: SidebarProps) {
       icon: FileText,
       subItems: [
         { id: 'document-management', label: 'Văn phòng số' },
-        { id: 'document-draft', label: 'Dự thảo văn bản' },
+        ...(currentUser ? [{ id: 'document-draft', label: 'Soạn thảo VB' }] : []),
       ]
     },
     { id: 'digital-transformation', label: 'Chuyển đổi số', icon: Zap },
@@ -68,6 +68,7 @@ export function Sidebar({ activeTab, onChangeTab }: SidebarProps) {
         { id: 'schedules', label: 'Lịch cơ quan' },
         { id: 'pcn-schedules', label: 'Lịch Ban Pháp chế' },
         { id: 'ktns-schedules', label: 'Lịch Ban KTNS' },
+        ...(currentUser ? [{ id: 'personal-schedule', label: 'Lịch cá nhân' }] : []),
       ]
     },
     { id: 'assistant', label: 'Trợ lý số', icon: Bot },

@@ -44,7 +44,8 @@ export function Login() {
             username: firebaseUser.email,
             role: 'ADMIN',
             name: firebaseUser.displayName || 'Quản trị viên',
-            employeeId: 'admin'
+            employeeId: 'admin',
+            email: firebaseUser.email
           });
           return;
         }
@@ -56,7 +57,8 @@ export function Login() {
              username: firebaseUser.email || firebaseUser.uid,
              role: 'USER', // We'll default to USER for non-admins for now
              name: existingEmployee.name,
-             employeeId: existingEmployee.id
+             employeeId: existingEmployee.id,
+             email: firebaseUser.email || undefined
            });
            return;
         }
@@ -68,7 +70,8 @@ export function Login() {
                username: firebaseUser.email || firebaseUser.uid,
                role: 'USER',
                name: existingRegistration.name,
-               employeeId: existingRegistration.uid
+               employeeId: existingRegistration.uid,
+               email: Object(firebaseUser).email || undefined
              });
           } else if (existingRegistration.status === 'PENDING') {
              setRegistrationUser(firebaseUser);

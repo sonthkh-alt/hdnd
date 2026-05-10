@@ -5,6 +5,7 @@ export interface AuthUser {
   role: SystemRole;
   employeeId?: string;
   name: string;
+  email?: string;
 }
 
 export type UserStatus = 'PENDING' | 'APPROVED' | 'REJECTED';

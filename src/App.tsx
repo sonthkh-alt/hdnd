@@ -9,6 +9,7 @@ import { CommuneDirectoryManager } from './components/CommuneDirectoryManager';
 import { ScheduleManager } from './components/ScheduleManager';
 import { KTNSSchedule } from './components/KTNSSchedule';
 import { PCNSchedule } from './components/PCNSchedule';
+import { PersonalSchedule } from './components/PersonalSchedule';
 import { DocumentManagement } from './components/DocumentManagement';
 import { DigitalTransformation } from './components/DigitalTransformation';
 import { AIAssistant } from './components/AIAssistant';
@@ -56,6 +57,7 @@ function AppContent() {
         {activeTab === 'schedules' && <ScheduleManager />}
         {activeTab === 'ktns-schedules' && <KTNSSchedule />}
         {activeTab === 'pcn-schedules' && <PCNSchedule />}
+        {activeTab === 'personal-schedule' && <PersonalSchedule />}
         {activeTab === 'assistant' && <AIAssistant />}
         {activeTab === 'approvals' && <ApprovalManager />}
         {activeTab === 'login' && <Login />}
