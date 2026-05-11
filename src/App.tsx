@@ -41,10 +41,19 @@ function AppContent() {
     return <PendingApproval />;
   }
 
+  const handleTabChange = (tab: TabId) => {
+    setActiveTab(tab);
+    setIsMobileMenuOpen(false); // Close menu on mobile after selection
+  };
+
   // Allow 'LOGGED_OUT' users to see the dashboard as guests
   return (
     <div className="flex h-screen w-full bg-slate-50 font-sans text-slate-900 overflow-hidden">
-      <Sidebar activeTab={activeTab} onChangeTab={setActiveTab} />
+      <Sidebar 
+        activeTab={activeTab} 
+        onChangeTab={setActiveTab} 
+      />
+      
       <main className="flex-1 overflow-y-auto w-full relative">
         {activeTab === 'dashboard' && <Dashboard onTabChange={setActiveTab} />}
         {activeTab === 'employees' && <EmployeeManager />}
