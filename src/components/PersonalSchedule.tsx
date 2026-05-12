@@ -5,7 +5,12 @@ import { Calendar as CalendarIcon, Clock, LogIn, AlertCircle, RefreshCw } from '
 import { formatDateVN } from '../lib/utils';
 import { useApp } from '../store';
 
-const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+const VITE_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+const GOOGLE_CLIENT_ID = VITE_ID ? VITE_ID.trim() : undefined;
+
+if (!GOOGLE_CLIENT_ID) {
+  console.warn('VITE_GOOGLE_CLIENT_ID is not configured in environment variables.');
+}
 
 interface GoogleEvent {
   id: string;

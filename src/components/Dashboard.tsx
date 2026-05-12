@@ -1,4 +1,4 @@
-import { Users, Calendar, AlertCircle, Contact, Zap, Activity, TrendingUp } from 'lucide-react';
+import { Users, Calendar, AlertCircle, Contact, Zap, Activity, TrendingUp, Book } from 'lucide-react';
 import { useApp } from '../store';
 import { mockNADeputies } from '../data/naDeputies';
 import { deputiesData } from '../data/deputies';
@@ -132,6 +132,52 @@ export function Dashboard({ onTabChange }: DashboardProps) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Danh bạ điện thoại */}
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+          <div className="px-6 py-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
+            <h3 className="font-semibold text-slate-800 text-lg">Danh bạ điện thoại</h3>
+            <Book size={20} className="text-slate-500" />
+          </div>
+          <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <button 
+              onClick={() => onTabChange('employees')}
+              className="flex items-center gap-3 p-4 rounded-lg border border-slate-200 hover:border-blue-400 hover:bg-blue-50 transition-all text-left"
+            >
+              <div className="bg-blue-100 p-2 rounded-md">
+                <Users size={20} className="text-blue-700" />
+              </div>
+              <span className="font-medium text-slate-700">Văn phòng</span>
+            </button>
+            <button 
+              onClick={() => onTabChange('na-deputies')}
+              className="flex items-center gap-3 p-4 rounded-lg border border-slate-200 hover:border-indigo-400 hover:bg-indigo-50 transition-all text-left"
+            >
+              <div className="bg-indigo-100 p-2 rounded-md">
+                <Contact size={20} className="text-indigo-700" />
+              </div>
+              <span className="font-medium text-slate-700">Đại biểu QH</span>
+            </button>
+            <button 
+              onClick={() => onTabChange('deputies')}
+              className="flex items-center gap-3 p-4 rounded-lg border border-slate-200 hover:border-amber-400 hover:bg-amber-50 transition-all text-left"
+            >
+              <div className="bg-amber-100 p-2 rounded-md">
+                <Contact size={20} className="text-amber-700" />
+              </div>
+              <span className="font-medium text-slate-700">Đại biểu HĐND</span>
+            </button>
+            <button 
+              onClick={() => onTabChange('commune-directory')}
+              className="flex items-center gap-3 p-4 rounded-lg border border-slate-200 hover:border-emerald-400 hover:bg-emerald-50 transition-all text-left"
+            >
+              <div className="bg-emerald-100 p-2 rounded-md">
+                <Book size={20} className="text-emerald-700" />
+              </div>
+              <span className="font-medium text-slate-700">Xã, Phường</span>
+            </button>
+          </div>
+        </div>
+
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
           <div className="px-6 py-4 border-b border-slate-200 bg-slate-50">
             <h3 className="font-semibold text-slate-800 text-lg">Sự kiện trong tuần</h3>
