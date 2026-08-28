@@ -9,6 +9,9 @@
 
 export const KPI_PORTAL_URL = 'https://hdndthkpi.vercel.app';
 
+/** Hệ thống Lịch công tác tuần — tên miền riêng nhưng cho phép nhúng. */
+export const WEEKLY_CALENDAR_URL = 'https://calendar-beta-lac.vercel.app';
+
 export type KpiTone =
   | 'red'
   | 'emerald'
@@ -36,8 +39,10 @@ export interface KpiModule {
   icon: string;
   tone: KpiTone;
   badge?: string;
-  /** Hệ thống riêng ở tên miền khác — mở tab mới, không nhúng. */
+  /** Hệ thống riêng ở tên miền khác và chặn nhúng — mở ở tab mới. */
   externalUrl?: string;
+  /** Hệ thống riêng ở tên miền khác nhưng cho phép nhúng — mở ngay trong khung. */
+  embedUrl?: string;
 }
 
 export const kpiModules: KpiModule[] = [
@@ -136,7 +141,7 @@ export const kpiModules: KpiModule[] = [
     icon: 'CalendarDays',
     tone: 'teal',
     badge: 'Mới',
-    externalUrl: 'https://calendar-beta-lac.vercel.app',
+    embedUrl: WEEKLY_CALENDAR_URL,
   },
   {
     id: 'hr',
@@ -178,4 +183,4 @@ export const findKpiModule = (route: string) =>
 
 /** Địa chỉ đầy đủ của một phân hệ (hệ thống riêng trả về tên miền của nó). */
 export const kpiModuleUrl = (module: KpiModule) =>
-  module.externalUrl ?? `${KPI_PORTAL_URL}/#/${module.route}`;
+  module.externalUrl ?? module.embedUrl ?? `${KPI_PORTAL_URL}/#/${module.route}`;

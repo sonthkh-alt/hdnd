@@ -14,6 +14,7 @@ import { ScheduleManager } from './components/ScheduleManager';
 import { KTNSSchedule } from './components/KTNSSchedule';
 import { PCNSchedule } from './components/PCNSchedule';
 import { PersonalSchedule } from './components/PersonalSchedule';
+import { WeeklyCalendar } from './components/WeeklyCalendar';
 import { DocumentManagement } from './components/DocumentManagement';
 import { DigitalTransformation } from './components/DigitalTransformation';
 import { KpiPortal } from './components/KpiPortal';
@@ -75,6 +76,7 @@ function AppContent() {
           {activeTab === 'ktns-schedules' && <KTNSSchedule />}
           {activeTab === 'pcn-schedules' && <PCNSchedule />}
           {activeTab === 'personal-schedule' && <PersonalSchedule />}
+          {activeTab === 'weekly-calendar' && <WeeklyCalendar />}
           {activeTab === 'assistant' && <AIAssistant />}
           {activeTab === 'approvals' && <ApprovalManager />}
           {activeTab === 'login' && <Login />}

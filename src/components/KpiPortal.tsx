@@ -7,10 +7,6 @@ import {
   ExternalLink,
   FlaskConical,
   Landmark,
-  Loader2,
-  Maximize2,
-  Minimize2,
-  RefreshCw,
   ScanSearch,
   ShieldCheck,
   Sparkles,
@@ -20,6 +16,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { EmbeddedApp } from './EmbeddedApp';
 import {
   KPI_PORTAL_URL,
   findKpiModule,
@@ -210,108 +207,17 @@ function ModuleCard({
 function EmbeddedModule({ route, onBack }: { route: string; onBack?: () => void }) {
   const module = findKpiModule(route);
   const url = module ? kpiModuleUrl(module) : `${KPI_PORTAL_URL}/#/${route}`;
-
-  const [loading, setLoading] = useState(true);
-  const [fullscreen, setFullscreen] = useState(false);
-  const [reloadKey, setReloadKey] = useState(0);
-
-  useEffect(() => {
-    setLoading(true);
-  }, [route, reloadKey]);
-
-  useEffect(() => {
-    if (!fullscreen) return;
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setFullscreen(false);
-    };
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
-  }, [fullscreen]);
-
-  const Icon = module ? ICONS[module.icon] ?? Target : Target;
+  const origin = module?.embedUrl ?? KPI_PORTAL_URL;
 
   return (
-    <div
-      className={cn(
-        'flex flex-col bg-slate-50',
-        fullscreen ? 'fixed inset-0 z-[70] p-3' : 'h-full p-4 md:p-6',
-      )}
-    >
-      {/* Toolbar */}
-      <div className="flex shrink-0 flex-wrap items-center gap-2 rounded-t-2xl border border-b-0 border-slate-200 bg-white px-3 py-2.5 md:px-4">
-        {onBack && (
-          <button
-            type="button"
-            onClick={onBack}
-            className="rounded-lg border border-slate-200 px-3 py-1.5 text-[12.5px] font-semibold text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900"
-          >
-            ← Danh mục
-          </button>
-        )}
-
-        <div className="flex min-w-0 flex-1 items-center gap-2">
-          {module && (
-            <span className={cn('rounded-lg border p-1.5', TONES[module.tone])}>
-              <Icon size={15} />
-            </span>
-          )}
-          <span className="truncate text-[13.5px] font-bold text-slate-800">
-            {module?.title ?? 'Phần mềm nghiệp vụ'}
-          </span>
-        </div>
-
-        <div className="flex shrink-0 items-center gap-1">
-          <button
-            type="button"
-            onClick={() => setReloadKey(k => k + 1)}
-            className="rounded-lg p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
-            title="Tải lại"
-          >
-            <RefreshCw size={16} />
-          </button>
-          <button
-            type="button"
-            onClick={() => setFullscreen(f => !f)}
-            className="rounded-lg p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
-            title={fullscreen ? 'Thoát toàn màn hình (Esc)' : 'Toàn màn hình'}
-          >
-            {fullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
-          </button>
-          <a
-            href={url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-lg p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
-            title="Mở ở tab mới"
-          >
-            <ExternalLink size={16} />
-          </a>
-        </div>
-      </div>
-
-      {/* Frame */}
-      <div className="relative min-h-0 flex-1 overflow-hidden rounded-b-2xl border border-slate-200 bg-white">
-        {loading && (
-          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-white">
-            <Loader2 size={28} className="animate-spin text-blue-600" />
-            <p className="text-sm text-slate-500">Đang tải phân hệ...</p>
-          </div>
-        )}
-        <iframe
-          key={`${route}-${reloadKey}`}
-          src={url}
-          title={module?.title ?? 'Phần mềm nghiệp vụ'}
-          onLoad={() => setLoading(false)}
-          referrerPolicy="no-referrer-when-downgrade"
-          allow="clipboard-write; microphone"
-          className="h-full w-full border-0"
-        />
-      </div>
-
-      <p className="shrink-0 pt-2 text-center text-[11px] text-slate-400">
-        Nội dung được nhúng từ {KPI_PORTAL_URL} · nếu phân hệ yêu cầu đăng nhập, hãy đăng nhập ngay
-        trong khung hoặc mở ở tab mới.
-      </p>
-    </div>
+    <EmbeddedApp
+      url={url}
+      frameKey={route}
+      title={module?.title ?? 'Phần mềm nghiệp vụ'}
+      icon={module ? ICONS[module.icon] ?? Target : Target}
+      toneClass={module ? TONES[module.tone] : undefined}
+      onBack={onBack}
+      note={`Nội dung được nhúng từ ${origin} · nếu phân hệ yêu cầu đăng nhập, hãy đăng nhập ngay trong khung hoặc mở ở tab mới.`}
+    />
   );
 }

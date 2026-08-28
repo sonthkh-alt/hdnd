@@ -23,6 +23,7 @@ export type TabId =
   | 'pcn-schedules'
   | 'schedules'
   | 'personal-schedule'
+  | 'weekly-calendar'
   | 'assistant'
   | 'approvals'
   | 'document-management'
@@ -77,6 +78,7 @@ export const PAGE_TITLES: Record<TabId, string> = {
   'pcn-schedules': 'Lịch Ban Pháp chế',
   schedules: 'Lịch công tác cơ quan',
   'personal-schedule': 'Lịch công tác cá nhân',
+  'weekly-calendar': 'Lịch công tác tuần (Online)',
   assistant: 'Trợ lý số',
   approvals: 'Duyệt đăng ký',
   'document-management': 'Văn phòng số',
@@ -136,6 +138,7 @@ export function buildNavigation(currentUser: AuthUser | null): NavSection[] {
           icon: Calendar,
           children: [
             { id: 'schedules', label: 'Lịch cơ quan' },
+            { id: 'weekly-calendar', label: 'Lịch tuần Online' },
             { id: 'pcn-schedules', label: 'Lịch Ban Pháp chế' },
             { id: 'ktns-schedules', label: 'Lịch Ban KTNS' },
             ...(currentUser ? [{ id: 'personal-schedule' as TabId, label: 'Lịch cá nhân' }] : []),
