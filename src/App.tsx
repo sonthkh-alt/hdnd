@@ -16,6 +16,7 @@ import { PCNSchedule } from './components/PCNSchedule';
 import { PersonalSchedule } from './components/PersonalSchedule';
 import { DocumentManagement } from './components/DocumentManagement';
 import { DigitalTransformation } from './components/DigitalTransformation';
+import { KpiPortal } from './components/KpiPortal';
 import { AIAssistant } from './components/AIAssistant';
 import { Login } from './components/Login';
 import { Registration } from './components/Registration';
@@ -60,6 +61,12 @@ function AppContent() {
           {activeTab === 'document-management' && <DocumentManagement />}
           {activeTab === 'document-draft' && <DraftAssistant />}
           {activeTab === 'digital-transformation' && <DigitalTransformation />}
+          {activeTab === 'kpi-portal' && <KpiPortal />}
+          {activeTab === 'kpi-bieuquyet' && <KpiPortal route="bieuquyet" />}
+          {activeTab === 'kpi-okr' && <KpiPortal route="okr" />}
+          {activeTab === 'kpi-kiemdiem' && <KpiPortal route="kiemdiem" />}
+          {activeTab === 'kpi-tieuchi' && <KpiPortal route="tieuchi" />}
+          {activeTab === 'kpi-troly' && <KpiPortal route="troly" />}
           {activeTab === 'commune-directory' && <CommuneDirectoryManager />}
           {activeTab === 'province-directory' && <ProvinceDirectory />}
           {activeTab === 'na-deputies' && <NADeputiesManager />}

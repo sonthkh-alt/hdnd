@@ -5,6 +5,7 @@ import {
   Contact,
   FileText,
   LayoutDashboard,
+  LayoutGrid,
   ShieldCheck,
   Zap,
   type LucideIcon,
@@ -27,6 +28,12 @@ export type TabId =
   | 'document-management'
   | 'document-draft'
   | 'digital-transformation'
+  | 'kpi-portal'
+  | 'kpi-bieuquyet'
+  | 'kpi-okr'
+  | 'kpi-kiemdiem'
+  | 'kpi-tieuchi'
+  | 'kpi-troly'
   | 'login'
   | 'ioc-overview'
   | 'ioc-economic'
@@ -75,6 +82,12 @@ export const PAGE_TITLES: Record<TabId, string> = {
   'document-management': 'Văn phòng số',
   'document-draft': 'Soạn thảo văn bản',
   'digital-transformation': 'Chuyển đổi số & AI',
+  'kpi-portal': 'Phần mềm nghiệp vụ dùng chung',
+  'kpi-bieuquyet': 'Biểu quyết Online',
+  'kpi-okr': 'Đánh giá OKR / KPI cán bộ, công chức',
+  'kpi-kiemdiem': 'Kiểm điểm, đánh giá, xếp loại đảng viên',
+  'kpi-tieuchi': 'Đánh giá tiêu chí HĐND tỉnh, xã, phường',
+  'kpi-troly': 'Trợ lý AI nghiệp vụ dân cử',
   login: 'Đăng nhập hệ thống',
   'ioc-overview': 'IOC · Dashboard trung tâm',
   'ioc-economic': 'IOC · Chỉ số Kinh tế - Xã hội',
@@ -126,6 +139,19 @@ export function buildNavigation(currentUser: AuthUser | null): NavSection[] {
             { id: 'pcn-schedules', label: 'Lịch Ban Pháp chế' },
             { id: 'ktns-schedules', label: 'Lịch Ban KTNS' },
             ...(currentUser ? [{ id: 'personal-schedule' as TabId, label: 'Lịch cá nhân' }] : []),
+          ],
+        },
+        {
+          key: 'kpi',
+          label: 'Phần mềm nghiệp vụ',
+          icon: LayoutGrid,
+          children: [
+            { id: 'kpi-portal', label: 'Tất cả phân hệ' },
+            { id: 'kpi-bieuquyet', label: 'Biểu quyết Online' },
+            { id: 'kpi-okr', label: 'Đánh giá OKR / KPI' },
+            { id: 'kpi-kiemdiem', label: 'Kiểm điểm đảng viên' },
+            { id: 'kpi-tieuchi', label: 'Tiêu chí HĐND' },
+            { id: 'kpi-troly', label: 'Trợ lý AI dân cử' },
           ],
         },
         {
