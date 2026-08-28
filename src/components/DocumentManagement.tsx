@@ -4,7 +4,7 @@ export function DocumentManagement() {
   const portalUrl = "https://qlvbdh.thanhhoa.gov.vn/truycap";
 
   return (
-    <div className="p-4 md:p-8 w-full h-[calc(100vh-1rem)] flex flex-col space-y-6 animate-in fade-in duration-500">
+    <div className="p-4 md:p-8 w-full h-[calc(100vh-6rem)] flex flex-col space-y-6 animate-in fade-in duration-500">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 shrink-0">
         <div className="flex items-center gap-3">
           <div className="bg-emerald-100 p-2.5 rounded-xl text-emerald-700 shadow-sm border border-emerald-200">

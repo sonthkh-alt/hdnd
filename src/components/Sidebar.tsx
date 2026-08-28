@@ -1,335 +1,453 @@
-import { LayoutDashboard, Users, CheckSquare, Calendar, Bot, Building2, LogOut, UserCircle, Contact, ChevronDown, ChevronRight, FileText, Zap, Activity, Menu, X } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { KeyboardEvent as ReactKeyboardEvent, PointerEvent as ReactPointerEvent } from 'react';
+import {
+  Building2,
+  ChevronRight,
+  LogOut,
+  PanelLeftClose,
+  PanelLeftOpen,
+  UserCircle,
+  X,
+} from 'lucide-react';
 import { cn } from '../lib/utils';
 import { useApp } from '../store';
-import React, { useEffect, useState, useRef } from 'react';
+import {
+  SIDEBAR_COLLAPSED_WIDTH,
+  SIDEBAR_MAX_WIDTH,
+  SIDEBAR_MIN_WIDTH,
+  type SidebarLayout,
+} from '../hooks/useSidebarLayout';
+import { buildNavigation, isItemActive, type NavItem, type TabId } from '../navigation';
 
-export type TabId = 'dashboard' | 'employees' | 'commune-directory' | 'deputies' | 'na-deputies' | 'ktns-schedules' | 'pcn-schedules' | 'schedules' | 'personal-schedule' | 'assistant' | 'approvals' | 'document-management' | 'document-draft' | 'digital-transformation' | 'login' | 'ioc-overview' | 'ioc-economic' | 'ioc-documents' | 'ioc-voters' | 'ioc-sessions';
+export type { TabId } from '../navigation';
 
 interface SidebarProps {
   activeTab: TabId;
   onChangeTab: (tab: TabId) => void;
+  layout: SidebarLayout;
 }
 
-// Subcomponent for Desktop Dropdown Item
-const DesktopNavItem: React.FC<{ tab: any, activeTab: string, onChangeTab: (t: TabId) => void }> = ({ tab, activeTab, onChangeTab }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+const ROLE_LABEL: Record<string, string> = {
+  ADMIN: 'Quản trị viên',
+  MANAGER: 'Lãnh đạo',
+  USER: 'Chuyên viên',
+};
 
-  const isActive = activeTab === tab.id || tab.subItems?.some((s: any) => s.id === activeTab);
-  const Icon = tab.icon;
-
-  const handleMouseEnter = () => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    setIsOpen(true);
-  };
-
-  const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(() => {
-      setIsOpen(false);
-    }, 150);
-  };
-
-  if (tab.subItems) {
-    return (
-      <div 
-        className="relative group" 
-        onMouseEnter={handleMouseEnter} 
-        onMouseLeave={handleMouseLeave}
-      >
-        <button 
-          className={cn(
-            "flex items-center gap-2 px-3 py-2 rounded-md font-medium text-sm transition-colors",
-            isActive ? (tab.id === 'ioc' ? "bg-blue-600/20 text-blue-400" : "bg-slate-800 text-white") : "hover:bg-slate-800 text-slate-300"
-          )}
-          onClick={() => onChangeTab(tab.subItems[0].id)}
-        >
-          <Icon size={18} className={cn(isActive || tab.id === 'ioc' ? "text-blue-400" : "text-slate-400")} />
-          <span className="whitespace-nowrap">{tab.label}</span>
-          <ChevronDown size={14} className={cn("transition-transform", isOpen && "rotate-180")} />
-        </button>
-
-        {isOpen && (
-          <div className="absolute top-full left-0 mt-1 w-56 bg-slate-800 border border-slate-700 shadow-xl rounded-lg overflow-hidden z-50">
-            <div className="py-2">
-              {tab.subItems.map((sub: any) => (
-                <button
-                  key={sub.id}
-                  onClick={() => {
-                    onChangeTab(sub.id);
-                    setIsOpen(false);
-                  }}
-                  className={cn(
-                    "w-full text-left px-4 py-2 text-sm transition-colors",
-                    activeTab === sub.id ? "bg-blue-600/20 text-blue-400 font-medium" : "text-slate-300 hover:bg-slate-700 hover:text-white"
-                  )}
-                >
-                  {sub.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  return (
-    <button
-      onClick={() => onChangeTab(tab.id as TabId)}
-      className={cn(
-        "flex items-center gap-2 px-3 py-2 rounded-md font-medium text-sm transition-colors",
-        isActive ? "bg-slate-800 text-white" : "hover:bg-slate-800 text-slate-300"
-      )}
-    >
-      <Icon size={18} className={cn(isActive ? "text-blue-400" : "text-slate-400")} />
-      <span className="whitespace-nowrap">{tab.label}</span>
-    </button>
+function useMediaQuery(query: string) {
+  const [matches, setMatches] = useState(() =>
+    typeof window !== 'undefined' ? window.matchMedia(query).matches : true,
   );
-}
-
-// Subcomponent for Mobile Accordion Item
-const MobileNavItem: React.FC<{ tab: any, activeTab: string, onChangeTab: (t: TabId) => void, closeMenu: () => void }> = ({ tab, activeTab, onChangeTab, closeMenu }) => {
-  const isActive = activeTab === tab.id || tab.subItems?.some((s: any) => s.id === activeTab);
-  const [isOpen, setIsOpen] = useState(isActive);
-  const Icon = tab.icon;
-
-  if (tab.subItems) {
-    return (
-      <div className="w-full">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className={cn(
-            "flex items-center justify-between w-full px-4 py-3 text-left transition-colors",
-            isActive ? "bg-slate-800 text-white border-l-4 border-blue-500" : "text-slate-300 border-l-4 border-transparent"
-          )}
-        >
-          <div className="flex items-center gap-3">
-            <Icon size={20} className={isActive ? "text-blue-400" : "text-slate-400"} />
-            <span className="font-medium">{tab.label}</span>
-          </div>
-          <ChevronRight size={18} className={cn("transition-transform", isOpen && "rotate-90")} />
-        </button>
-        {isOpen && (
-          <div className="bg-slate-800/50 flex flex-col">
-            {tab.subItems.map((sub: any) => (
-              <button
-                key={sub.id}
-                onClick={() => {
-                  onChangeTab(sub.id);
-                  closeMenu();
-                }}
-                className={cn(
-                  "w-full text-left px-12 py-3 text-sm transition-colors",
-                  activeTab === sub.id ? "text-blue-400 font-bold bg-slate-800" : "text-slate-400 hover:text-white hover:bg-slate-800/80"
-                )}
-              >
-                {sub.label}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  return (
-    <button
-      onClick={() => {
-        onChangeTab(tab.id as TabId);
-        closeMenu();
-      }}
-      className={cn(
-        "flex items-center gap-3 w-full px-4 py-3 text-left transition-colors border-l-4",
-        isActive ? "bg-slate-800 text-white border-blue-500" : "text-slate-300 hover:bg-slate-800 border-transparent"
-      )}
-    >
-      <Icon size={20} className={isActive ? "text-blue-400" : "text-slate-400"} />
-      <span className="font-medium">{tab.label}</span>
-    </button>
-  );
-}
-
-export function Sidebar({ activeTab, onChangeTab }: SidebarProps) {
-  const { currentUser, logout, pendingRegistrations } = useApp();
-  const [time, setTime] = useState(new Date());
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const timer = setInterval(() => setTime(new Date()), 1000);
-    return () => clearInterval(timer);
-  }, []);
+    const mql = window.matchMedia(query);
+    const onChange = () => setMatches(mql.matches);
+    onChange();
+    mql.addEventListener('change', onChange);
+    return () => mql.removeEventListener('change', onChange);
+  }, [query]);
 
-  const tabs = [
-    { id: 'dashboard', label: 'Tổng quan', icon: LayoutDashboard },
-    { 
-      id: 'ioc', 
-      label: 'IOC Điều hành', 
-      icon: Activity,
-      isSpecial: true,
-      subItems: [
-        { id: 'ioc-overview', label: 'Dashboard Trung tâm' },
-        { id: 'ioc-economic', label: 'Chỉ số Kinh tế - XH' },
-        { id: 'ioc-documents', label: 'Giám sát Văn bản' },
-        { id: 'ioc-voters', label: 'Phân tích Cử tri' },
-        { id: 'ioc-sessions', label: 'Giám sát Kỳ họp' },
-      ]
-    },
-    { 
-      id: 'document-management', 
-      label: 'Quản lý văn bản', 
-      icon: FileText,
-      subItems: [
-        { id: 'document-management', label: 'Văn phòng số' },
-        ...(currentUser ? [{ id: 'document-draft', label: 'Soạn thảo VB' }] : []),
-      ]
-    },
-    { id: 'digital-transformation', label: 'Chuyển đổi số', icon: Zap },
-    { 
-      id: 'directory', 
-      label: 'Danh bạ', 
-      icon: Contact,
-      subItems: [
-        { id: 'employees', label: 'Hồ sơ Cán bộ' },
-        { id: 'commune-directory', label: 'Danh bạ điện thoại' },
-        { id: 'na-deputies', label: 'Đại biểu Quốc hội' },
-        { id: 'deputies', label: 'Đại biểu HĐND' },
-      ]
-    },
-    { 
-      id: 'schedules', 
-      label: 'Lịch công tác', 
-      icon: Calendar,
-      subItems: [
-        { id: 'schedules', label: 'Lịch cơ quan' },
-        { id: 'pcn-schedules', label: 'Lịch Ban Pháp chế' },
-        { id: 'ktns-schedules', label: 'Lịch Ban KTNS' },
-        ...(currentUser ? [{ id: 'personal-schedule', label: 'Lịch cá nhân' }] : []),
-      ]
-    },
-    { id: 'assistant', label: 'Trợ lý số', icon: Bot },
-  ] as any[];
+  return matches;
+}
 
-  if (currentUser?.role === 'ADMIN') {
-    tabs.push({ id: 'approvals', label: 'Duyệt', icon: Users });
-  }
+export function Sidebar({ activeTab, onChangeTab, layout }: SidebarProps) {
+  const { currentUser, logout, pendingRegistrations } = useApp();
+  const isDesktop = useMediaQuery('(min-width: 1024px)');
+  const asideRef = useRef<HTMLElement | null>(null);
 
+  const sections = useMemo(() => buildNavigation(currentUser), [currentUser]);
   const pendingCount = pendingRegistrations.filter(r => r.status === 'PENDING').length;
 
-  return (
-    <div className="bg-slate-900 border-b border-slate-800 shrink-0 relative z-50">
-      {/* Top Row: Centered Header */}
-      <div className="flex items-center justify-center py-3 md:py-4 border-b border-slate-800/80 bg-slate-900/50">
-        <div className="flex items-center gap-2 md:gap-3">
-          <div className="bg-red-600 p-1.5 md:p-2 rounded-lg shadow-inner">
-            <Building2 className="text-yellow-300 w-5 h-5 md:w-6 md:h-6" />
-          </div>
-          <h1 className="font-bold text-base md:text-xl text-white tracking-wide uppercase text-center flex flex-col md:flex-row md:gap-2 leading-tight">
-            <span>Văn phòng ĐBQH & HĐND</span>
-            <span className="text-blue-400">tỉnh Thanh Hóa</span>
-          </h1>
-        </div>
-      </div>
+  // Collapsed is a desktop-only affordance: the mobile drawer always shows labels.
+  const iconOnly = layout.collapsed && isDesktop;
 
-      {/* Bottom Row: Menu Toggle, Time, User Actions */}
-      <div className="flex items-center justify-between px-3 md:px-5 h-14 md:h-16">
-        {/* Left: Mobile Menu Toggle Button / Desktop Nav */}
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="xl:hidden p-2 bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 rounded-md transition-colors flex items-center justify-center border border-slate-700"
-          >
-            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
-          
-          {/* Desktop Menu - Hidden on mobile, flex on xl and above */}
-          <nav className="hidden xl:flex items-center gap-1">
-            {tabs.map(tab => (
-              <DesktopNavItem key={tab.id} tab={tab} activeTab={activeTab} onChangeTab={onChangeTab} />
-            ))}
-          </nav>
-        </div>
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
+  const [flyout, setFlyout] = useState<{ item: NavItem; top: number } | null>(null);
+  const flyoutTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-        {/* Right: Time & User / Auth */}
-        <div className="flex items-center gap-3 md:gap-5">
-          {/* Time Display */}
-          <div className="text-right">
-            <div className="text-slate-300 text-xs md:text-sm font-bold font-mono tracking-wider">
-              {time.toLocaleTimeString('vi-VN')}
-            </div>
-            <div className="hidden lg:block text-slate-500 text-[10px] uppercase font-bold mt-0.5">
-              {time.toLocaleDateString('vi-VN', { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' })}
-            </div>
-          </div>
-          
-          {/* Auth Actions */}
-          <div className="flex items-center pl-3 md:pl-4 border-l border-slate-700">
-            {currentUser ? (
-               <div className="flex items-center gap-3">
-                 {pendingCount > 0 && currentUser?.role === 'ADMIN' && (
-                   <span className="hidden md:flex bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-md">
-                     {pendingCount} chờ duyệt
-                   </span>
-                 )}
-                 <div className="hidden lg:block text-right mr-1">
-                   <p className="font-bold text-white text-sm leading-tight">{currentUser.name}</p>
-                   <p className="text-slate-400 text-[10px] uppercase font-bold">{currentUser.role === 'ADMIN' ? 'Quản trị viên' : (currentUser.role === 'MANAGER' ? 'Lãnh đạo' : 'Chuyên viên')}</p>
-                 </div>
-                 <UserCircle size={28} className="text-blue-400 hidden sm:block" />
-                 <button 
-                   onClick={logout}
-                   className="flex items-center justify-center p-2 bg-slate-800 hover:bg-red-600 hover:text-white text-red-400 rounded-md transition-colors shadow-sm border border-slate-700"
-                   title="Đăng xuất"
-                 >
-                   <LogOut size={16} />
-                 </button>
-               </div>
-            ) : (
-               <button 
-                 onClick={() => onChangeTab('login')}
-                 className="flex items-center gap-1.5 md:gap-2 py-1.5 px-3 md:px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-bold text-xs md:text-sm transition-all shadow-md active:scale-95 whitespace-nowrap"
-               >
-                 <UserCircle size={16} className="md:w-[18px] md:h-[18px]" />
-                 Đăng nhập
-               </button>
+  // Keep the group owning the current page unfolded.
+  useEffect(() => {
+    for (const section of sections) {
+      for (const item of section.items) {
+        if (item.children?.some(c => c.id === activeTab)) {
+          setOpenGroups(prev => (prev[item.key] ? prev : { ...prev, [item.key]: true }));
+        }
+      }
+    }
+  }, [activeTab, sections]);
+
+  useEffect(() => {
+    if (!iconOnly) setFlyout(null);
+  }, [iconOnly]);
+
+  // Visual feedback while dragging the resize handle.
+  useEffect(() => {
+    if (!layout.isResizing) return;
+    const previousCursor = document.body.style.cursor;
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+    return () => {
+      document.body.style.cursor = previousCursor;
+      document.body.style.userSelect = '';
+    };
+  }, [layout.isResizing]);
+
+  const startResize = useCallback(
+    (e: ReactPointerEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      const origin = asideRef.current?.getBoundingClientRect().left ?? 0;
+      layout.setIsResizing(true);
+
+      const onMove = (ev: PointerEvent) => layout.setWidth(ev.clientX - origin);
+      const onUp = () => {
+        layout.setIsResizing(false);
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onUp);
+      };
+
+      window.addEventListener('pointermove', onMove);
+      window.addEventListener('pointerup', onUp);
+    },
+    [layout],
+  );
+
+  const onHandleKeyDown = (e: ReactKeyboardEvent<HTMLDivElement>) => {
+    const step = e.shiftKey ? 32 : 12;
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      layout.setWidth(layout.width - step);
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      layout.setWidth(layout.width + step);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      layout.resetWidth();
+    }
+  };
+
+  const navigate = (tab: TabId) => {
+    onChangeTab(tab);
+    setFlyout(null);
+    if (!isDesktop) layout.setMobileOpen(false);
+  };
+
+  const openFlyout = (item: NavItem, el: HTMLElement) => {
+    if (flyoutTimer.current) clearTimeout(flyoutTimer.current);
+    const rect = el.getBoundingClientRect();
+    setFlyout({ item, top: Math.max(12, Math.min(rect.top, window.innerHeight - 320)) });
+  };
+
+  const scheduleCloseFlyout = () => {
+    if (flyoutTimer.current) clearTimeout(flyoutTimer.current);
+    flyoutTimer.current = setTimeout(() => setFlyout(null), 140);
+  };
+
+  const renderItem = (item: NavItem) => {
+    const Icon = item.icon;
+    const active = isItemActive(item, activeTab);
+    const isIoc = item.accent === 'ioc';
+    const badge = item.badge === 'pending' && pendingCount > 0 ? pendingCount : null;
+    const expanded = !!openGroups[item.key];
+
+    return (
+      <li
+        key={item.key}
+        className="relative"
+        onMouseEnter={e => {
+          if (iconOnly && item.children) openFlyout(item, e.currentTarget);
+        }}
+        onMouseLeave={() => {
+          if (iconOnly) scheduleCloseFlyout();
+        }}
+      >
+        <button
+          type="button"
+          onClick={() => {
+            if (item.tab) {
+              navigate(item.tab);
+            } else if (iconOnly) {
+              if (item.children?.[0]) navigate(item.children[0].id);
+            } else {
+              setOpenGroups(prev => ({ ...prev, [item.key]: !prev[item.key] }));
+            }
+          }}
+          title={iconOnly ? item.label : undefined}
+          aria-current={active && item.tab ? 'page' : undefined}
+          aria-expanded={item.children && !iconOnly ? expanded : undefined}
+          className={cn(
+            'group relative flex w-full items-center rounded-lg text-[13.5px] font-medium transition-colors duration-150',
+            iconOnly ? 'h-11 justify-center px-0' : 'gap-3 px-3 py-2.5',
+            active
+              ? isIoc
+                ? 'bg-blue-500/15 text-blue-200'
+                : 'bg-slate-800 text-white'
+              : 'text-slate-400 hover:bg-slate-800/70 hover:text-slate-100',
+          )}
+        >
+          {/* Active rail marker */}
+          <span
+            className={cn(
+              'absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-r-full transition-all duration-200',
+              active ? (isIoc ? 'bg-blue-400' : 'bg-blue-500') : 'bg-transparent',
             )}
+          />
+          <Icon
+            size={18}
+            className={cn(
+              'shrink-0 transition-colors',
+              active
+                ? isIoc
+                  ? 'text-blue-300'
+                  : 'text-blue-400'
+                : 'text-slate-500 group-hover:text-slate-300',
+            )}
+          />
+          {!iconOnly && <span className="flex-1 truncate text-left">{item.label}</span>}
+          {!iconOnly && badge !== null && (
+            <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[10px] font-bold text-white">
+              {badge}
+            </span>
+          )}
+          {!iconOnly && item.children && (
+            <ChevronRight
+              size={15}
+              className={cn(
+                'shrink-0 text-slate-500 transition-transform duration-200',
+                expanded && 'rotate-90',
+              )}
+            />
+          )}
+          {iconOnly && badge !== null && (
+            <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500 ring-2 ring-slate-900" />
+          )}
+        </button>
+
+        {/* Nested pages, shown inline when the rail is expanded */}
+        {!iconOnly && item.children && (
+          <div
+            className={cn(
+              'grid transition-all duration-200 ease-out',
+              expanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0',
+            )}
+          >
+            <ul className="ml-[26px] space-y-0.5 overflow-hidden border-l border-slate-800 pl-3">
+              {item.children.map(child => {
+                const childActive = activeTab === child.id;
+                return (
+                  <li key={child.id} className="first:mt-1 last:mb-1">
+                    <button
+                      type="button"
+                      onClick={() => navigate(child.id)}
+                      aria-current={childActive ? 'page' : undefined}
+                      className={cn(
+                        'w-full truncate rounded-md px-3 py-2 text-left text-[13px] transition-colors',
+                        childActive
+                          ? 'bg-blue-500/10 font-semibold text-blue-300'
+                          : 'text-slate-400 hover:bg-slate-800/70 hover:text-slate-200',
+                      )}
+                    >
+                      {child.label}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
+        )}
+      </li>
+    );
+  };
+
+  const drawerWidth = iconOnly ? SIDEBAR_COLLAPSED_WIDTH : layout.width;
+
+  return (
+    <>
+      {/* Mobile backdrop */}
+      <div
+        onClick={() => layout.setMobileOpen(false)}
+        className={cn(
+          'fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-sm transition-opacity duration-200 lg:hidden',
+          layout.mobileOpen ? 'opacity-100' : 'pointer-events-none opacity-0',
+        )}
+        aria-hidden="true"
+      />
+
+      <aside
+        ref={asideRef}
+        style={{ width: drawerWidth }}
+        className={cn(
+          'fixed inset-y-0 left-0 z-50 flex h-full shrink-0 flex-col border-r border-slate-800 bg-slate-900 text-slate-200',
+          'max-lg:!w-[86vw] max-lg:!max-w-[320px] max-lg:shadow-2xl',
+          layout.mobileOpen ? 'max-lg:translate-x-0' : 'max-lg:-translate-x-full',
+          'lg:relative lg:translate-x-0',
+          layout.isResizing ? 'transition-none' : 'transition-[width,transform] duration-200 ease-out',
+        )}
+      >
+        {/* Brand */}
+        <div
+          className={cn(
+            'flex h-16 shrink-0 items-center border-b border-slate-800',
+            iconOnly ? 'justify-center px-0' : 'gap-3 px-4',
+          )}
+        >
+          <button
+            type="button"
+            onClick={() => navigate('dashboard')}
+            className="flex shrink-0 items-center justify-center rounded-lg bg-red-600 p-2 shadow-inner transition-transform hover:scale-105"
+            title="Về trang tổng quan"
+          >
+            <Building2 className="h-5 w-5 text-yellow-300" />
+          </button>
+          {!iconOnly && (
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[13px] font-bold uppercase leading-tight tracking-wide text-white">
+                Văn phòng ĐBQH &amp; HĐND
+              </p>
+              <p className="truncate text-[11px] font-semibold uppercase tracking-wider text-blue-400">
+                tỉnh Thanh Hóa
+              </p>
+            </div>
+          )}
+          <button
+            type="button"
+            onClick={() => layout.setMobileOpen(false)}
+            className="rounded-md p-1.5 text-slate-400 hover:bg-slate-800 hover:text-white lg:hidden"
+            title="Đóng menu"
+          >
+            <X size={18} />
+          </button>
         </div>
-      </div>
 
-      {/* Mobile/Tablet Dropdown Menu Panel */}
-      {isMobileMenuOpen && (
-        <div className="xl:hidden absolute top-full left-0 w-full bg-slate-900 border-t border-slate-800 shadow-2xl flex flex-col max-h-[calc(100vh-120px)] overflow-y-auto">
-          {/* User Profile Mobile */}
-          <div className="p-4 border-b border-slate-800 bg-slate-800/30 lg:hidden flex justify-between items-center">
-             {currentUser ? (
-               <div className="flex items-center gap-3">
-                 <UserCircle size={36} className="text-blue-400" />
-                 <div>
-                   <p className="font-bold text-white text-sm">{currentUser.name}</p>
-                   <p className="text-slate-400 text-[11px] uppercase tracking-wider font-bold mt-0.5">{currentUser.role === 'ADMIN' ? 'Quản trị viên' : (currentUser.role === 'MANAGER' ? 'Lãnh đạo' : 'Chuyên viên')}</p>
-                 </div>
-               </div>
-             ) : (
-                <div className="flex flex-col gap-1 w-full">
-                  <p className="text-slate-400 text-xs uppercase font-bold tracking-wider">Chế độ khách</p>
-                  <p className="text-slate-300 text-[13px]">Vui lòng đăng nhập để sử dụng đầy đủ tính năng</p>
-                </div>
-             )}
-             
-             {pendingCount > 0 && currentUser?.role === 'ADMIN' && (
-               <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-md ml-auto mr-4">
-                 {pendingCount} chờ duyệt
-               </span>
-             )}
-          </div>
+        {/* Navigation tree */}
+        <nav className="hdnd-scroll flex-1 overflow-y-auto overflow-x-hidden px-3 py-4">
+          {sections.map((section, index) => (
+            <div key={section.title} className={cn(index > 0 && 'mt-5')}>
+              {iconOnly
+                ? index > 0 && <div className="mx-auto mb-3 h-px w-8 bg-slate-800" />
+                : (
+                  <p className="mb-2 px-3 text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500">
+                    {section.title}
+                  </p>
+                )}
+              <ul className="space-y-1">{section.items.map(renderItem)}</ul>
+            </div>
+          ))}
+        </nav>
 
-          <div className="flex flex-col py-2">
-            {tabs.map(tab => (
-              <MobileNavItem key={tab.id} tab={tab} activeTab={activeTab} onChangeTab={onChangeTab} closeMenu={() => setIsMobileMenuOpen(false)} />
-            ))}
-          </div>
+        {/* Account block */}
+        <div className={cn('shrink-0 border-t border-slate-800 p-3', iconOnly && 'px-2')}>
+          {currentUser ? (
+            <div
+              className={cn(
+                'flex items-center rounded-lg bg-slate-800/60',
+                iconOnly ? 'justify-center p-2' : 'gap-3 p-2.5',
+              )}
+              title={iconOnly ? currentUser.name : undefined}
+            >
+              <UserCircle size={iconOnly ? 24 : 32} className="shrink-0 text-blue-400" />
+              {!iconOnly && (
+                <>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-[13px] font-bold text-white">{currentUser.name}</p>
+                    <p className="truncate text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      {ROLE_LABEL[currentUser.role] ?? currentUser.role}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={logout}
+                    className="rounded-md p-2 text-red-400 transition-colors hover:bg-red-600 hover:text-white"
+                    title="Đăng xuất"
+                  >
+                    <LogOut size={16} />
+                  </button>
+                </>
+              )}
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => navigate('login')}
+              className={cn(
+                'flex w-full items-center justify-center rounded-lg bg-blue-600 font-bold text-white transition-colors hover:bg-blue-700',
+                iconOnly ? 'h-10 px-0' : 'gap-2 px-3 py-2.5 text-[13px]',
+              )}
+              title="Đăng nhập"
+            >
+              <UserCircle size={18} />
+              {!iconOnly && 'Đăng nhập'}
+            </button>
+          )}
+
+          {/* Collapse control */}
+          <button
+            type="button"
+            onClick={layout.toggleCollapsed}
+            className={cn(
+              'mt-2 hidden w-full items-center rounded-lg px-3 py-2 text-[12px] font-medium text-slate-500 transition-colors hover:bg-slate-800 hover:text-slate-200 lg:flex',
+              iconOnly && 'justify-center px-0',
+            )}
+            title={layout.collapsed ? 'Mở rộng menu (Ctrl+B)' : 'Thu gọn menu (Ctrl+B)'}
+          >
+            {layout.collapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
+            {!iconOnly && <span className="ml-3">Thu gọn menu</span>}
+          </button>
+        </div>
+
+        {/* Drag handle — only meaningful while the rail shows labels */}
+        {!iconOnly && (
+          <div
+            role="separator"
+            aria-orientation="vertical"
+            aria-label="Kéo để điều chỉnh độ rộng menu"
+            aria-valuenow={layout.width}
+            aria-valuemin={SIDEBAR_MIN_WIDTH}
+            aria-valuemax={SIDEBAR_MAX_WIDTH}
+            tabIndex={0}
+            onPointerDown={startResize}
+            onDoubleClick={layout.resetWidth}
+            onKeyDown={onHandleKeyDown}
+            title="Kéo để chỉnh độ rộng · nhấp đúp để đặt lại"
+            className={cn(
+              'absolute inset-y-0 -right-1 z-10 hidden w-2 cursor-col-resize touch-none focus:outline-none lg:block',
+              'after:absolute after:inset-y-0 after:left-1/2 after:w-0.5 after:-translate-x-1/2 after:rounded-full after:transition-colors',
+              layout.isResizing
+                ? 'after:bg-blue-500'
+                : 'after:bg-transparent hover:after:bg-blue-500/60 focus-visible:after:bg-blue-500',
+            )}
+          />
+        )}
+      </aside>
+
+      {/* Flyout submenu for the collapsed rail */}
+      {iconOnly && flyout?.item.children && (
+        <div
+          style={{ top: flyout.top, left: SIDEBAR_COLLAPSED_WIDTH + 6 }}
+          onMouseEnter={() => {
+            if (flyoutTimer.current) clearTimeout(flyoutTimer.current);
+          }}
+          onMouseLeave={scheduleCloseFlyout}
+          className="fixed z-[60] w-60 overflow-hidden rounded-xl border border-slate-700 bg-slate-800 py-2 shadow-2xl"
+        >
+          <p className="px-4 pb-2 text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500">
+            {flyout.item.label}
+          </p>
+          {flyout.item.children.map(child => (
+            <button
+              key={child.id}
+              type="button"
+              onClick={() => navigate(child.id)}
+              className={cn(
+                'block w-full px-4 py-2 text-left text-[13px] transition-colors',
+                activeTab === child.id
+                  ? 'bg-blue-500/15 font-semibold text-blue-300'
+                  : 'text-slate-300 hover:bg-slate-700 hover:text-white',
+              )}
+            >
+              {child.label}
+            </button>
+          ))}
         </div>
       )}
-    </div>
+    </>
   );
 }

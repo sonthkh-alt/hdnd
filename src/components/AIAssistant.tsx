@@ -65,7 +65,7 @@ YÊU CẦU: ${input}`;
   };
 
   return (
-    <div className="p-8 max-w-5xl mx-auto h-[calc(100vh-2rem)] flex flex-col space-y-6">
+    <div className="p-8 max-w-5xl mx-auto h-[calc(100vh-6rem)] flex flex-col space-y-6">
       <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-6 text-white shadow-lg shrink-0">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-4">
