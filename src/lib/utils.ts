@@ -29,3 +29,13 @@ export function getPriorityColor(priority: string) {
       return 'bg-blue-100 text-blue-800 border-blue-200';
   }
 }
+
+// Strip Vietnamese diacritics so searches match regardless of accents/case.
+export function normalizeVN(value: string) {
+  return (value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/Đ/g, 'D')
+    .toLowerCase();
+}

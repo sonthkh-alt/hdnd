@@ -15,6 +15,7 @@ export type TabId =
   | 'dashboard'
   | 'employees'
   | 'commune-directory'
+  | 'province-directory'
   | 'deputies'
   | 'na-deputies'
   | 'ktns-schedules'
@@ -62,6 +63,7 @@ export const PAGE_TITLES: Record<TabId, string> = {
   dashboard: 'Tổng quan hệ thống',
   employees: 'Hồ sơ cán bộ',
   'commune-directory': 'Danh bạ xã, phường',
+  'province-directory': 'Danh bạ điện thoại tỉnh Thanh Hóa',
   deputies: 'Đại biểu HĐND tỉnh',
   'na-deputies': 'Đại biểu Quốc hội',
   'ktns-schedules': 'Lịch Ban Kinh tế - Ngân sách',
@@ -144,6 +146,7 @@ export function buildNavigation(currentUser: AuthUser | null): NavSection[] {
           children: [
             { id: 'employees', label: 'Hồ sơ Cán bộ' },
             { id: 'commune-directory', label: 'Danh bạ điện thoại' },
+            { id: 'province-directory', label: 'Danh bạ tỉnh Thanh Hóa' },
             { id: 'na-deputies', label: 'Đại biểu Quốc hội' },
             { id: 'deputies', label: 'Đại biểu HĐND' },
           ],

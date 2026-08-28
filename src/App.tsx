@@ -9,6 +9,7 @@ import { EmployeeManager } from './components/EmployeeManager';
 import { DeputiesManager } from './components/DeputiesManager';
 import { NADeputiesManager } from './components/NADeputiesManager';
 import { CommuneDirectoryManager } from './components/CommuneDirectoryManager';
+import { ProvinceDirectory } from './components/ProvinceDirectory';
 import { ScheduleManager } from './components/ScheduleManager';
 import { KTNSSchedule } from './components/KTNSSchedule';
 import { PCNSchedule } from './components/PCNSchedule';
@@ -60,6 +61,7 @@ function AppContent() {
           {activeTab === 'document-draft' && <DraftAssistant />}
           {activeTab === 'digital-transformation' && <DigitalTransformation />}
           {activeTab === 'commune-directory' && <CommuneDirectoryManager />}
+          {activeTab === 'province-directory' && <ProvinceDirectory />}
           {activeTab === 'na-deputies' && <NADeputiesManager />}
           {activeTab === 'deputies' && <DeputiesManager />}
           {activeTab === 'schedules' && <ScheduleManager />}
