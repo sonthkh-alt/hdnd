@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   LayoutGrid,
   ShieldCheck,
+  UserRound,
   Zap,
   type LucideIcon,
 } from 'lucide-react';
@@ -24,6 +25,10 @@ export type TabId =
   | 'schedules'
   | 'personal-schedule'
   | 'weekly-calendar'
+  | 'term-program'
+  | 'personal-giapha'
+  | 'personal-golf'
+  | 'personal-english'
   | 'assistant'
   | 'approvals'
   | 'document-management'
@@ -79,6 +84,10 @@ export const PAGE_TITLES: Record<TabId, string> = {
   schedules: 'Lịch công tác cơ quan',
   'personal-schedule': 'Lịch công tác cá nhân',
   'weekly-calendar': 'Lịch công tác tuần (Online)',
+  'term-program': 'Chương trình công tác toàn khóa 2026 - 2031',
+  'personal-giapha': 'Gia phả dòng họ',
+  'personal-golf': 'Golf',
+  'personal-english': 'English Defense',
   assistant: 'Trợ lý số',
   approvals: 'Duyệt đăng ký',
   'document-management': 'Văn phòng số',
@@ -139,6 +148,7 @@ export function buildNavigation(currentUser: AuthUser | null): NavSection[] {
           children: [
             { id: 'schedules', label: 'Lịch cơ quan' },
             { id: 'weekly-calendar', label: 'Lịch tuần Online' },
+            { id: 'term-program', label: 'Chương trình toàn khóa' },
             { id: 'pcn-schedules', label: 'Lịch Ban Pháp chế' },
             { id: 'ktns-schedules', label: 'Lịch Ban KTNS' },
             ...(currentUser ? [{ id: 'personal-schedule' as TabId, label: 'Lịch cá nhân' }] : []),
@@ -189,6 +199,21 @@ export function buildNavigation(currentUser: AuthUser | null): NavSection[] {
   ];
 
   if (currentUser?.role === 'ADMIN') {
+    sections.push({
+      title: 'Cá nhân',
+      items: [
+        {
+          key: 'personal',
+          label: 'Không gian riêng',
+          icon: UserRound,
+          children: [
+            { id: 'personal-giapha', label: 'Gia phả dòng họ' },
+            { id: 'personal-golf', label: 'Golf' },
+            { id: 'personal-english', label: 'English Defense' },
+          ],
+        },
+      ],
+    });
     sections.push({
       title: 'Quản trị',
       items: [

@@ -15,6 +15,8 @@ import { KTNSSchedule } from './components/KTNSSchedule';
 import { PCNSchedule } from './components/PCNSchedule';
 import { PersonalSchedule } from './components/PersonalSchedule';
 import { WeeklyCalendar } from './components/WeeklyCalendar';
+import { TermProgramDashboard } from './components/TermProgramDashboard';
+import { PersonalSite } from './components/PersonalSite';
 import { DocumentManagement } from './components/DocumentManagement';
 import { DigitalTransformation } from './components/DigitalTransformation';
 import { KpiPortal } from './components/KpiPortal';
@@ -36,6 +38,13 @@ function AppContent() {
   // Automatically return to dashboard after login
   useEffect(() => {
     if (currentUser && activeTab === 'login') {
+      setActiveTab('dashboard');
+    }
+  }, [currentUser, activeTab]);
+
+  // Personal tabs require an ADMIN account; bounce back if access is lost
+  useEffect(() => {
+    if (activeTab.startsWith('personal-') && activeTab !== 'personal-schedule' && currentUser?.role !== 'ADMIN') {
       setActiveTab('dashboard');
     }
   }, [currentUser, activeTab]);
@@ -77,6 +86,16 @@ function AppContent() {
           {activeTab === 'pcn-schedules' && <PCNSchedule />}
           {activeTab === 'personal-schedule' && <PersonalSchedule />}
           {activeTab === 'weekly-calendar' && <WeeklyCalendar />}
+          {activeTab === 'term-program' && <TermProgramDashboard />}
+
+          {/* Không gian cá nhân — chỉ dành cho tài khoản ADMIN */}
+          {currentUser?.role === 'ADMIN' && (
+            <>
+              {activeTab === 'personal-giapha' && <PersonalSite site="giapha" />}
+              {activeTab === 'personal-golf' && <PersonalSite site="golf" />}
+              {activeTab === 'personal-english' && <PersonalSite site="english" />}
+            </>
+          )}
           {activeTab === 'assistant' && <AIAssistant />}
           {activeTab === 'approvals' && <ApprovalManager />}
           {activeTab === 'login' && <Login />}

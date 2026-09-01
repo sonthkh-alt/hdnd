@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HĐND tỉnh Thanh Hóa khóa XIX — Chương trình công tác toàn khóa 2026-2031</title>
+<style>
+:root{
+  color-scheme: light;
+  --plane:#f9f9f7; --surface:#fcfcfb;
+  --ink:#0b0b0b; --ink2:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --axis:#c3c2b7; --ring:rgba(11,11,11,0.10);
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s7:#4a3aa7;
+  --good:#0ca30c; --warn:#fab219; --serious:#ec835a; --crit:#d03b3b;
+  --seq1:#cde2fb; --seq2:#9ec5f4; --seq3:#6da7ec; --seq4:#3987e5; --seq5:#256abf; --seq6:#184f95;
+  --shadow:0 1px 2px rgba(11,11,11,.05), 0 8px 24px -12px rgba(11,11,11,.18);
+}
+html[data-theme="dark"]{
+  color-scheme: dark;
+  --plane:#0d0d0d; --surface:#1a1a19;
+  --ink:#ffffff; --ink2:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,0.10);
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s7:#9085e9;
+  --seq1:#184f95; --seq2:#1c5cab; --seq3:#256abf; --seq4:#2a78d6; --seq5:#3987e5; --seq6:#5598e7;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--plane);color:var(--ink);
+ font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;line-height:1.5;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:1280px;margin:0 auto;padding:0 20px 64px}
+
+/* ---------- top bar ---------- */
+.topbar{position:sticky;top:0;z-index:50;background:var(--plane);
+ border-bottom:1px solid var(--ring);backdrop-filter:blur(8px)}
+.topbar .inner{max-width:1280px;margin:0 auto;padding:12px 20px;display:flex;gap:16px;
+ align-items:center;flex-wrap:wrap}
+.brand{display:flex;flex-direction:column;gap:1px;margin-right:auto;min-width:0}
+.brand b{font-size:15px;font-weight:650;letter-spacing:-.01em}
+.brand span{font-size:12px;color:var(--muted)}
+.btn{border:1px solid var(--ring);background:var(--surface);color:var(--ink2);
+ border-radius:8px;padding:6px 11px;font:inherit;font-size:12.5px;cursor:pointer;
+ display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn:hover{border-color:var(--axis);color:var(--ink)}
+.btn.on{background:var(--s1);border-color:var(--s1);color:#fff}
+
+/* ---------- headline ---------- */
+.head{padding:32px 0 8px}
+.eyebrow{font-size:12px;letter-spacing:.10em;text-transform:uppercase;color:var(--muted);
+ font-weight:600}
+h1{font-size:30px;line-height:1.2;margin:8px 0 6px;letter-spacing:-.02em;font-weight:680;max-width:26ch}
+.sub{color:var(--ink2);font-size:14px;max-width:80ch;margin:0}
+.meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.tag{font-size:12px;color:var(--ink2);border:1px solid var(--ring);border-radius:999px;
+ padding:3px 10px;background:var(--surface)}
+
+/* ---------- cards ---------- */
+.card{background:var(--surface);border:1px solid var(--ring);border-radius:14px;
+ padding:18px 20px;box-shadow:var(--shadow)}
+.card h2{font-size:15px;margin:0 0 2px;font-weight:640;letter-spacing:-.01em}
+.card .note{font-size:12px;color:var(--muted);margin:0 0 16px}
+section{margin-top:28px;scroll-margin-top:78px}
+.sechead{display:flex;align-items:baseline;gap:12px;margin:0 0 12px;flex-wrap:wrap}
+.sechead h2{font-size:18px;margin:0;font-weight:660;letter-spacing:-.015em}
+.sechead p{margin:0;font-size:12.5px;color:var(--muted)}
+
+/* ---------- stat tiles ---------- */
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:22px}
+.tile{background:var(--surface);border:1px solid var(--ring);border-radius:14px;padding:16px 18px;
+ box-shadow:var(--shadow);display:flex;flex-direction:column;gap:2px}
+.tile .lab{font-size:12px;color:var(--muted);font-weight:520}
+.tile .val{font-size:38px;font-weight:660;letter-spacing:-.03em;line-height:1.05;margin-top:4px}
+.tile .val small{font-size:15px;font-weight:560;color:var(--ink2);letter-spacing:0}
+.tile .foot{font-size:11.5px;color:var(--ink2);margin-top:6px}
+.dotrow{display:flex;align-items:center;gap:6px}
+.dot{width:9px;height:9px;border-radius:50%;flex:none}
+
+/* ---------- progress meter ---------- */
+.meter{display:flex;height:14px;border-radius:7px;overflow:hidden;background:var(--grid);gap:2px}
+.meter i{display:block;height:100%}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--ink2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+
+/* ---------- calendar grid ---------- */
+.calwrap{overflow-x:auto}
+table.cal{border-collapse:separate;border-spacing:3px;width:100%;min-width:820px}
+table.cal th{font-size:11px;color:var(--muted);font-weight:560;padding:2px 0;text-align:center}
+table.cal th.y{text-align:left;width:52px;padding-right:8px}
+table.cal td{height:44px;border-radius:8px;background:transparent;border:1px dashed transparent;
+ vertical-align:middle;padding:0}
+table.cal td.empty{border-color:var(--grid)}
+table.cal td.now{border:1px solid var(--s1);border-style:solid}
+.ylab{font-size:14px;font-weight:640;color:var(--ink);text-align:left}
+.chip{width:100%;height:100%;border:none;border-radius:8px;cursor:pointer;color:#fff;
+ font:inherit;font-size:10.5px;font-weight:620;line-height:1.15;padding:4px 3px;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+ box-shadow:0 0 0 2px var(--surface)}
+.chip:hover{filter:brightness(1.08)}
+.chip.sel{outline:2px solid var(--ink);outline-offset:1px}
+.chip .pct{font-size:9.5px;font-weight:560;opacity:.92}
+.chip.pending{opacity:.78}
+.gs{position:absolute}
+td.wrapper{position:relative}
+.sup-mark{position:absolute;left:2px;right:2px;bottom:-2px;height:3px;border-radius:2px;background:var(--s7)}
+
+/* ---------- charts ---------- */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:1.15fr 1fr;gap:16px}
+svg{display:block;width:100%;height:auto;overflow:visible}
+.ax{font-size:11px;fill:var(--muted)}
+.vl{font-size:11px;fill:var(--ink2);font-weight:600}
+.gl{stroke:var(--grid);stroke-width:1}
+.bl{stroke:var(--axis);stroke-width:1}
+
+/* ---------- supervision ---------- */
+.suplist{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sup{border:1px solid var(--ring);border-radius:12px;padding:13px 15px;background:var(--surface);
+ display:flex;gap:12px;align-items:flex-start}
+.sup .yr{font-size:19px;font-weight:660;letter-spacing:-.02em;line-height:1.1;min-width:46px}
+.sup .yr em{display:block;font-size:10.5px;font-style:normal;color:var(--muted);font-weight:520}
+.sup .bd{min-width:0}
+.sup .t{font-size:12.8px;line-height:1.42;margin:0 0 6px}
+.sup .m{font-size:11px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.badge{font-size:10.5px;border-radius:5px;padding:1.5px 7px;font-weight:600;color:#fff}
+
+/* ---------- table ---------- */
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+select,input[type=search]{font:inherit;font-size:12.5px;padding:6px 10px;border-radius:8px;
+ border:1px solid var(--ring);background:var(--surface);color:var(--ink)}
+table.det{width:100%;border-collapse:collapse;font-size:12.5px}
+table.det th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;
+ color:var(--muted);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--axis);
+ background:var(--surface)}
+.tblwrap table.det th{position:sticky;top:0;z-index:2}
+table.det td{padding:8px 10px;border-bottom:1px solid var(--grid);vertical-align:top;color:var(--ink2)}
+table.det tr.mt td{background:var(--plane);font-weight:640;color:var(--ink);font-size:13px}
+table.det td.n{color:var(--ink);width:46%}
+table.det td.l2{padding-left:26px}
+table.det td.l2::before{content:"–";color:var(--muted);margin-right:7px}
+.pill{font-size:10.5px;border:1px solid var(--ring);border-radius:5px;padding:1px 7px;
+ white-space:nowrap;color:var(--ink2)}
+.tblwrap{max-height:560px;overflow:auto;border:1px solid var(--ring);border-radius:12px;
+ background:var(--surface)}
+.stsel{font-size:11.5px;padding:3px 6px;border-radius:6px}
+
+/* ---------- tooltip ---------- */
+#tip{position:fixed;z-index:99;pointer-events:none;background:var(--surface);
+ border:1px solid var(--ring);border-radius:9px;padding:8px 11px;font-size:12px;
+ box-shadow:var(--shadow);max-width:300px;opacity:0;transition:opacity .09s;color:var(--ink)}
+#tip b{display:block;margin-bottom:3px;font-size:12.5px}
+#tip .r{color:var(--ink2);display:flex;gap:8px;justify-content:space-between}
+
+footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--ring);
+ font-size:11.5px;color:var(--muted);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+
+@media (max-width:900px){
+  .tiles{grid-template-columns:repeat(2,1fr)}
+  .grid2,.grid3,.suplist{grid-template-columns:1fr}
+  h1{font-size:24px}
+}
+@media print{
+  .topbar,.filters,.noprint{display:none!important}
+  body{background:#fff}
+  .card,.tile{box-shadow:none;break-inside:avoid}
+  section{break-inside:avoid}
+  .tblwrap{max-height:none;overflow:visible}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar noprint"><div class="inner">
+  <div class="brand">
+    <b>Chương trình công tác toàn khóa — HĐND tỉnh Thanh Hóa khóa XIX</b>
+    <span>Nghị quyết số 46/NQ-HĐND ngày 27/5/2026 · nhiệm kỳ 2026 – 2031</span>
+  </div>
+  <button class="btn" id="btnTheme">◐ Nền tối</button>
+  <button class="btn" id="btnExport">↓ Xuất tiến độ</button>
+  <button class="btn" id="btnImport">↑ Nhập tiến độ</button>
+  <button class="btn" id="btnPrint">⎙ In / PDF</button>
+  <input type="file" id="fileIn" accept=".json" hidden>
+</div></div>
+
+<div class="wrap">
+
+<div class="head">
+  <div class="eyebrow">Bảng điều hành nhiệm kỳ</div>
+  <h1>Toàn cảnh Chương trình công tác toàn khóa 2026 – 2031</h1>
+  <p class="sub">Trực quan hóa toàn bộ Phụ lục Nghị quyết 46/NQ-HĐND: kỳ họp, đầu việc trình kỳ họp,
+  chuyên đề giám sát và phân công trách nhiệm trong 5 năm của nhiệm kỳ.</p>
+  <div class="meta">
+    <span class="tag">Cập nhật mốc thời gian: <b id="today"></b></span>
+    <span class="tag">Nguồn: NQ 46/NQ-HĐND ngày 27/5/2026 (Phụ lục)</span>
+    <span class="tag" id="ovTag" hidden></span>
+  </div>
+</div>
+
+<div class="tiles" id="tiles"></div>
+
+<section>
+  <div class="card">
+    <h2>Tiến độ thực hiện toàn khóa</h2>
+    <p class="note">Trạng thái được suy ra tự động theo mốc thời gian của từng kỳ họp; có thể ghi đè thủ công ở bảng chi tiết bên dưới.</p>
+    <div class="meter" id="meter"></div>
+    <div class="legend" id="meterLeg"></div>
+  </div>
+</section>
+
+<section>
+  <div class="sechead">
+    <h2>Bản đồ nhiệm kỳ</h2>
+    <p>22 kỳ họp trải trên 6 năm — bấm vào một kỳ họp để xem toàn bộ nội dung trình.</p>
+  </div>
+  <div class="card">
+    <div class="calwrap"><table class="cal" id="cal"></table></div>
+    <div class="legend" id="calLeg"></div>
+  </div>
+</section>
+
+<section id="detailWrap" hidden>
+  <div class="card">
+    <div class="sechead" style="margin-bottom:8px">
+      <h2 id="dTitle"></h2>
+      <p id="dMeta"></p>
+    </div>
+    <div id="dBody"></div>
+  </div>
+</section>
+
+<section>
+  <div class="sechead">
+    <h2>Phân tích khối lượng công việc</h2>
+    <p>170 đầu việc trong Phụ lục, bóc tách theo năm, theo loại kỳ họp, theo sản phẩm đầu ra và theo cơ quan chủ trì tham mưu.</p>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h2>Đầu việc trình kỳ họp theo năm</h2>
+      <p class="note">Phân theo loại kỳ họp · đơn vị: đầu việc</p>
+      <div id="c1"></div>
+      <div class="legend" id="c1leg"></div>
+    </div>
+    <div class="card">
+      <h2>Sản phẩm đầu ra phải ban hành</h2>
+      <p class="note">Theo loại văn bản ghi trong Phụ lục · đơn vị: đầu việc</p>
+      <div id="c2"></div>
+    </div>
+  </div>
+  <div class="grid3" style="margin-top:16px">
+    <div class="card">
+      <h2>Cơ quan chủ trì tham mưu</h2>
+      <p class="note">Ai gánh khối lượng lớn nhất trong 170 đầu việc</p>
+      <div id="c3"></div>
+    </div>
+    <div class="card">
+      <h2>Mật độ công việc theo tháng trong năm</h2>
+      <p class="note">Tổng đầu việc dồn vào từng tháng của một năm điển hình</p>
+      <div id="c4"></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sechead">
+    <h2>Chuyên đề giám sát dự kiến</h2>
+    <p>10 chuyên đề trong nhiệm kỳ — 3 chuyên đề do HĐND tỉnh giám sát, 7 chuyên đề do Thường trực HĐND tỉnh giám sát.</p>
+  </div>
+  <div class="grid2" style="margin-bottom:16px">
+    <div class="card">
+      <h2>Phân công chủ trì tham mưu giám sát</h2>
+      <p class="note">Số chuyên đề mỗi Ban chủ trì trong cả nhiệm kỳ</p>
+      <div id="c5"></div>
+    </div>
+    <div class="card">
+      <h2>Cấp giám sát theo năm</h2>
+      <p class="note">HĐND tỉnh giám sát (ban hành nghị quyết) vs Thường trực HĐND giám sát (ban hành kết luận)</p>
+      <div id="c6"></div>
+      <div class="legend" id="c6leg"></div>
+    </div>
+  </div>
+  <div class="suplist" id="suplist"></div>
+</section>
+
+<section>
+  <div class="sechead">
+    <h2>Bảng chi tiết &amp; ghi nhận tiến độ</h2>
+    <p>Chọn trạng thái để ghi đè kết quả suy tự động; bấm “Xuất tiến độ” để lưu lại thành tệp JSON và nhập lại ở lần sau.</p>
+  </div>
+  <div class="card">
+    <div class="filters noprint">
+      <select id="fYear"></select>
+      <select id="fType"></select>
+      <select id="fOwner"></select>
+      <input type="search" id="fQ" placeholder="Tìm trong nội dung nhiệm vụ…" style="min-width:230px">
+      <button class="btn" id="fReset">Xóa lọc</button>
+      <span style="font-size:12px;color:var(--muted)" id="fCount"></span>
+    </div>
+    <div class="tblwrap"><table class="det" id="det"></table></div>
+  </div>
+</section>
+
+<footer>
+  <span>Dữ liệu trích xuất nguyên văn từ Phụ lục Nghị quyết số 46/NQ-HĐND ngày 27/5/2026 của HĐND tỉnh Thanh Hóa.</span>
+  <span>Tiến độ ghi đè chỉ tồn tại trong phiên làm việc — hãy xuất tệp JSON để lưu.</span>
+</footer>
+</div>
+
+<div id="tip"></div>
+
+<script>
+const DATA = {"meetings":[{"id":1,"year":2026,"name":"Tổ chức kỳ họp thứ Nhất HĐND tỉnh khoá XIX, nhiệm kỳ 2026 - 2031 (đã thực hiện vào 26/3/2026)","month":3,"type":"kỳ họp thứ Nhất"},{"id":2,"year":2026,"name":"Tổ chức kỳ họp chuyên đề (Tháng 5/2026)","month":5,"type":"chuyên đề"},{"id":3,"year":2026,"name":"Kỳ họp thường lệ (Tháng 7/2026)","month":7,"type":"thường lệ"},{"id":4,"year":2026,"name":"Tổ chức kỳ họp chuyên đề (Tháng 11/2026)","month":11,"type":"chuyên đề"},{"id":5,"year":2026,"name":"Kỳ họp thường lệ cuối năm (Tháng 12/2026)","month":12,"type":"thường lệ cuối năm"},{"id":6,"year":2027,"name":"Tổ chức kỳ họp chuyên đề (Tháng 5/2027)","month":5,"type":"chuyên đề"},{"id":7,"year":2027,"name":"Kỳ họp thường lệ (Tháng 7/2027)","month":7,"type":"thường lệ"},{"id":8,"year":2027,"name":"Tổ chức kỳ họp chuyên đề (Tháng 11/2027)","month":11,"type":"chuyên đề"},{"id":9,"year":2027,"name":"Kỳ họp thường lệ cuối năm (Tháng 12/2027)","month":12,"type":"thường lệ cuối năm"},{"id":10,"year":2028,"name":"Tổ chức kỳ họp chuyên đề (Tháng 5/2028)","month":5,"type":"chuyên đề"},{"id":11,"year":2028,"name":"Kỳ họp thường lệ (Tháng 7/2028)","month":7,"type":"thường lệ"},{"id":12,"year":2028,"name":"Tổ chức kỳ họp chuyên đề (Tháng 11/2028)","month":11,"type":"chuyên đề"},{"id":13,"year":2028,"name":"Kỳ họp thường lệ cuối năm (Tháng 12/2028)","month":12,"type":"thường lệ cuối năm"},{"id":14,"year":2029,"name":"Tổ chức kỳ họp chuyên đề (Tháng 5/2029)","month":5,"type":"chuyên đề"},{"id":15,"year":2029,"name":"Kỳ họp thường lệ (Tháng 7/2029)","month":7,"type":"thường lệ"},{"id":16,"year":2029,"name":"Tổ chức kỳ họp chuyên đề (Tháng 11/2029)","month":11,"type":"chuyên đề"},{"id":17,"year":2029,"name":"Kỳ họp thường lệ cuối năm (Tháng 12/2029)","month":12,"type":"thường lệ cuối năm"},{"id":18,"year":2030,"name":"Tổ chức kỳ họp chuyên đề (Tháng 5/2030)","month":5,"type":"chuyên đề"},{"id":19,"year":2030,"name":"Kỳ họp thường lệ (Tháng 7/2030)","month":7,"type":"thường lệ"},{"id":20,"year":2030,"name":"Tổ chức kỳ họp chuyên đề (Tháng 11/2030)","month":11,"type":"chuyên đề"},{"id":21,"year":2030,"name":"Kỳ họp thường lệ cuối năm (Tháng 12/2030)","month":12,"type":"thường lệ cuối năm"},{"id":22,"year":2031,"name":"Kỳ họp tổng kết hoạt động HĐND tỉnh khoá XIX, nhiệm kỳ 2026 - 2031 (Quý I/2031)","month":1,"type":"tổng kết nhiệm kỳ"}],"tasks":[{"mid":1,"year":2026,"lvl":1,"name":"Tổ chức kỳ họp thứ Nhất HĐND tỉnh khoá XIX, nhiệm kỳ 2026 - 2031 (đã thực hiện vào 26/3/2026)","owner":"HĐND tỉnh","coop":"UBND tỉnh, các Ban của HĐND tỉnh và các cơ quan có liên quan","doc":"Nghị quyết"},{"mid":2,"year":2026,"lvl":1,"name":"Xem xét, thảo luận và quyết định các giải pháp giải quyết những công việc phát sinh đột xuất.","owner":"HĐND tỉnh","coop":"UBND tỉnh, các Ban của HĐND tỉnh và các cơ quan có liên quan","doc":"Nghị quyết"},{"mid":2,"year":2026,"lvl":1,"name":"Xem xét, thông qua các dự thảo nghị quyết kỳ họp và các nội dung thuộc thẩm quyền:","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra"},{"mid":2,"year":2026,"lvl":2,"name":"Quy chế làm việc của HĐND","owner":"Ban Pháp chế HĐND tỉnh","coop":"Các Ban của HĐND tỉnh; Văn phòng Đoàn ĐBQH và HĐND tỉnh","doc":"Tờ trình, Nghị quyết"},{"mid":2,"year":2026,"lvl":2,"name":"Chương trình công tác toàn khoá của Hội đồng nhân dân tỉnh Thanh Hóa khoá XIX, nhiệm kỳ 2026 - 2031.","owner":"Văn phòng Đoàn ĐBQH và HĐND tỉnh","coop":"Các Ban của HĐND tỉnh","doc":"Tờ trình, Nghị quyết"},{"mid":2,"year":2026,"lvl":2,"name":"Nghị quyết về: nhân sự; quy phạm pháp luật; cơ chế, chính sách và các nghị quyết khác (nếu có).","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":3,"year":2026,"lvl":1,"name":"Xem xét báo cáo kết quả hoạt động 6 tháng đầu năm và phương hướng, nhiệm vụ 6 tháng cuối năm 2026 của Thường trực Hội đồng nhân dân, Ban của Hội đồng nhân dân; Tòa án nhân dân tỉnh, Viện Kiểm sát nhân dân tỉnh, Thi hành án dân sự tỉnh","owner":"Thường trực HĐND, Ban của HĐND; Tòa án nhân dân tỉnh, Viện Kiểm sát nhân dân tỉnh, Thi hành án dân sự tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":3,"year":2026,"lvl":1,"name":"Xem xét báo cáo của UBND tỉnh về kết quả 6 tháng đầu năm 2026 và nhiệm vụ, giải pháp 6 tháng cuối năm 2026:","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":3,"year":2026,"lvl":2,"name":"Về kinh tế - xã hội, ngân sách nhà nước, quyết toán ngân sách nhà nước của địa phương","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":3,"year":2026,"lvl":2,"name":"Về công tác phòng, chống tham nhũng, tiêu cực; tiết kiệm, chống lãng phí; công tác phòng, chống tội phạm và vi phạm pháp luật; việc giải quyết khiếu nại, tố cáo và kiến nghị của cơ quan, tổ chức, cá nhân","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":3,"year":2026,"lvl":2,"name":"Việc giải quyết kiến nghị của cử tri gửi đến kỳ họp thường lệ cuối năm 2025","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":3,"year":2026,"lvl":1,"name":"Xem xét báo cáo khác theo quy định của pháp luật, nghị quyết của Hội đồng nhân dân hoặc đề nghị của Thường trực Hội đồng nhân dân.","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"","doc":"Báo cáo"},{"mid":3,"year":2026,"lvl":1,"name":"Xem xét báo cáo kết quả thực hiện Chương trình giám sát năm trước của HĐND tỉnh, Thường trực HĐND tỉnh, các Ban của HĐND tỉnh","owner":"Thường trực HĐND tỉnh, các Ban của HĐND tỉnh","coop":"","doc":"Báo cáo"},{"mid":3,"year":2026,"lvl":1,"name":"Hoạt động chất vấn và trả lời chất vấn tại kỳ họp (nếu có)","owner":"HĐND tỉnh","coop":"UBND tỉnh, các Ban của HĐND tỉnh và các cơ quan có liên quan","doc":"Nghị quyết"},{"mid":3,"year":2026,"lvl":1,"name":"Xem xét, thông qua các dự thảo nghị quyết kỳ họp và các nội dung thuộc thẩm quyền:","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":3,"year":2026,"lvl":2,"name":"Kế hoạch phát triển kinh tế - xã hội 05 năm, giai đoạn 2026 - 2030","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":3,"year":2026,"lvl":2,"name":"Kế hoạch đầu tư công trung hạn NSĐP giai đoạn 2026 -2030;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":3,"year":2026,"lvl":2,"name":"Kế hoạch tài chính 5 năm 2026 - 2030;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":3,"year":2026,"lvl":2,"name":"Nghị quyết về: nhân sự; quy phạm pháp luật; cơ chế, chính sách và các nghị quyết khác (nếu có).","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":4,"year":2026,"lvl":1,"name":"Xem xét, thảo luận và quyết định các giải pháp giải quyết những công việc phát sinh đột xuất.","owner":"HĐND tỉnh","coop":"UBND tỉnh, các Ban của HĐND tỉnh và các cơ quan có liên quan","doc":"Nghị quyết"},{"mid":4,"year":2026,"lvl":1,"name":"Xem xét, thông qua các dự thảo nghị quyết về: nhân sự; quy phạm pháp luật; cơ chế, chính sách và các nội dung thuộc thẩm quyền (nếu có)","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":5,"year":2026,"lvl":1,"name":"Xem xét báo cáo kết quả hoạt động năm 2026, phương hướng, nhiệm vụ năm 2027 của Thường trực HĐND tỉnh, các Ban của HĐND tỉnh, Toà án nhân dân tỉnh, Viện Kiểm sát nhân dân tỉnh, Thi hành án dân sự tỉnh","owner":"Thường trực HĐND tỉnh, các Ban của HĐND tỉnh, Toà án nhân dân tỉnh, Viện Kiểm sát nhân dân tỉnh, Thi hành án dân sự tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":5,"year":2026,"lvl":1,"name":"Xem xét báo cáo của UBND tỉnh về kết quả năm 2026 và nhiệm vụ, giải pháp năm 2027:","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":5,"year":2026,"lvl":2,"name":"Về kinh tế - xã hội, ngân sách nhà nước, quyết toán ngân sách nhà nước của địa phương;","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":5,"year":2026,"lvl":2,"name":"Về công tác phòng, chống tham nhũng, tiêu cực; tiết kiệm, chống lãng phí; công tác phòng, chống tội phạm và vi phạm pháp luật; việc giải quyết khiếu nại, tố cáo và kiến nghị của cơ quan, tổ chức, cá nhân","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":5,"year":2026,"lvl":2,"name":"Việc giải quyết kiến nghị của cử tri gửi đến kỳ họp thường lệ giữa năm","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":5,"year":2026,"lvl":2,"name":"Kết quả thực hiện các kiến nghị, đề xuất sau giám sát của HĐND, Thường trực HĐND, các Ban của HĐND tỉnh (trong trường hợp cần thiết)","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":5,"year":2026,"lvl":1,"name":"Xem xét báo cáo khác theo quy định của pháp luật, nghị quyết của Hội đồng nhân dân hoặc đề nghị của Thường trực Hội đồng nhân dân.","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":5,"year":2026,"lvl":1,"name":"Xem xét báo cáo kết quả thực hiện Chương trình giám sát của Thường trực HĐND tỉnh, các Ban của HĐND tỉnh","owner":"Thường trực HĐND tỉnh, các Ban của HĐND tỉnh","coop":"","doc":"Báo cáo"},{"mid":5,"year":2026,"lvl":1,"name":"Hoạt động chất vấn và trả lời chất vấn tại kỳ họp (nếu có)","owner":"HĐND tỉnh","coop":"UBND tỉnh, các Ban của HĐND tỉnh và các cơ quan có liên quan","doc":"Nghị quyết"},{"mid":5,"year":2026,"lvl":1,"name":"Xem xét, thông qua các dự thảo nghị quyết kỳ họp và các nội dung thuộc thẩm quyền:","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":5,"year":2026,"lvl":2,"name":"Kế hoạch đầu tư công năm 2027;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":5,"year":2026,"lvl":2,"name":"Kế hoạch phát triển kinh tế - xã hội năm 2027;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":5,"year":2026,"lvl":2,"name":"Phê chuẩn quyết toán thu NSNN trên địa bàn; quyết toán thu, chi NSĐP năm 2025;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":5,"year":2026,"lvl":2,"name":"Dự toán thu NSNN trên địa bàn; thu, chi NSĐP năm 2027;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":5,"year":2026,"lvl":2,"name":"Phân bổ dự toán chi NSĐP năm 2027;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":5,"year":2026,"lvl":2,"name":"Kế hoạch tổ chức các kỳ họp thường lệ năm 2027;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":5,"year":2026,"lvl":2,"name":"Chương trình giám sát năm 2027 của HĐND tỉnh;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":5,"year":2026,"lvl":2,"name":"Giao biên chế năm 2027 của tỉnh Thanh Hóa;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":5,"year":2026,"lvl":2,"name":"Nghị quyết về: nhân sự; quy phạm pháp luật; cơ chế, chính sách và các nghị quyết khác (nếu có).","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":6,"year":2027,"lvl":1,"name":"Xem xét, thảo luận và quyết định các giải pháp giải quyết những công việc phát sinh đột xuất.","owner":"HĐND tỉnh","coop":"UBND tỉnh, các Ban của HĐND tỉnh và các cơ quan có liên quan","doc":"Nghị quyết"},{"mid":6,"year":2027,"lvl":1,"name":"Xem xét, thông qua các dự thảo nghị quyết về: nhân sự; quy phạm pháp luật; cơ chế, chính sách và các nội dung thuộc thẩm quyền (nếu có)","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra"},{"mid":7,"year":2027,"lvl":1,"name":"Xem xét báo cáo kết quả hoạt động 6 tháng đầu năm và phương hướng, nhiệm vụ 6 tháng cuối năm 2027 của Thường trực Hội đồng nhân dân, Ban của Hội đồng nhân dân; Tòa án nhân dân tỉnh, Viện Kiểm sát nhân dân tỉnh, Thi hành án dân sự tỉnh","owner":"Thường trực HĐND, Ban của HĐND; Tòa án nhân dân tỉnh, Viện Kiểm sát nhân dân tỉnh, Thi hành án dân sự tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":7,"year":2027,"lvl":1,"name":"Xem xét báo cáo của UBND tỉnh về kết quả 6 tháng đầu năm 2027 và nhiệm vụ, giải pháp 6 tháng cuối năm 2027:","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":7,"year":2027,"lvl":2,"name":"Về kinh tế - xã hội, ngân sách nhà nước, quyết toán ngân sách nhà nước của địa phương","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":7,"year":2027,"lvl":2,"name":"Về công tác phòng, chống tham nhũng, tiêu cực; tiết kiệm, chống lãng phí; công tác phòng, chống tội phạm và vi phạm pháp luật; việc giải quyết khiếu nại, tố cáo và kiến nghị của cơ quan, tổ chức, cá nhân","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":7,"year":2027,"lvl":2,"name":"Việc giải quyết kiến nghị của cử tri gửi đến kỳ họp thường lệ cuối năm 2026","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":7,"year":2027,"lvl":1,"name":"Xem xét báo cáo khác theo quy định của pháp luật, nghị quyết của Hội đồng nhân dân hoặc đề nghị của Thường trực Hội đồng nhân dân.","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"","doc":"Báo cáo"},{"mid":7,"year":2027,"lvl":1,"name":"Xem xét báo cáo kết quả thực hiện Chương trình giám sát năm trước của HĐND tỉnh, Thường trực HĐND tỉnh, các Ban của HĐND tỉnh","owner":"Thường trực HĐND tỉnh, các Ban của HĐND tỉnh","coop":"","doc":"Báo cáo"},{"mid":7,"year":2027,"lvl":1,"name":"Hoạt động chất vấn và trả lời chất vấn tại kỳ họp (nếu có)","owner":"HĐND tỉnh","coop":"UBND tỉnh, các Ban của HĐND tỉnh và các cơ quan có liên quan","doc":"Nghị quyết"},{"mid":7,"year":2027,"lvl":1,"name":"Xem xét, thông qua các dự thảo nghị quyết về: nhân sự; quy phạm pháp luật; cơ chế, chính sách và các nội dung thuộc thẩm quyền (nếu có)","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":8,"year":2027,"lvl":1,"name":"Xem xét, thảo luận và quyết định các giải pháp giải quyết những công việc phát sinh đột xuất.","owner":"HĐND tỉnh","coop":"UBND tỉnh, các Ban của HĐND tỉnh và các cơ quan có liên quan","doc":"Nghị quyết"},{"mid":8,"year":2027,"lvl":1,"name":"Xem xét, thông qua các dự thảo nghị quyết về: nhân sự; quy phạm pháp luật; cơ chế, chính sách và các nội dung thuộc thẩm quyền (nếu có)","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":9,"year":2027,"lvl":1,"name":"Xem xét báo cáo kết quả hoạt động năm 2027, phương hướng, nhiệm vụ năm 2028 của Thường trực HĐND tỉnh, các Ban của HĐND tỉnh, Toà án nhân dân tỉnh, Viện Kiểm sát nhân dân tỉnh, Thi hành án dân sự tỉnh","owner":"Thường trực HĐND tỉnh, các Ban của HĐND tỉnh, Toà án nhân dân tỉnh, Viện Kiểm sát nhân dân tỉnh, Thi hành án dân sự tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":9,"year":2027,"lvl":1,"name":"Xem xét báo cáo của UBND tỉnh về kết quả năm 2027 và nhiệm vụ, giải pháp năm 2028:","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":9,"year":2027,"lvl":2,"name":"Về kinh tế - xã hội, ngân sách nhà nước, quyết toán ngân sách nhà nước của địa phương;","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":9,"year":2027,"lvl":2,"name":"Về công tác phòng, chống tham nhũng, tiêu cực; tiết kiệm, chống lãng phí; công tác phòng, chống tội phạm và vi phạm pháp luật; việc giải quyết khiếu nại, tố cáo và kiến nghị của cơ quan, tổ chức, cá nhân","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":9,"year":2027,"lvl":2,"name":"Việc giải quyết kiến nghị của cử tri gửi đến kỳ họp thường lệ giữa năm 2027","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":9,"year":2027,"lvl":2,"name":"Kết quả thực hiện các kiến nghị, đề xuất sau giám sát của HĐND, Thường trực HĐND, các Ban của HĐND tỉnh (trong trường hợp cần thiết)","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":9,"year":2027,"lvl":1,"name":"Xem xét báo cáo khác theo quy định của pháp luật, nghị quyết của Hội đồng nhân dân hoặc đề nghị của Thường trực Hội đồng nhân dân.","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"","doc":"Báo cáo"},{"mid":9,"year":2027,"lvl":1,"name":"Xem xét báo cáo kết quả thực hiện Chương trình giám sát của Thường trực HĐND tỉnh, các Ban của HĐND tỉnh","owner":"Thường trực HĐND tỉnh, các Ban của HĐND tỉnh","coop":"","doc":"Báo cáo"},{"mid":9,"year":2027,"lvl":1,"name":"Hoạt động chất vấn và trả lời chất vấn tại kỳ họp (nếu có)","owner":"HĐND tỉnh","coop":"UBND tỉnh, các Ban của HĐND tỉnh và các cơ quan có liên quan","doc":"Nghị quyết"},{"mid":9,"year":2027,"lvl":1,"name":"Xem xét, thông qua các dự thảo nghị quyết kỳ họp và các nội dung thuộc thẩm quyền:","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":9,"year":2027,"lvl":2,"name":"Kế hoạch đầu tư công năm 2028;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":9,"year":2027,"lvl":2,"name":"Kế hoạch phát triển kinh tế - xã hội năm 2028;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":9,"year":2027,"lvl":2,"name":"Phê chuẩn quyết toán thu NSNN trên địa bàn; quyết toán thu, chi NSĐP năm 2026;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":9,"year":2027,"lvl":2,"name":"Dự toán thu NSNN trên địa bàn; thu, chi NSĐP năm 2028;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":9,"year":2027,"lvl":2,"name":"Phân bổ dự toán chi NSĐP năm 2028;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":9,"year":2027,"lvl":2,"name":"Kế hoạch tổ chức các kỳ họp thường lệ năm 2028;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":9,"year":2027,"lvl":2,"name":"Chương trình giám sát năm 2028 của HĐND tỉnh;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":9,"year":2027,"lvl":2,"name":"Giao biên chế năm 2028 của tỉnh Thanh Hóa;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":9,"year":2027,"lvl":2,"name":"Nghị quyết về: nhân sự; quy phạm pháp luật; cơ chế, chính sách và các nghị quyết khác (nếu có).","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":10,"year":2028,"lvl":1,"name":"Xem xét, thảo luận và quyết định các giải pháp giải quyết những công việc phát sinh đột xuất.","owner":"HĐND tỉnh","coop":"UBND tỉnh, các Ban của HĐND tỉnh và các cơ quan có liên quan","doc":"Nghị quyết"},{"mid":10,"year":2028,"lvl":1,"name":"Xem xét, thông qua các dự thảo nghị quyết về: nhân sự; quy phạm pháp luật; cơ chế, chính sách và các nội dung thuộc thẩm quyền (nếu có)","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra"},{"mid":11,"year":2028,"lvl":1,"name":"Xem xét báo cáo kết quả hoạt động 6 tháng đầu năm và phương hướng nhiệm vụ 6 tháng cuối năm 2028 của Thường trực Hội đồng nhân dân, Ban của Hội đồng nhân dân; Tòa án nhân dân tỉnh, Viện Kiểm sát nhân dân tỉnh, Thi hành án dân sự tỉnh","owner":"Thường trực HĐND, Ban của HĐND; Tòa án nhân dân tỉnh, Viện Kiểm sát nhân dân tỉnh, Thi hành án dân sự tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":11,"year":2028,"lvl":1,"name":"Xem xét báo cáo của UBND tỉnh về kết quả 6 tháng đầu năm 2028 và nhiệm vụ, giải pháp 6 tháng cuối năm 2029:","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":11,"year":2028,"lvl":2,"name":"Về kinh tế - xã hội, ngân sách nhà nước, quyết toán ngân sách nhà nước của địa phương","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":11,"year":2028,"lvl":2,"name":"Về công tác phòng, chống tham nhũng, tiêu cực; tiết kiệm, chống lãng phí; công tác phòng, chống tội phạm và vi phạm pháp luật; việc giải quyết khiếu nại, tố cáo và kiến nghị của cơ quan, tổ chức, cá nhân","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":11,"year":2028,"lvl":2,"name":"Việc giải quyết kiến nghị của cử tri gửi đến kỳ họp thường lệ cuối năm 2027","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":11,"year":2028,"lvl":1,"name":"Xem xét báo cáo khác theo quy định của pháp luật, nghị quyết của Hội đồng nhân dân hoặc đề nghị của Thường trực Hội đồng nhân dân.","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"","doc":"Báo cáo"},{"mid":11,"year":2028,"lvl":1,"name":"Xem xét báo cáo kết quả thực hiện Chương trình giám sát năm trước của HĐND tỉnh, Thường trực HĐND tỉnh, các Ban của HĐND tỉnh","owner":"Thường trực HĐND tỉnh, các Ban của HĐND tỉnh","coop":"","doc":"Báo cáo"},{"mid":11,"year":2028,"lvl":1,"name":"Hoạt động chất vấn và trả lời chất vấn tại kỳ họp (nếu có)","owner":"HĐND tỉnh","coop":"UBND tỉnh, các Ban của HĐND tỉnh và các cơ quan có liên quan","doc":"Nghị quyết"},{"mid":11,"year":2028,"lvl":1,"name":"Xem xét, thông qua các dự thảo nghị quyết về: nhân sự; quy phạm pháp luật; cơ chế, chính sách và các nội dung thuộc thẩm quyền (nếu có)","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":12,"year":2028,"lvl":1,"name":"Xem xét, thảo luận và quyết định các giải pháp giải quyết những công việc phát sinh đột xuất.","owner":"HĐND tỉnh","coop":"UBND tỉnh, các Ban của HĐND tỉnh và các cơ quan có liên quan","doc":"Nghị quyết"},{"mid":12,"year":2028,"lvl":1,"name":"Xem xét, thông qua các dự thảo nghị quyết về: nhân sự; quy phạm pháp luật; cơ chế, chính sách và các nội dung thuộc thẩm quyền (nếu có)","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":13,"year":2028,"lvl":1,"name":"Xem xét báo cáo kết quả hoạt động năm 2028, phương hướng, nhiệm vụ năm 2029 của Thường trực HĐND tỉnh, các Ban của HĐND tỉnh, Toà án nhân dân tỉnh, Viện Kiểm sát nhân dân tỉnh, Thi hành án dân sự tỉnh","owner":"Thường trực HĐND tỉnh, các Ban của HĐND tỉnh, Toà án nhân dân tỉnh, Viện Kiểm sát nhân dân tỉnh, Thi hành án dân sự tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":13,"year":2028,"lvl":1,"name":"Xem xét báo cáo của UBND tỉnh về kết quả năm 2028 và nhiệm vụ, giải pháp năm 2029:","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":13,"year":2028,"lvl":2,"name":"Về kinh tế - xã hội, ngân sách nhà nước, quyết toán ngân sách nhà nước của địa phương;","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":13,"year":2028,"lvl":2,"name":"Về công tác phòng, chống tham nhũng, tiêu cực; tiết kiệm, chống lãng phí; công tác phòng, chống tội phạm và vi phạm pháp luật; việc giải quyết khiếu nại, tố cáo và kiến nghị của cơ quan, tổ chức, cá nhân","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":13,"year":2028,"lvl":2,"name":"Việc giải quyết kiến nghị của cử tri gửi đến kỳ họp thường lệ giữa năm 2028","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":13,"year":2028,"lvl":2,"name":"Kết quả thực hiện các kiến nghị, đề xuất sau giám sát của HĐND, Thường trực HĐND, các Ban của HĐND tỉnh (trong trường hợp cần thiết)","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":13,"year":2028,"lvl":1,"name":"Xem xét báo cáo khác theo quy định của pháp luật, nghị quyết của Hội đồng nhân dân hoặc đề nghị của Thường trực Hội đồng nhân dân.","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"","doc":"Báo cáo"},{"mid":13,"year":2028,"lvl":1,"name":"Xem xét báo cáo kết quả thực hiện Chương trình giám sát của Thường trực HĐND tỉnh, các Ban của HĐND tỉnh","owner":"Thường trực HĐND tỉnh, các Ban của HĐND tỉnh","coop":"","doc":"Báo cáo"},{"mid":13,"year":2028,"lvl":1,"name":"Hoạt động chất vấn và trả lời chất vấn tại kỳ họp (nếu có)","owner":"HĐND tỉnh","coop":"UBND tỉnh, các Ban của HĐND tỉnh và các cơ quan có liên quan","doc":"Nghị quyết"},{"mid":13,"year":2028,"lvl":1,"name":"Lấy phiếu tín nhiệm đối với người giữ chức vụ do HĐND tỉnh bầu","owner":"HĐND tỉnh","coop":"","doc":"Nghị quyết"},{"mid":13,"year":2028,"lvl":1,"name":"Xem xét, thông qua các dự thảo nghị quyết kỳ họp và các nội dung thuộc thẩm quyền:","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":13,"year":2028,"lvl":2,"name":"Kế hoạch đầu tư công năm 2029;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":13,"year":2028,"lvl":2,"name":"Kế hoạch phát triển kinh tế - xã hội năm 2029;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":13,"year":2028,"lvl":2,"name":"Phê chuẩn quyết toán thu NSNN trên địa bàn; quyết toán thu, chi NSĐP năm 2027;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":13,"year":2028,"lvl":2,"name":"Dự toán thu NSNN trên địa bàn; thu, chi NSĐP năm 2029;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":13,"year":2028,"lvl":2,"name":"Phân bổ dự toán chi NSĐP năm 2029;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":13,"year":2028,"lvl":2,"name":"Kế hoạch tổ chức các kỳ họp thường lệ năm 2029;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":13,"year":2028,"lvl":2,"name":"Chương trình giám sát năm 2029 của HĐND tỉnh;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":13,"year":2028,"lvl":2,"name":"Giao biên chế năm 2029 của tỉnh Thanh Hóa;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":13,"year":2028,"lvl":2,"name":"Nghị quyết về: nhân sự; quy phạm pháp luật; cơ chế, chính sách và các nghị quyết khác (nếu có).","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":14,"year":2029,"lvl":1,"name":"Xem xét, thảo luận và quyết định các giải pháp giải quyết những công việc phát sinh đột xuất.","owner":"HĐND tỉnh","coop":"UBND tỉnh, các Ban của HĐND tỉnh và các cơ quan có liên quan","doc":"Nghị quyết"},{"mid":14,"year":2029,"lvl":1,"name":"Xem xét, thông qua các dự thảo nghị quyết về: nhân sự; quy phạm pháp luật; cơ chế, chính sách và các nội dung thuộc thẩm quyền (nếu có)","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra"},{"mid":15,"year":2029,"lvl":1,"name":"Xem xét báo cáo kết quả hoạt động 6 tháng đầu năm và phương hướng nhiệm vụ 6 tháng cuối năm 2029 của Thường trực Hội đồng nhân dân, Ban của Hội đồng nhân dân; Tòa án nhân dân tỉnh, Viện Kiểm sát nhân dân tỉnh, Thi hành án dân sự tỉnh","owner":"Thường trực Hội đồng nhân dân, Ban của Hội đồng nhân dân; Tòa án nhân dân tỉnh, Viện Kiểm sát nhân dân tỉnh, Thi hành án dân sự tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":15,"year":2029,"lvl":1,"name":"Xem xét báo cáo của UBND tỉnh về kết quả 6 tháng đầu năm 2029 và nhiệm vụ, giải pháp 6 tháng cuối năm 2029:","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":15,"year":2029,"lvl":2,"name":"Về kinh tế - xã hội, ngân sách nhà nước, quyết toán ngân sách nhà nước của địa phương","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":15,"year":2029,"lvl":2,"name":"Về công tác phòng, chống tham nhũng, tiêu cực; tiết kiệm, chống lãng phí; công tác phòng, chống tội phạm và vi phạm pháp luật; việc giải quyết khiếu nại, tố cáo và kiến nghị của cơ quan, tổ chức, cá nhân","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":15,"year":2029,"lvl":2,"name":"Việc giải quyết kiến nghị của cử tri gửi đến kỳ họp thường lệ cuối năm 2028","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":15,"year":2029,"lvl":1,"name":"Xem xét báo cáo khác theo quy định của pháp luật, nghị quyết của Hội đồng nhân dân hoặc đề nghị của Thường trực Hội đồng nhân dân.","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"","doc":"Báo cáo"},{"mid":15,"year":2029,"lvl":1,"name":"Xem xét báo cáo kết quả thực hiện Chương trình giám sát năm trước của HĐND tỉnh, Thường trực HĐND tỉnh, các Ban của HĐND tỉnh","owner":"Thường trực HĐND tỉnh, các Ban của HĐND tỉnh","coop":"","doc":"Báo cáo"},{"mid":15,"year":2029,"lvl":1,"name":"Hoạt động chất vấn và trả lời chất vấn tại kỳ họp (nếu có)","owner":"HĐND tỉnh","coop":"UBND tỉnh, các Ban của HĐND tỉnh và các cơ quan có liên quan","doc":"Nghị quyết"},{"mid":15,"year":2029,"lvl":1,"name":"Xem xét, thông qua các dự thảo nghị quyết về: nhân sự; quy phạm pháp luật; cơ chế, chính sách và các nội dung thuộc thẩm quyền (nếu có)","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":16,"year":2029,"lvl":1,"name":"Xem xét, thảo luận và quyết định các giải pháp giải quyết những công việc phát sinh đột xuất.","owner":"HĐND tỉnh","coop":"UBND tỉnh, các Ban của HĐND tỉnh và các cơ quan có liên quan","doc":"Nghị quyết"},{"mid":16,"year":2029,"lvl":1,"name":"Xem xét, thông qua các dự thảo nghị quyết về: nhân sự; quy phạm pháp luật; cơ chế, chính sách và các nội dung thuộc thẩm quyền (nếu có)","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":17,"year":2029,"lvl":1,"name":"Xem xét báo cáo kết quả hoạt động năm 2029, phương hướng, nhiệm vụ năm 2030 của Thường trực HĐND tỉnh, các Ban của HĐND tỉnh, Toà án nhân dân tỉnh, Viện Kiểm sát nhân dân tỉnh, Thi hành án dân sự tỉnh","owner":"Thường trực HĐND tỉnh, các Ban của HĐND tỉnh, Toà án nhân dân tỉnh, Viện Kiểm sát nhân dân tỉnh, Thi hành án dân sự tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":17,"year":2029,"lvl":1,"name":"Xem xét báo cáo của UBND tỉnh về kết quả năm 2029 và nhiệm vụ, giải pháp năm 2030:","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":17,"year":2029,"lvl":2,"name":"Về kinh tế - xã hội, ngân sách nhà nước, quyết toán ngân sách nhà nước của địa phương;","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":17,"year":2029,"lvl":2,"name":"Về công tác phòng, chống tham nhũng, tiêu cực; tiết kiệm, chống lãng phí; công tác phòng, chống tội phạm và vi phạm pháp luật; việc giải quyết khiếu nại, tố cáo và kiến nghị của cơ quan, tổ chức, cá nhân","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":17,"year":2029,"lvl":2,"name":"Việc giải quyết kiến nghị của cử tri gửi đến kỳ họp thường lệ giữa năm 2029","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":17,"year":2029,"lvl":2,"name":"Kết quả thực hiện các kiến nghị, đề xuất sau giám sát của HĐND, Thường trực HĐND, các Ban của HĐND tỉnh (trong trường hợp cần thiết)","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":17,"year":2029,"lvl":1,"name":"Xem xét báo cáo khác theo quy định của pháp luật, nghị quyết của Hội đồng nhân dân hoặc đề nghị của Thường trực Hội đồng nhân dân.","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"","doc":"Báo cáo"},{"mid":17,"year":2029,"lvl":1,"name":"Xem xét báo cáo kết quả thực hiện Chương trình giám sát của Thường trực HĐND tỉnh, các Ban của HĐND tỉnh","owner":"Thường trực HĐND tỉnh, các Ban của HĐND tỉnh","coop":"","doc":"Báo cáo"},{"mid":17,"year":2029,"lvl":1,"name":"Hoạt động chất vấn và trả lời chất vấn tại kỳ họp (nếu có)","owner":"HĐND tỉnh","coop":"UBND tỉnh, các Ban của HĐND tỉnh và các cơ quan có liên quan","doc":"Nghị quyết"},{"mid":17,"year":2029,"lvl":1,"name":"Xem xét, thông qua các dự thảo nghị quyết kỳ họp và các nội dung thuộc thẩm quyền:","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":17,"year":2029,"lvl":2,"name":"Kế hoạch đầu tư công năm 2030;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":17,"year":2029,"lvl":2,"name":"Kế hoạch phát triển kinh tế - xã hội năm 2030;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":17,"year":2029,"lvl":2,"name":"Phê chuẩn quyết toán thu NSNN trên địa bàn; quyết toán thu, chi NSĐP năm 2028;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":17,"year":2029,"lvl":2,"name":"Dự toán thu NSNN trên địa bàn; thu, chi NSĐP năm 2030;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":17,"year":2029,"lvl":2,"name":"Phân bổ dự toán chi NSĐP năm 2030;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":17,"year":2029,"lvl":2,"name":"Kế hoạch tổ chức các kỳ họp thường lệ năm 2030;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":17,"year":2029,"lvl":2,"name":"Chương trình giám sát năm 2030 của HĐND tỉnh;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":17,"year":2029,"lvl":2,"name":"Giao biên chế năm 2030 của tỉnh Thanh Hóa;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":17,"year":2029,"lvl":2,"name":"Nghị quyết về: nhân sự; quy phạm pháp luật; cơ chế, chính sách và các nghị quyết khác (nếu có).","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":18,"year":2030,"lvl":1,"name":"Xem xét, thảo luận và quyết định các giải pháp giải quyết những công việc phát sinh đột xuất.","owner":"HĐND tỉnh","coop":"UBND tỉnh, các Ban của HĐND tỉnh và các cơ quan có liên quan","doc":"Nghị quyết"},{"mid":18,"year":2030,"lvl":1,"name":"Xem xét, thông qua các dự thảo nghị quyết về: nhân sự; quy phạm pháp luật; cơ chế, chính sách và các nội dung thuộc thẩm quyền (nếu có)","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra"},{"mid":19,"year":2030,"lvl":1,"name":"Xem xét báo cáo kết quả hoạt động 6 tháng đầu năm và phương hướng, nhiệm vụ 6 tháng cuối năm 2030 của Thường trực Hội đồng nhân dân, Ban của Hội đồng nhân dân; Tòa án nhân dân tỉnh, Viện Kiểm sát nhân dân tỉnh, Thi hành án dân sự tỉnh","owner":"Thường trực HĐND, Ban của HĐND; Tòa án nhân dân tỉnh, Viện Kiểm sát nhân dân tỉnh, Thi hành án dân sự tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":19,"year":2030,"lvl":1,"name":"Xem xét báo cáo của UBND tỉnh về kết quả 6 tháng đầu năm 2030 và nhiệm vụ, giải pháp 6 tháng cuối năm 2030:","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":19,"year":2030,"lvl":2,"name":"Về kinh tế - xã hội, ngân sách nhà nước, quyết toán ngân sách nhà nước của địa phương","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":19,"year":2030,"lvl":2,"name":"Về công tác phòng, chống tham nhũng, tiêu cực; tiết kiệm, chống lãng phí; công tác phòng, chống tội phạm và vi phạm pháp luật; việc giải quyết khiếu nại, tố cáo và kiến nghị của cơ quan, tổ chức, cá nhân","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":19,"year":2030,"lvl":2,"name":"Việc giải quyết kiến nghị của cử tri gửi đến kỳ họp thường lệ cuối năm 2029","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":19,"year":2030,"lvl":1,"name":"Xem xét báo cáo khác theo quy định của pháp luật, nghị quyết của Hội đồng nhân dân hoặc đề nghị của Thường trực Hội đồng nhân dân.","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"","doc":"Báo cáo"},{"mid":19,"year":2030,"lvl":1,"name":"Xem xét báo cáo kết quả thực hiện Chương trình giám sát năm trước của HĐND tỉnh, Thường trực HĐND tỉnh, các Ban của HĐND tỉnh","owner":"Thường trực HĐND tỉnh, các Ban của HĐND tỉnh","coop":"","doc":"Báo cáo"},{"mid":19,"year":2030,"lvl":1,"name":"Hoạt động chất vấn và trả lời chất vấn tại kỳ họp (nếu có)","owner":"HĐND tỉnh","coop":"UBND tỉnh, các Ban của HĐND tỉnh và các cơ quan có liên quan","doc":"Nghị quyết"},{"mid":19,"year":2030,"lvl":1,"name":"Xem xét, thông qua các dự thảo nghị quyết về: nhân sự; quy phạm pháp luật; cơ chế, chính sách và các nội dung thuộc thẩm quyền (nếu có)","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":20,"year":2030,"lvl":1,"name":"Xem xét, thảo luận và quyết định các giải pháp giải quyết những công việc phát sinh đột xuất.","owner":"HĐND tỉnh","coop":"UBND tỉnh, các Ban của HĐND tỉnh và các cơ quan có liên quan","doc":"Nghị quyết"},{"mid":20,"year":2030,"lvl":1,"name":"Xem xét, thông qua các dự thảo nghị quyết về: nhân sự; quy phạm pháp luật; cơ chế, chính sách và các nội dung thuộc thẩm quyền (nếu có)","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":21,"year":2030,"lvl":1,"name":"Xem xét báo cáo kết quả hoạt động năm 2028, phương hướng, nhiệm vụ năm 2029 của Thường trực HĐND tỉnh, các Ban của HĐND tỉnh, Toà án nhân dân tỉnh, Viện Kiểm sát nhân dân tỉnh, Thi hành án dân sự tỉnh","owner":"Thường trực HĐND tỉnh, các Ban của HĐND tỉnh, Toà án nhân dân tỉnh, Viện Kiểm sát nhân dân tỉnh, Thi hành án dân sự tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":21,"year":2030,"lvl":1,"name":"Xem xét báo cáo của UBND tỉnh về kết quả năm 2030 và nhiệm vụ, giải pháp năm 2031:","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":21,"year":2030,"lvl":2,"name":"Về kinh tế - xã hội, ngân sách nhà nước, quyết toán ngân sách nhà nước của địa phương;","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":21,"year":2030,"lvl":2,"name":"Về công tác phòng, chống tham nhũng, tiêu cực; tiết kiệm, chống lãng phí; công tác phòng, chống tội phạm và vi phạm pháp luật; việc giải quyết khiếu nại, tố cáo và kiến nghị của cơ quan, tổ chức, cá nhân","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":21,"year":2030,"lvl":2,"name":"Việc giải quyết kiến nghị của cử tri gửi đến kỳ họp thường lệ giữa năm 2030","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":21,"year":2030,"lvl":2,"name":"Kết quả thực hiện các kiến nghị, đề xuất sau giám sát của HĐND, Thường trực HĐND, các Ban của HĐND tỉnh (trong trường hợp cần thiết)","owner":"UBND tỉnh","coop":"Các Ban của HĐND tỉnh thẩm tra theo lĩnh vực được phân công","doc":"Báo cáo"},{"mid":21,"year":2030,"lvl":1,"name":"Xem xét báo cáo khác theo quy định của pháp luật, nghị quyết của Hội đồng nhân dân hoặc đề nghị của Thường trực Hội đồng nhân dân.","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"","doc":"Báo cáo"},{"mid":21,"year":2030,"lvl":1,"name":"Xem xét báo cáo kết quả thực hiện Chương trình giám sát của Thường trực HĐND tỉnh, các Ban của HĐND tỉnh","owner":"Thường trực HĐND tỉnh, các Ban của HĐND tỉnh","coop":"","doc":"Báo cáo"},{"mid":21,"year":2030,"lvl":1,"name":"Hoạt động chất vấn và trả lời chất vấn tại kỳ họp (nếu có)","owner":"HĐND tỉnh","coop":"UBND tỉnh, các Ban của HĐND tỉnh và các cơ quan có liên quan","doc":"Nghị quyết"},{"mid":21,"year":2030,"lvl":1,"name":"Xem xét, thông qua các dự thảo nghị quyết kỳ họp và các nội dung thuộc thẩm quyền:","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":21,"year":2030,"lvl":2,"name":"Kế hoạch đầu tư công năm 2031;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":21,"year":2030,"lvl":2,"name":"Kế hoạch phát triển kinh tế - xã hội năm 2031;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":21,"year":2030,"lvl":2,"name":"Phê chuẩn quyết toán thu NSNN trên địa bàn; quyết toán thu, chi NSĐP năm 2029;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":21,"year":2030,"lvl":2,"name":"Dự toán thu NSNN trên địa bàn; thu, chi NSĐP năm 2031;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":21,"year":2030,"lvl":2,"name":"Phân bổ dự toán chi NSĐP năm 2031;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":21,"year":2030,"lvl":2,"name":"Kế hoạch tổ chức các kỳ họp thường lệ năm 2031;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":21,"year":2030,"lvl":2,"name":"Chương trình giám sát năm 2031 của HĐND tỉnh;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":21,"year":2030,"lvl":2,"name":"Giao biên chế năm 2031 của tỉnh Thanh Hóa;","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":21,"year":2030,"lvl":2,"name":"Nghị quyết về: nhân sự; quy phạm pháp luật; cơ chế, chính sách và các nghị quyết khác (nếu có).","owner":"Các Ban của HĐND tỉnh theo lĩnh vực được phân công","coop":"UBND tỉnh, sở, ban, ngành có liên quan","doc":"Báo cáo thẩm tra, Nghị quyết"},{"mid":22,"year":2031,"lvl":1,"name":"Kỳ họp tổng kết hoạt động HĐND tỉnh khoá XIX, nhiệm kỳ 2026 - 2031 (Quý I/2031)","owner":"HĐND tỉnh","coop":"UBND tỉnh, các Ban của HĐND tỉnh và các cơ quan có liên quan","doc":"Báo cáo tổng kết; tham luận"}],"supervision":[{"year":2026,"half":2,"level":"Thường trực HĐND tỉnh","topic":"Việc thực hiện các quy định của pháp luật về tổ chức bộ máy và việc giải quyết thủ tục hành chính sau sắp xếp đơn vị hành chính cấp xã trên địa bàn tỉnh.","owner":"Ban Pháp chế HĐND tỉnh","coop":"Các Ban của HĐND tỉnh, Văn phòng Đoàn ĐBQH và HĐND tỉnh","doc":"Kế hoạch, Quyết định, Đề cương, Kết luận","full":"Thường trực HĐND tỉnh giám sát chuyên đề 06 tháng cuối năm 2026: Việc thực hiện các quy định của pháp luật về tổ chức bộ máy và việc giải quyết thủ tục hành chính sau sắp xếp đơn vị hành chính cấp xã trên địa bàn tỉnh."},{"year":2027,"half":1,"level":"Thường trực HĐND tỉnh","topic":"Tình hình triển khai các dự án đầu tư trực tiếp trên địa bàn tỉnh, việc xử lý các vi phạm về đất đai trong quá trình triển khai các dự án đầu tư trực tiếp","owner":"Ban Kinh tế - Ngân sách HĐND tỉnh","coop":"Các Ban của HĐND tỉnh, Văn phòng Đoàn ĐBQH và HĐND tỉnh","doc":"Kế hoạch, Quyết định, Đề cương, Kết luận","full":"Thường trực HĐND tỉnh giám sát chuyên đề 06 tháng đầu năm 2027: Tình hình triển khai các dự án đầu tư trực tiếp trên địa bàn tỉnh, việc xử lý các vi phạm về đất đai trong quá trình triển khai các dự án đầu tư trực tiếp"},{"year":2027,"half":2,"level":"HĐND tỉnh","topic":"Việc triển khai thực hiện các nhiệm vụ đột phá phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số trên địa bàn tỉnh","owner":"Ban Văn hóa - Xã hội HĐND tỉnh","coop":"Các Ban của HĐND tỉnh, Văn phòng Đoàn ĐBQH và HĐND tỉnh","doc":"Kế hoạch, Quyết định, Đề cương, Nghị quyết","full":"HĐND tỉnh giám sát chuyên đề 06 tháng cuối năm 2027: Việc triển khai thực hiện các nhiệm vụ đột phá phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số trên địa bàn tỉnh"},{"year":2028,"half":1,"level":"Thường trực HĐND tỉnh","topic":"Việc thực hiện chính sách, pháp luật về bảo vệ môi trường trên địa bàn tỉnh","owner":"Ban Kinh tế - Ngân sách HĐND tỉnh","coop":"Các Ban của HĐND tỉnh, Văn phòng Đoàn ĐBQH và HĐND tỉnh","doc":"Kế hoạch, Quyết định, Đề cương, Kết luận","full":"Thường trực HĐND tỉnh giám sát chuyên đề 06 tháng đầu năm 2028: Việc thực hiện chính sách, pháp luật về bảo vệ môi trường trên địa bàn tỉnh"},{"year":2028,"half":2,"level":"Thường trực HĐND tỉnh","topic":"Việc triển khai thực hiện các chương trình mục tiêu quốc gia xây dựng nông thôn mới, giảm nghèo bền vững và phát triển kinh tế - xã hội vùng đồng bào dân tộc thiểu số và miền núi giai đoạn 2026 - 2035","owner":"Ban Dân tộc HĐND tỉnh","coop":"Các Ban của HĐND tỉnh, Văn phòng Đoàn ĐBQH và HĐND tỉnh","doc":"Kế hoạch, Quyết định, Đề cương, Kết luận","full":"Thường trực HĐND tỉnh giám sát chuyên đề 06 tháng cuối năm 2028: Việc triển khai thực hiện các chương trình mục tiêu quốc gia xây dựng nông thôn mới, giảm nghèo bền vững và phát triển kinh tế - xã hội vùng đồng bào dân tộc thiểu số và miền núi giai đoạn 2026 - 2035"},{"year":2029,"half":1,"level":"Thường trực HĐND tỉnh","topic":"Việc thực hiện pháp luật trong tiếp dân, xử lý đơn thư, khiếu nại, tố cáo, kiến nghị, phản ánh của công dân","owner":"Ban Pháp chế HĐND tỉnh","coop":"Các Ban của HĐND tỉnh, Văn phòng Đoàn ĐBQH và HĐND tỉnh","doc":"Kế hoạch, Quyết định, Đề cương, Kết luận","full":"Thường trực HĐND tỉnh giám sát chuyên đề 06 tháng đầu năm 2029: Việc thực hiện pháp luật trong tiếp dân, xử lý đơn thư, khiếu nại, tố cáo, kiến nghị, phản ánh của công dân"},{"year":2029,"half":2,"level":"HĐND tỉnh","topic":"Giám sát việc thực hiện quy hoạch mạng lưới trường lớp, xây dựng trường chuẩn quốc gia; công tác quản lý, bồi dưỡng đội ngũ và nâng cao chất lượng giáo dục toàn diện; việc triển khai chuyển đổi số trong ngành giáo dục, giai đoạn 2026 - 2028","owner":"Ban Văn hóa - Xã hội HĐND tỉnh","coop":"Các Ban của HĐND tỉnh, Văn phòng Đoàn ĐBQH và HĐND tỉnh","doc":"Kế hoạch, Quyết định, Đề cương, Nghị quyết","full":"HĐND tỉnh giám sát chuyên đề 06 tháng cuối năm 2029: Giám sát việc thực hiện quy hoạch mạng lưới trường lớp, xây dựng trường chuẩn quốc gia; công tác quản lý, bồi dưỡng đội ngũ và nâng cao chất lượng giáo dục toàn diện; việc triển khai chuyển đổi số trong ngành giáo dục, giai đoạn 2026 - 2028"},{"year":2030,"half":1,"level":"Thường trực HĐND tỉnh","topic":"Công tác giải phóng mặt bằng, bồi thường, tái định cư các dự án đầu tư công, đầu tư trực tiếp trên địa bàn tỉnh từ năm 2021 đến nay","owner":"Ban Kinh tế - Ngân sách HĐND tỉnh","coop":"Các Ban của HĐND tỉnh, Văn phòng Đoàn ĐBQH và HĐND tỉnh","doc":"Kế hoạch, Quyết định, Đề cương, Kết luận","full":"Thường trực HĐND tỉnh giám sát chuyên đề 06 tháng đầu năm 2030: Công tác giải phóng mặt bằng, bồi thường, tái định cư các dự án đầu tư công, đầu tư trực tiếp trên địa bàn tỉnh từ năm 2021 đến nay"},{"year":2030,"half":2,"level":"HĐND tỉnh","topic":"Cải cách hành chính, trọng tâm là cải cách thủ tục hành chính trên địa bàn tỉnh.","owner":"Ban Pháp chế HĐND tỉnh","coop":"Các Ban của HĐND tỉnh, Văn phòng Đoàn ĐBQH và HĐND tỉnh","doc":"Kế hoạch, Quyết định, Đề cương, Nghị quyết","full":"HĐND tỉnh giám sát chuyên đề 06 tháng cuối năm 2030: Cải cách hành chính, trọng tâm là cải cách thủ tục hành chính trên địa bàn tỉnh."},{"year":2031,"half":0,"level":"Thường trực HĐND tỉnh","topic":"việc triển khai thực hiện công tác bầu cử đại biểu Quốc hội khóa XVII và bầu cử đại biểu HĐND các cấp nhiệm kỳ 2031 - 2036 trên địa bàn tỉnh (trước, trong và sau ngày bầu cử)","owner":"Ban Kinh tế - Ngân sách HĐND tỉnh","coop":"Các Ban của HĐND tỉnh, Văn phòng Đoàn ĐBQH và HĐND tỉnh","doc":"Kế hoạch, Quyết định","full":"Thường trực HĐND tỉnh giám sát việc triển khai thực hiện công tác bầu cử đại biểu Quốc hội khóa XVII và bầu cử đại biểu HĐND các cấp nhiệm kỳ 2031 - 2036 trên địa bàn tỉnh (trước, trong và sau ngày bầu cử)"}]};
+const TODAY = new Date();
+const S = getComputedStyle(document.documentElement);
+const cvar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+/* ---------- helpers ---------- */
+const MTYPE = {
+  "kỳ họp thứ Nhất":{c:"--s7", s:"Kỳ họp thứ Nhất", short:"Thứ Nhất"},
+  "thường lệ":{c:"--s1", s:"Kỳ họp thường lệ giữa năm", short:"Thường lệ"},
+  "thường lệ cuối năm":{c:"--s3", s:"Kỳ họp thường lệ cuối năm", short:"Cuối năm"},
+  "chuyên đề":{c:"--s2", s:"Kỳ họp chuyên đề", short:"Chuyên đề"},
+  "tổng kết nhiệm kỳ":{c:"--s4", s:"Kỳ họp tổng kết nhiệm kỳ", short:"Tổng kết"}
+};
+const shortOwner = o => {
+  if(/^Các Ban của HĐND tỉnh theo lĩnh vực/.test(o)) return "Các Ban của HĐND tỉnh";
+  if(/^UBND tỉnh$/.test(o)) return "UBND tỉnh";
+  if(/^HĐND tỉnh$/.test(o)) return "HĐND tỉnh";
+  if(/^Văn phòng/.test(o)) return "Văn phòng Đoàn ĐBQH và HĐND";
+  if(/^Ban Pháp chế/.test(o)) return "Ban Pháp chế";
+  if(/Toà án|Tòa án/.test(o)) return "TT HĐND, các Ban + TAND, VKSND, THADS";
+  if(/^Thường trực/.test(o)) return "Thường trực HĐND và các Ban";
+  return o;
+};
+const shortBan = o => o.replace(/\s*HĐND tỉnh$/,'').replace(/\s+/g,' ').trim();
+const fmtDate = d => d.toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'});
+document.getElementById('today').textContent = fmtDate(TODAY);
+
+/* meeting date = first day of its month */
+DATA.meetings.forEach(m=>{
+  m.start = new Date(m.year, (m.month||1)-1, 1);
+  m.end   = new Date(m.year, (m.month||1), 0);
+  m.tasks = DATA.tasks.filter(t=>t.mid===m.id);
+});
+const OVERRIDE = {};           // id -> 'done' | 'todo'
+const DAY = 864e5;
+function autoStatus(m){
+  if(m.end < TODAY) return 'done';
+  if((m.start - TODAY)/DAY <= 150) return 'soon';
+  return 'todo';
+}
+function status(m){ return OVERRIDE[m.id] || autoStatus(m); }
+const STLAB = {done:{t:'Đã thực hiện',c:'--good'}, soon:{t:'Sắp đến hạn',c:'--warn'}, todo:{t:'Chưa đến hạn',c:'--muted'}};
+
+/* ---------- tooltip ---------- */
+const tip = document.getElementById('tip');
+function showTip(html,e){ tip.innerHTML=html; tip.style.opacity=1;
+  const r=tip.getBoundingClientRect();
+  let x=e.clientX+14, y=e.clientY+14;
+  if(x+r.width>innerWidth-8) x=e.clientX-r.width-14;
+  if(y+r.height>innerHeight-8) y=e.clientY-r.height-14;
+  tip.style.left=x+'px'; tip.style.top=y+'px';
+}
+function hideTip(){ tip.style.opacity=0 }
+
+/* ---------- tiles ---------- */
+function renderTiles(){
+  const ms=DATA.meetings, st=ms.map(status);
+  const done=st.filter(x=>x==='done').length;
+  const doneTasks=ms.filter(m=>status(m)==='done').reduce((a,m)=>a+m.tasks.length,0);
+  const nextM = ms.filter(m=>status(m)!=='done').sort((a,b)=>a.start-b.start)[0];
+  const tiles=[
+    {lab:'Kỳ họp trong nhiệm kỳ', val:ms.length,
+     foot:`1 kỳ họp thứ Nhất · 10 thường lệ · 10 chuyên đề · 1 tổng kết`},
+    {lab:'Đầu việc trình kỳ họp', val:DATA.tasks.length,
+     foot:`${DATA.tasks.filter(t=>/Nghị quyết/.test(t.doc)).length} đầu việc phải ban hành nghị quyết`},
+    {lab:'Chuyên đề giám sát', val:DATA.supervision.length,
+     foot:`3 chuyên đề của HĐND tỉnh · 7 của Thường trực HĐND`},
+    {lab:'Tiến độ toàn khóa', val:Math.round(done/ms.length*100)+'<small>%</small>',
+     foot:`${done}/${ms.length} kỳ họp · ${doneTasks}/${DATA.tasks.length} đầu việc đã qua mốc`}
+  ];
+  document.getElementById('tiles').innerHTML = tiles.map(t=>
+    `<div class="tile"><div class="lab">${t.lab}</div><div class="val">${t.val}</div>
+     <div class="foot">${t.foot}</div></div>`).join('');
+
+  /* meter */
+  const counts={done:0,soon:0,todo:0}; ms.forEach(m=>counts[status(m)]++);
+  const total=ms.length;
+  document.getElementById('meter').innerHTML=['done','soon','todo'].map(k=>
+    counts[k]?`<i style="width:${counts[k]/total*100}%;background:var(${STLAB[k].c})"></i>`:'').join('');
+  document.getElementById('meterLeg').innerHTML=['done','soon','todo'].map(k=>
+    `<span><i class="dot" style="background:var(${STLAB[k].c})"></i>${STLAB[k].t} — <b>${counts[k]}</b> kỳ họp</span>`).join('')
+    + (nextM?`<span style="margin-left:auto;color:var(--muted)">Mốc kế tiếp: <b style="color:var(--ink)">${nextM.name.replace(/^Tổ chức (.)/,(a,b)=>b.toUpperCase())}</b></span>`:'');
+}
+
+/* ---------- calendar ---------- */
+const YEARS=[...new Set(DATA.meetings.map(m=>m.year))].sort();
+function renderCal(){
+  const supBy={}; DATA.supervision.forEach(s=>{ (supBy[s.year]=supBy[s.year]||[]).push(s) });
+  let h='<tr><th class="y"></th>'+Array.from({length:12},(_,i)=>`<th>T${i+1}</th>`).join('')+'</tr>';
+  YEARS.forEach(y=>{
+    h+=`<tr><td class="ylab">${y}</td>`;
+    for(let mo=1;mo<=12;mo++){
+      const m=DATA.meetings.find(x=>x.year===y&&x.month===mo);
+      const isNow = (y===TODAY.getFullYear() && mo===TODAY.getMonth()+1);
+      if(!m){ h+=`<td class="empty${isNow?' now':''}"></td>`; continue }
+      const t=MTYPE[m.type], st=status(m);
+      h+=`<td class="wrapper${isNow?' now':''}"><button class="chip${st==='todo'?' pending':''}" data-id="${m.id}"
+            style="background:var(${t.c})">
+            <span>${t.short}</span><span class="pct">${m.tasks.length} việc</span></button></td>`;
+    }
+    h+='</tr>';
+  });
+  const cal=document.getElementById('cal'); cal.innerHTML=h;
+  cal.querySelectorAll('.chip').forEach(b=>{
+    const m=DATA.meetings.find(x=>x.id==b.dataset.id);
+    b.onclick=()=>openMeeting(m.id);
+    b.onmousemove=e=>{const st=status(m);showTip(
+      `<b>${m.name.replace(/^Tổ chức (.)/,(a,b)=>b.toUpperCase())}</b>
+       <div class="r"><span>Loại</span><span>${MTYPE[m.type].s}</span></div>
+       <div class="r"><span>Nội dung trình</span><span>${m.tasks.length} đầu việc</span></div>
+       <div class="r"><span>Trạng thái</span><span>${STLAB[st].t}</span></div>`,e)};
+    b.onmouseleave=hideTip;
+  });
+  document.getElementById('calLeg').innerHTML =
+    Object.values(MTYPE).map(t=>`<span><i class="dot" style="background:var(${t.c})"></i>${t.s}</span>`).join('')
+    + `<span style="margin-left:auto"><i class="dot" style="background:var(--grid)"></i>Ô nhạt = chưa đến hạn</span>`;
+}
+
+/* ---------- detail panel ---------- */
+function openMeeting(id){
+  const m=DATA.meetings.find(x=>x.id===id);
+  document.getElementById('detailWrap').hidden=false;
+  document.getElementById('dTitle').textContent=m.name.replace(/^Tổ chức (.)/,(a,b)=>b.toUpperCase());
+  const st=status(m);
+  document.getElementById('dMeta').innerHTML=
+    `${MTYPE[m.type].s} · ${m.month?'tháng '+m.month+'/'+m.year:m.year} · ${m.tasks.length} đầu việc ·
+     <b style="color:var(${STLAB[st].c})">${STLAB[st].t}</b>`;
+  document.getElementById('dBody').innerHTML =
+   `<table class="det"><tr><th>Nội dung trình</th><th>Cơ quan tham mưu</th><th>Sản phẩm</th></tr>`+
+   m.tasks.map(t=>`<tr><td class="n ${t.lvl===2?'l2':''}">${t.name}</td>
+     <td>${shortOwner(t.owner)}</td><td><span class="pill">${t.doc}</span></td></tr>`).join('')+`</table>`;
+  document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('sel',c.dataset.id==id));
+  document.getElementById('detailWrap').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ---------- chart primitives ---------- */
+const SVG='http://www.w3.org/2000/svg';
+function el(n,a={}){const e=document.createElementNS(SVG,n);for(const k in a)e.setAttribute(k,a[k]);return e}
+function rr(x,y,w,h,r,fill,horiz){ // rounded on the data end only
+  r=Math.max(0,Math.min(r, horiz? w/2 : h/2));
+  let d;
+  if(horiz) d=`M${x},${y} H${x+w-r} A${r},${r} 0 0 1 ${x+w},${y+r} V${y+h-r} A${r},${r} 0 0 1 ${x+w-r},${y+h} H${x} Z`;
+  else d=`M${x},${y+h} V${y+r} A${r},${r} 0 0 1 ${x+r},${y} H${x+w-r} A${r},${r} 0 0 1 ${x+w},${y+r} V${y+h} Z`;
+  return el('path',{d,fill});
+}
+/* horizontal bar chart, single series, direct labels */
+function hbar(mount,rows,color,fmt){
+  const W=560, rowH=30;
+  const vlab=rows.map(r=>String(fmt?fmt(r.v):r.v));
+  const pad={t:6,b:6,l:0,r:Math.max(...vlab.map(v=>v.length))*6.6+14};
+  const labW = Math.min(230, Math.max(...rows.map(r=>r.label.length))*6.0+8);
+  const H=pad.t+pad.b+rows.length*rowH;
+  const max=Math.max(...rows.map(r=>r.v))||1;
+  const bw=W-labW-pad.r-12;
+  const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'});
+  rows.forEach((r,i)=>{
+    const y=pad.t+i*rowH;
+    const tx=el('text',{x:labW,y:y+rowH/2+4,'text-anchor':'end',class:'ax'}); tx.textContent=r.label;
+    s.appendChild(tx);
+    const w=Math.max(2,r.v/max*bw);
+    const g=rr(labW+12,y+7,w,rowH-15,4,typeof color==='function'?color(r,i):color,true);
+    g.style.cursor='default'; s.appendChild(g);
+    const v=el('text',{x:labW+12+w+7,y:y+rowH/2+4,class:'vl'}); v.textContent=vlab[i];
+    s.appendChild(v);
+  });
+  mount.innerHTML=''; mount.appendChild(s);
+}
+/* stacked vertical bars */
+function sbar(mount,cats,series,colors){
+  const W=560,H=250,pad={t:14,r:8,b:34,l:34};
+  const totals=cats.map((_,i)=>series.reduce((a,s)=>a+s.v[i],0));
+  const raw=Math.max(...totals)||1;
+  const step=raw<=4?1:raw<=8?2:raw<=20?5:10;
+  const max=Math.ceil(raw/(step*4))*(step*4);
+  const iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+  const bw=Math.min(58, iw/cats.length*0.62);
+  const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'});
+  for(let i=0;i<=4;i++){const y=pad.t+ih-ih*i/4;
+    s.appendChild(el('line',{x1:pad.l,x2:W-pad.r,y1:y,y2:y,class:i?'gl':'bl'}));
+    const t=el('text',{x:pad.l-7,y:y+4,'text-anchor':'end',class:'ax'});t.textContent=Math.round(max*i/4);s.appendChild(t)}
+  cats.forEach((c,i)=>{
+    const cx=pad.l+iw*(i+.5)/cats.length, x=cx-bw/2;
+    let acc=0;
+    series.forEach((se,j)=>{
+      const v=se.v[i]; if(!v) return;
+      const h=v/max*ih, y=pad.t+ih-(acc+v)/max*ih;
+      const isTop = series.slice(j+1).every(x2=>!x2.v[i]);
+      const g=rr(x,y,bw,Math.max(1,h-2),isTop?4:0,`var(${colors[j]})`,false);
+      g.style.cursor='pointer';
+      g.addEventListener('mousemove',e=>showTip(`<b>${c}</b><div class="r"><span>${se.name}</span><span>${v} đầu việc</span></div><div class="r"><span>Tổng năm</span><span>${totals[i]}</span></div>`,e));
+      g.addEventListener('mouseleave',hideTip);
+      s.appendChild(g); acc+=v;
+    });
+    const tv=el('text',{x:cx,y:pad.t+ih-totals[i]/max*ih-7,'text-anchor':'middle',class:'vl'});
+    tv.textContent=totals[i]; s.appendChild(tv);
+    const tl=el('text',{x:cx,y:H-13,'text-anchor':'middle',class:'ax'}); tl.textContent=c; s.appendChild(tl);
+  });
+  mount.innerHTML=''; mount.appendChild(s);
+}
+
+/* ---------- charts ---------- */
+function renderCharts(){
+  /* C1 tasks per year by meeting type */
+  const types=['thường lệ','thường lệ cuối năm','chuyên đề','kỳ họp thứ Nhất','tổng kết nhiệm kỳ'];
+  const cols=['--s1','--s3','--s2','--s7','--s4'];
+  const series=types.map((ty,j)=>({name:MTYPE[ty].s, v:YEARS.map(y=>
+    DATA.meetings.filter(m=>m.year===y&&m.type===ty).reduce((a,m)=>a+m.tasks.length,0))}));
+  sbar(document.getElementById('c1'),YEARS.map(String),series,cols);
+  document.getElementById('c1leg').innerHTML=series.map((s,j)=>
+    `<span><i class="dot" style="background:var(${cols[j]})"></i>${s.name}</span>`).join('');
+
+  /* C2 doc types */
+  const dc={}; DATA.tasks.forEach(t=>dc[t.doc]=(dc[t.doc]||0)+1);
+  const drows=Object.entries(dc).sort((a,b)=>b[1]-a[1]).map(([k,v])=>({label:k,v}));
+  const dsteps=['--seq6','--seq5','--seq4','--seq3','--seq2','--seq2'];
+  hbar(document.getElementById('c2'),drows,(r,i)=>`var(${dsteps[Math.min(i,5)]})`);
+
+  /* C3 owners */
+  const oc={}; DATA.tasks.forEach(t=>{const k=shortOwner(t.owner); oc[k]=(oc[k]||0)+1});
+  const orows=Object.entries(oc).sort((a,b)=>b[1]-a[1]).map(([k,v])=>({label:k,v}));
+  hbar(document.getElementById('c3'),orows,'var(--s1)');
+
+  /* C4 month density (typical full year: 2027) */
+  const mrows=[5,7,11,12].map(mo=>{
+    const n=DATA.meetings.filter(m=>m.month===mo&&m.year>=2027&&m.year<=2030)
+      .reduce((a,m)=>a+m.tasks.length,0)/4;
+    const mm=DATA.meetings.find(m=>m.month===mo&&m.year===2027);
+    return {label:`Tháng ${mo} — ${MTYPE[mm.type].short}`, v:Math.round(n)};
+  });
+  hbar(document.getElementById('c4'),mrows,r=>{
+    const mo=+r.label.match(/\d+/)[0];
+    return `var(${MTYPE[DATA.meetings.find(m=>m.month===mo&&m.year===2027).type].c})`;
+  }, v=>v+' việc');
+
+  /* C5 supervision by Ban */
+  const bc={}; DATA.supervision.forEach(s=>{const k=shortBan(s.owner); bc[k]=(bc[k]||0)+1});
+  hbar(document.getElementById('c5'),Object.entries(bc).sort((a,b)=>b[1]-a[1])
+    .map(([k,v])=>({label:k,v})),'var(--s7)', v=>v+' chuyên đề');
+
+  /* C6 supervision level by year */
+  const sy=YEARS.map(y=>DATA.supervision.filter(s=>s.year===y));
+  const s6=[{name:'HĐND tỉnh giám sát',v:sy.map(a=>a.filter(s=>s.level==='HĐND tỉnh').length)},
+            {name:'Thường trực HĐND giám sát',v:sy.map(a=>a.filter(s=>s.level!=='HĐND tỉnh').length)}];
+  const c6=['--s2','--s1'];
+  sbar(document.getElementById('c6'),YEARS.map(String),s6,c6);
+  document.getElementById('c6leg').innerHTML=s6.map((s,j)=>
+    `<span><i class="dot" style="background:var(${c6[j]})"></i>${s.name}</span>`).join('');
+}
+
+/* ---------- supervision list ---------- */
+function renderSup(){
+  document.getElementById('suplist').innerHTML=DATA.supervision.map(s=>{
+    const lv = s.level==='HĐND tỉnh';
+    return `<div class="sup">
+      <div class="yr">${s.year}<em>${s.half===1?'6 th. đầu':s.half===2?'6 th. cuối':'cả năm'}</em></div>
+      <div class="bd">
+        <p class="t">${s.topic.charAt(0).toUpperCase()+s.topic.slice(1)}</p>
+        <div class="m">
+          <span class="badge" style="background:var(${lv?'--s2':'--s1'})">${lv?'HĐND tỉnh':'Thường trực HĐND'}</span>
+          <span>Chủ trì: <b style="color:var(--ink2)">${shortBan(s.owner)}</b></span>
+          <span>· Sản phẩm: ${s.doc}</span>
+        </div>
+      </div></div>`;
+  }).join('');
+}
+
+/* ---------- detail table ---------- */
+function opts(sel,arr,all){ sel.innerHTML=`<option value="">${all}</option>`+
+  arr.map(v=>`<option>${v}</option>`).join('') }
+function renderTable(){
+  const fy=document.getElementById('fYear').value,
+        ft=document.getElementById('fType').value,
+        fo=document.getElementById('fOwner').value,
+        fq=document.getElementById('fQ').value.trim().toLowerCase();
+  let n=0, h=`<tr><th style="width:44%">Nội dung</th><th>Cơ quan tham mưu</th>
+       <th>Phối hợp</th><th style="width:120px">Sản phẩm</th></tr>`;
+  DATA.meetings.forEach(m=>{
+    if(fy && m.year!=fy) return;
+    if(ft && MTYPE[m.type].s!==ft) return;
+    const rows=m.tasks.filter(t=>
+      (!fo||shortOwner(t.owner)===fo) && (!fq||t.name.toLowerCase().includes(fq)));
+    if(!rows.length) return;
+    n+=rows.length;
+    const st=status(m);
+    h+=`<tr class="mt"><td colspan="3">${m.name.replace(/^Tổ chức (.)/,(a,b)=>b.toUpperCase())}
+        <span class="pill" style="margin-left:8px;border-color:var(${STLAB[st].c});color:var(${STLAB[st].c})">${STLAB[st].t}</span></td>
+        <td><select class="stsel noprint" data-id="${m.id}">
+          <option value="">Tự động</option>
+          <option value="done"${OVERRIDE[m.id]==='done'?' selected':''}>Đã hoàn thành</option>
+          <option value="todo"${OVERRIDE[m.id]==='todo'?' selected':''}>Chưa hoàn thành</option>
+        </select></td></tr>`;
+    rows.forEach(t=>{ h+=`<tr><td class="n ${t.lvl===2?'l2':''}">${t.name}</td>
+      <td>${shortOwner(t.owner)}</td><td>${t.coop||'—'}</td>
+      <td><span class="pill">${t.doc}</span></td></tr>` });
+  });
+  document.getElementById('det').innerHTML=h;
+  document.getElementById('fCount').textContent=`Hiển thị ${n}/${DATA.tasks.length} đầu việc`;
+  document.querySelectorAll('.stsel').forEach(s=>s.onchange=()=>{
+    const id=+s.dataset.id;
+    if(s.value) OVERRIDE[id]=s.value; else delete OVERRIDE[id];
+    refresh();
+  });
+}
+function refresh(){
+  renderTiles(); renderCal(); renderTable();
+  const n=Object.keys(OVERRIDE).length, tg=document.getElementById('ovTag');
+  tg.hidden=!n; tg.innerHTML=`Đang ghi đè thủ công <b>${n}</b> kỳ họp`;
+}
+
+/* ---------- init ---------- */
+opts(document.getElementById('fYear'),YEARS,'Tất cả các năm');
+opts(document.getElementById('fType'),[...new Set(DATA.meetings.map(m=>MTYPE[m.type].s))],'Tất cả loại kỳ họp');
+opts(document.getElementById('fOwner'),[...new Set(DATA.tasks.map(t=>shortOwner(t.owner)))],'Tất cả cơ quan tham mưu');
+['fYear','fType','fOwner'].forEach(id=>document.getElementById(id).onchange=renderTable);
+document.getElementById('fQ').oninput=renderTable;
+document.getElementById('fReset').onclick=()=>{['fYear','fType','fOwner'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fQ').value=''; renderTable()};
+
+document.getElementById('btnTheme').onclick=e=>{
+  const d=document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme',d?'light':'dark');
+  e.target.textContent=d?'◐ Nền tối':'◑ Nền sáng';
+  renderCharts();
+};
+document.getElementById('btnPrint').onclick=()=>print();
+document.getElementById('btnExport').onclick=()=>{
+  const payload={nguon:'NQ 46/NQ-HĐND ngày 27/5/2026',xuat_luc:new Date().toISOString(),
+    tien_do:DATA.meetings.map(m=>({id:m.id,ky_hop:m.name,trang_thai_ghi_de:OVERRIDE[m.id]||null,
+      trang_thai_hien_thi:STLAB[status(m)].t}))};
+  const b=new Blob([JSON.stringify(payload,null,1)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(b);
+  a.download='tien-do-chuong-trinh-toan-khoa-XIX.json'; a.click(); URL.revokeObjectURL(a.href);
+};
+document.getElementById('btnImport').onclick=()=>document.getElementById('fileIn').click();
+document.getElementById('fileIn').onchange=ev=>{
+  const f=ev.target.files[0]; if(!f) return;
+  f.text().then(txt=>{ try{
+      const j=JSON.parse(txt);
+      Object.keys(OVERRIDE).forEach(k=>delete OVERRIDE[k]);
+      (j.tien_do||[]).forEach(r=>{ if(r.trang_thai_ghi_de) OVERRIDE[r.id]=r.trang_thai_ghi_de });
+      refresh();
+    }catch(e){ alert('Tệp không hợp lệ.') } });
+  ev.target.value='';
+};
+
+refresh(); renderCharts(); renderSup();
+</script>
+</body>
+</html>
